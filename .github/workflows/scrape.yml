@@ -21,7 +21,7 @@ jobs:
           python-version: "3.12"
 
       - name: 📦 의존성 설치
-        run: pip install requests beautifulsoup4
+        run: pip install yfinance
 
       - name: 🕷️ 크롤러 실행
         run: python scraper/scrape.py
