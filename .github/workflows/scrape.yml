@@ -1,0 +1,33 @@
+name: 📈 Daily Stock Update
+
+on:
+  schedule:
+    - cron: "10 1 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ 코드 체크아웃
+        uses: actions/checkout@v4
+      - name: 🐍 Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: 📦 의존성 설치
+        run: pip install requests beautifulsoup4
+      - name: 🕷️ 크롤러 실행
+        run: python scraper/scrape.py
+      - name: 💾 변경 사항 커밋 & 푸시
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/stocks.json
+          git diff --staged --quiet || \
+            git commit -m "📈 주식 데이터 업데이트 $(date +'%Y-%m-%d')"
+          git push
