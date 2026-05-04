@@ -1,16 +1,24 @@
 {
-  "updated_at": "2026-05-01 08:30:37",
+  "updated_at": "2026-05-04 09:33:11",
   "stocks": {
     "005930": {
       "name": "삼성전자",
       "code": "005930",
       "returns": {
-        "current": 220500,
-        "weekly": 0.46,
-        "monthly": 18.42,
-        "three_month": 46.91
+        "current": 232500,
+        "weekly": 3.56,
+        "monthly": 20.4,
+        "three_month": 39.09
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 232500,
+          "open": 228000,
+          "high": 232500,
+          "low": 224000,
+          "volume": 33538556
+        },
         {
           "date": "2026.04.30",
           "close": 220500,
@@ -522,14 +530,6 @@
           "high": 159170,
           "low": 148891,
           "volume": 29423670
-        },
-        {
-          "date": "2026.01.26",
-          "close": 151785,
-          "open": 154580,
-          "high": 156076,
-          "low": 151187,
-          "volume": 20561689
         }
       ]
     },
@@ -537,12 +537,20 @@
       "name": "SK하이닉스",
       "code": "000660",
       "returns": {
-        "current": 1286000,
-        "weekly": 5.24,
-        "monthly": 46.8,
-        "three_month": 55.23
+        "current": 1447000,
+        "weekly": 12.0,
+        "monthly": 63.32,
+        "three_month": 59.83
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 1447000,
+          "open": 1339000,
+          "high": 1450000,
+          "low": 1333000,
+          "volume": 6041070
+        },
         {
           "date": "2026.04.30",
           "close": 1286000,
@@ -1054,14 +1062,6 @@
           "high": 798526,
           "low": 731649,
           "volume": 5660198
-        },
-        {
-          "date": "2026.01.26",
-          "close": 734644,
-          "open": 751613,
-          "high": 752611,
-          "low": 734644,
-          "volume": 3133330
         }
       ]
     },
@@ -1069,12 +1069,20 @@
       "name": "LG에너지솔루션",
       "code": "373220",
       "returns": {
-        "current": 460500,
-        "weekly": -4.26,
-        "monthly": 15.56,
-        "three_month": 21.18
+        "current": 472000,
+        "weekly": 1.72,
+        "monthly": 14.42,
+        "three_month": 20.72
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 472000,
+          "open": 469000,
+          "high": 478000,
+          "low": 461000,
+          "volume": 444619
+        },
         {
           "date": "2026.04.30",
           "close": 460500,
@@ -1586,14 +1594,6 @@
           "high": 416500,
           "low": 404500,
           "volume": 330244
-        },
-        {
-          "date": "2026.01.26",
-          "close": 416000,
-          "open": 415000,
-          "high": 422000,
-          "low": 411000,
-          "volume": 323197
         }
       ]
     },
@@ -1601,12 +1601,20 @@
       "name": "NAVER",
       "code": "035420",
       "returns": {
-        "current": 211000,
-        "weekly": -1.4,
-        "monthly": 6.84,
-        "three_month": -20.44
+        "current": 209000,
+        "weekly": -2.79,
+        "monthly": 6.2,
+        "three_month": -21.49
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 209000,
+          "open": 213500,
+          "high": 213500,
+          "low": 208000,
+          "volume": 918886
+        },
         {
           "date": "2026.04.30",
           "close": 211000,
@@ -2118,14 +2126,6 @@
           "high": 288964,
           "low": 267193,
           "volume": 4948006
-        },
-        {
-          "date": "2026.01.26",
-          "close": 269667,
-          "open": 271151,
-          "high": 273625,
-          "low": 262245,
-          "volume": 2706664
         }
       ]
     },
@@ -2133,12 +2133,20 @@
       "name": "현대차",
       "code": "005380",
       "returns": {
-        "current": 531000,
-        "weekly": 3.51,
-        "monthly": 12.74,
-        "three_month": 11.58
+        "current": 539000,
+        "weekly": 2.86,
+        "monthly": 14.93,
+        "three_month": 10.15
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 539000,
+          "open": 545000,
+          "high": 547000,
+          "low": 532000,
+          "volume": 904277
+        },
         {
           "date": "2026.04.30",
           "close": 531000,
@@ -2650,14 +2658,6 @@
           "high": 496819,
           "low": 466950,
           "volume": 4492400
-        },
-        {
-          "date": "2026.01.26",
-          "close": 490347,
-          "open": 496819,
-          "high": 512749,
-          "low": 487858,
-          "volume": 3680159
         }
       ]
     },
@@ -2665,12 +2665,20 @@
       "name": "카카오",
       "code": "035720",
       "returns": {
-        "current": 47300,
-        "weekly": -1.56,
-        "monthly": 4.65,
-        "three_month": -18.89
+        "current": 47100,
+        "weekly": -2.79,
+        "monthly": 5.02,
+        "three_month": -20.33
       },
       "prices": [
+        {
+          "date": "2026.05.04",
+          "close": 47100,
+          "open": 47700,
+          "high": 47850,
+          "low": 46900,
+          "volume": 1593011
+        },
         {
           "date": "2026.04.30",
           "close": 47300,
@@ -3182,14 +3190,6 @@
           "high": 63311,
           "low": 61114,
           "volume": 4016704
-        },
-        {
-          "date": "2026.01.26",
-          "close": 61713,
-          "open": 62212,
-          "high": 62312,
-          "low": 60215,
-          "volume": 4143093
         }
       ]
     }
