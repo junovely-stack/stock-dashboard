@@ -14,6 +14,7 @@
 journal/collect.py        수집 (Yahoo·alternative.me·DefiLlama·Upbit·CoinGecko, 2017~ 전체 재추출)
 journal/analyze.py        구간 통계·비슷했던 날·일지 채점 → data/journal/dashboard.json, briefing.md
 journal/ingest_issue.py   이슈 폼 일지 → data/journal/entries/*.json
+journal/holdings.py       보유 코인 목록 (평단은 넣지 말 것 — 페이지에서 브라우저에만 저장)
 .github/ISSUE_TEMPLATE/market-journal.yml   30초 일지 입력 폼
 ```
 

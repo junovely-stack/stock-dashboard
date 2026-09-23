@@ -22,6 +22,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from holdings import HOLDINGS, col as hold_col
+
 # ─────────────────────────────────────────────
 # 설정
 # ─────────────────────────────────────────────
@@ -45,6 +47,8 @@ TARGETS = {
     "kospi": ("kospi", "코스피", "stock"),
     "kosdaq": ("kosdaq", "코스닥", "stock"),
 }
+# 보유 코인 (journal/holdings.py). 원화 기준 수익률 — 업비트 가격 그대로라 김프 변화도 포함된다.
+TARGETS.update({k: (hold_col(k), h["name"], "coin") for k, h in HOLDINGS.items()})
 
 INF = float("inf")
 # 구간 경계는 [이상, 미만). 값 바꾸면 모든 통계가 다시 계산된다.
@@ -296,6 +300,45 @@ def analog(f, codes, fwd, inds, latest):
 
 
 # ─────────────────────────────────────────────
+# 3-2) 보유 코인 요약
+# ─────────────────────────────────────────────
+def holdings_summary(px, latest):
+    btc_krw = px["upbit_btc_krw"] if "upbit_btc_krw" in px.columns else None
+    out = []
+    for k, h in HOLDINGS.items():
+        c = hold_col(k)
+        item = {"key": k, "name": h["name"], "market": h["upbit"]}
+        if c not in px.columns or px[c].loc[:latest].dropna().empty:
+            item["available"] = False
+            out.append(item)
+            continue
+        s = px[c].loc[:latest].dropna()
+        last = s.index[-1]
+
+        def r(d, ser=s):
+            base = ser.loc[:last - timedelta(days=d)]
+            return r1((ser.iloc[-1] / base.iloc[-1] - 1) * 100) if len(base) and ser.index[0] <= last - timedelta(days=d) else None
+        vs = None
+        if btc_krw is not None and r(30) is not None:
+            b = btc_krw.loc[:last].dropna()
+            if len(b):
+                rb = r(30, b)
+                vs = r1(r(30) - rb) if rb is not None else None
+        ma20 = s.iloc[-20:].mean() if len(s) >= 20 else None
+        item.update({
+            "available": True, "price": r1(s.iloc[-1], 2), "date": dstr(last),
+            "stale": (latest - last).days > STALE_DAYS,
+            "since": dstr(s.index[0]), "days": int(len(s)),
+            "r7": r(7), "r30": r(30), "r90": r(90), "vs_btc30": vs,
+            "ma20_gap": r1((s.iloc[-1] / ma20 - 1) * 100) if ma20 else None,
+            "high": r1(s.max(), 2), "from_high": r1((s.iloc[-1] / s.max() - 1) * 100),
+            "spark": [r1(v, 2) for v in s.iloc[-90:]],
+        })
+        out.append(item)
+    return out
+
+
+# ─────────────────────────────────────────────
 # 4) 차트용 시계열
 # ─────────────────────────────────────────────
 def series(px, f, latest):
@@ -434,6 +477,16 @@ def briefing(dash) -> str:
     bad = [f"{k}({v['state']})" for k, v in (st.get("sources") or {}).items() if v.get("state") != "ok"]
     L.append("소스 상태: " + ("전부 정상" if not bad else "⚠ " + ", ".join(bad) + " → 해당 값은 과거값/없음"))
     L.append("")
+    hs = [x for x in dash.get("holdings", []) if x.get("available")]
+    if hs:
+        L.append("## 보유 코인 (업비트 원화, 수익률은 원화 기준)")
+        def p(v, u="%"):
+            return "–" if v is None else f"{v:+.1f}{u}"
+        for x in hs:
+            L.append(f"- {x['name']}: {x['price']:,}원 ({x['date']}) · 7일 {p(x['r7'])} · 30일 {p(x['r30'])} · 90일 {p(x['r90'])} "
+                     f"· 업비트 BTC 대비 30일 {p(x['vs_btc30'], '%p')} · 20일선 {p(x['ma20_gap'])} · 데이터상 고점 대비 {p(x['from_high'])} "
+                     f"· 데이터 {x['since']}~ ({x['days']}일)" + (" ⚠과거값" if x["stale"] else ""))
+        L.append("")
     L.append("## 현재 상태 (지표 · 구간 · 이 구간일 때 BTC 30일 / 알트바스켓 30일 · 기저율)")
     for ind in dash["indicators"]:
         c = ind["current"]
@@ -540,7 +593,8 @@ def main() -> int:
         "data_through": dstr(latest),
         "status": status,
         "config": {"horizons": HORIZONS,
-                   "targets": [{"key": k, "name": v[1], "kind": v[2]} for k, v in TARGETS.items()],
+                   "targets": [{"key": k, "name": v[1], "kind": v[2], "group": "hold" if k in HOLDINGS else "market"}
+                               for k, v in TARGETS.items()],
                    "flat_band": FLAT_BAND, "thin_eff": THIN_EFF, "ref_eff": REF_EFF,
                    "analog_keys": ANALOG_KEYS, "analog_min_days": ANALOG_MIN_DAYS},
         "prices": {k: r1(px[v[0]].loc[:latest].dropna().iloc[-1], 2) if v[0] in px and px[v[0]].loc[:latest].notna().any() else None
@@ -549,6 +603,7 @@ def main() -> int:
         "indicators": inds,
         "analog": ana,
         "series": series(px, f, latest),
+        "holdings": holdings_summary(px, latest),
         "journal": journal,
     }
     dash = clean(dash)

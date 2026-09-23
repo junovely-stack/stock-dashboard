@@ -15,6 +15,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from holdings import HOLDINGS
+
 ROOT = Path(__file__).resolve().parent.parent
 ENTRIES_DIR = Path(os.environ.get("JOURNAL_ENTRIES_DIR", ROOT / "data" / "journal" / "entries"))
 
@@ -33,7 +35,8 @@ LABELS = {
     "날짜 (비우면 오늘)": "date",
 }
 TARGET_MAP = {"BTC": "btc", "ETH": "eth", "알트바스켓": "alt", "나스닥": "ndx",
-              "러셀2000": "rut", "코스피": "kospi", "코스닥": "kosdaq"}
+              "러셀2000": "rut", "코스피": "kospi", "코스닥": "kosdaq",
+              **{h["name"]: k for k, h in HOLDINGS.items()}}   # 보유 코인: 폼 옵션 글자 = holdings.py 의 name
 DIR_MAP = {"상승": "up", "하락": "down", "횡보": "flat"}
 ACTIONS = {"관망", "매수", "매도", "비중 확대", "비중 축소"}
 LATE_EDIT_HOURS = 24          # 작성 후 이 시간 넘어 고치면 적중률 집계에서 제외

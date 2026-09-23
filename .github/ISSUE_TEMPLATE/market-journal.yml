@@ -24,7 +24,11 @@ body:
     id: target
     attributes:
       label: 예측 대상
+      description: 보유 코인(리·오원·온도)은 업비트 원화가로 채점된다
       options:
+        - 리 RE
+        - 오원 O
+        - 온도 ONDO
         - BTC
         - ETH
         - 알트바스켓

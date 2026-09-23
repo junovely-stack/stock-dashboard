@@ -42,6 +42,28 @@
   .seg { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 2px; flex-wrap: wrap; }
   .seg button { background: transparent; border: 0; color: var(--sub); padding: 5px 10px; font: inherit; font-size: .8rem; border-radius: 8px; cursor: pointer; }
   .seg button.on { background: var(--accent); color: #fff; font-weight: 600; }
+  .seg .sep { align-self: center; font-size: .68rem; color: var(--dim); padding: 0 6px 0 10px; border-left: 1px solid var(--line); margin-left: 4px; }
+  .seg .sep:first-child { border-left: 0; margin-left: 0; padding-left: 6px; }
+
+  .hgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .hold { background: var(--card); border-radius: 12px; padding: 14px; border-left: 3px solid var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .hold .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .hold .nm { font-weight: 700; }
+  .hold .px { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .hold .px small { font-size: .75rem; color: var(--sub); font-weight: 400; margin-left: 2px; }
+  .hold .rets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 8px 0; font-variant-numeric: tabular-nums; }
+  .hold .rets div { background: var(--card2); border-radius: 6px; padding: 4px 6px; font-size: .78rem; }
+  .hold .rets span { display: block; font-size: .66rem; color: var(--dim); }
+  .hold .spark { width: 100%; height: 44px; display: block; margin: 4px 0 6px; }
+  .hold .row { font-size: .78rem; color: var(--sub); display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .hold .row b { color: var(--text); font-weight: 600; }
+  .hold .mine { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: .78rem; color: var(--sub); display: grid; gap: 6px; }
+  .hold .mine label { display: flex; align-items: center; gap: 6px; }
+  .hold .mine input { width: 110px; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 4px 8px; font: inherit; font-size: .8rem; font-variant-numeric: tabular-nums; }
+  .hold .mine .lv { display: flex; flex-wrap: wrap; gap: 4px; }
+  .hold .mine .lv span { background: var(--card2); border-radius: 5px; padding: 1px 6px; font-size: .72rem; font-variant-numeric: tabular-nums; }
+  .hold .mine .lv span.near { outline: 1px solid var(--accent); color: var(--text); }
+  tr.holdrow td:first-child::after { content: '보유'; font-size: .62rem; color: var(--accent); margin-left: 6px; font-weight: 600; }
 
   section { margin-top: 28px; }
   section > h2 { font-size: 1.05rem; font-weight: 700; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
@@ -152,31 +174,36 @@
       <span class="lab">기간</span><div class="seg" id="hSeg"></div>
     </div>
 
+    <section id="holdSec">
+      <h2><span class="n">1</span>보유 코인 <span class="hint">업비트 원화가 · 평단은 이 브라우저에만 저장(저장소·서버에 안 올라감)</span></h2>
+      <div class="hgrid" id="holdings"></div>
+    </section>
+
     <section>
-      <h2><span class="n">1</span>지금 어디에 있나 <span class="hint">카드의 숫자 = 과거에 이 구간이었을 때 이후 수익률</span></h2>
+      <h2><span class="n">2</span>지금 어디에 있나 <span class="hint">카드의 숫자 = 과거에 이 구간이었을 때 이후 수익률</span></h2>
       <p class="lead" id="nowLead"></p>
       <div class="grid" id="now"></div>
     </section>
 
     <section>
-      <h2><span class="n">2</span>지금과 비슷했던 날 <span class="hint">조건을 동시에 만족한 과거 날짜들의 이후 성적</span></h2>
+      <h2><span class="n">3</span>지금과 비슷했던 날 <span class="hint">조건을 동시에 만족한 과거 날짜들의 이후 성적</span></h2>
       <div class="panel" id="analog"></div>
     </section>
 
     <section>
-      <h2><span class="n">3</span>지표 구간별 이후 수익률 <span class="hint">셀 = 중앙값 · 아래 작은 글씨 = 상승확률/독립표본</span></h2>
+      <h2><span class="n">4</span>지표 구간별 이후 수익률 <span class="hint">셀 = 중앙값 · 아래 작은 글씨 = 상승확률/독립표본</span></h2>
       <div class="seg" id="indSeg" style="margin:8px 0 10px"></div>
       <div class="panel"><div class="tbl-wrap" id="bucketTbl"></div><div class="ns" id="bucketNote"></div></div>
     </section>
 
     <section>
-      <h2><span class="n">4</span>흐름 <span class="hint">위 = BTC(로그) · 아래 = 알트 강도(주황)·공포탐욕(회색)</span></h2>
+      <h2><span class="n">5</span>흐름 <span class="hint">위 = BTC(로그) · 아래 = 알트 강도(주황)·공포탐욕(회색)</span></h2>
       <div class="seg" id="rangeSeg" style="margin:8px 0 10px"></div>
       <div class="panel"><svg class="chart" id="flow" viewBox="0 0 1000 380" preserveAspectRatio="xMidYMid meet"></svg></div>
     </section>
 
     <section>
-      <h2><span class="n">5</span>내 일지 · 채점 <span class="hint">기간이 지나면 실제 수익률로 자동 채점</span></h2>
+      <h2><span class="n">6</span>내 일지 · 채점 <span class="hint">기간이 지나면 실제 수익률로 자동 채점</span></h2>
       <div id="journal"></div>
     </section>
 
@@ -226,7 +253,7 @@
       : `아직 데이터 없음 · ${esc(D.generated_at_kst || '')}`;
     const src = Object.entries(st.sources || {}).map(([k, v]) => {
       const [c, lab] = SRC_STATE[v.state] || SRC_STATE.wait;
-      const tt = [v.desc, v.max_date ? '최신 ' + v.max_date : '', v.error || ''].filter(Boolean).join(' · ');
+      const tt = [v.desc, v.max_date ? '최신 ' + v.max_date : '', v.note || '', v.error || ''].filter(Boolean).join(' · ');
       return `<span class="chip ${c}" title="${esc(tt)}"><i></i>${esc(v.desc?.split(' (')[0] || k)} · ${lab}</span>`;
     });
     src.push(`<span class="chip s-wait" title="네이버/KRX 수급 — 2단계에서 대사 후 연결"><i></i>외국인 순매수 · 연동 대기</span>`);
@@ -246,11 +273,14 @@
 
   // ── 컨트롤 ─────────────────────────
   function seg(el, items, cur, on) {
-    el.innerHTML = items.map(([k, l]) => `<button data-k="${esc(k)}" class="${k === cur ? 'on' : ''}">${esc(l)}</button>`).join('');
+    el.innerHTML = items.map(([k, l]) => k == null ? `<span class="sep">${esc(l)}</span>`
+      : `<button data-k="${esc(k)}" class="${k === cur ? 'on' : ''}">${esc(l)}</button>`).join('');
     el.onclick = e => { const b = e.target.closest('button'); if (b) on(b.dataset.k); };
   }
   function renderControls() {
-    seg($('tgtSeg'), D.config.targets.map(t => [t.key, t.name]), S.tgt, k => { S.tgt = k; save(); renderAll(); });
+    const hold = D.config.targets.filter(t => t.group === 'hold'), mkt = D.config.targets.filter(t => t.group !== 'hold');
+    const items = [...(hold.length ? [[null, '보유'], ...hold.map(t => [t.key, t.name])] : []), [null, '시장'], ...mkt.map(t => [t.key, t.name])];
+    seg($('tgtSeg'), items, S.tgt, k => { S.tgt = k; save(); renderAll(); });
     seg($('hSeg'), D.config.horizons.map(h => [String(h), h + '일']), S.h, k => { S.h = k; save(); renderAll(); });
   }
 
@@ -310,7 +340,7 @@
                 <td class="${th} ${cls(d?.med)}">${sgn(d?.med)}<span class="s">독립≈${d?.eff != null ? Math.round(d.eff) : '–'}</span></td>
                 <td class="${th}">${rangeBar(d, ...lohi[h])}<span class="s">${sgn(d?.p10)} ~ ${sgn(d?.p90)}</span></td>`;
       }).join('');
-      return `<tr class="${t.key === S.tgt ? 'sel' : ''}"><td>${esc(t.name)}</td>${cells}</tr>`;
+      return `<tr class="${t.key === S.tgt ? 'sel' : ''} ${t.group === 'hold' ? 'holdrow' : ''}"><td>${esc(t.name)}</td>${cells}</tr>`;
     }).join('');
     const head1 = hs.map(h => `<th colspan="3" style="text-align:center">${h}일 뒤</th>`).join('');
     const head2 = hs.map(() => `<th>상승확률</th><th>중앙값</th><th>p10 ~ p90</th>`).join('');
@@ -471,12 +501,68 @@
       '· 매일 겹치는 구간이라 30일 수익률 300일치는 독립 표본 ≈ 10개. 카드·표의 “독립≈”이 실제 표본 크기에 가깝다.',
       '· 알트바스켓·알트 강도는 지금 살아남은 대형 알트 20종 기준 → 과거 성과가 실제보다 좋게 나온다(생존 편향).',
       `· 채점 횡보 기준: 코인 7일 ±${fb.coin['7']}% / 30일 ±${fb.coin['30']}%, 주식 7일 ±${fb.stock['7']}% / 30일 ±${fb.stock['30']}%. 기준일 = 작성 시점에 마감된 마지막 UTC 일봉.`,
-      '· 데이터: Yahoo Finance, alternative.me, DefiLlama, Upbit, CoinGecko. 소스가 실패하면 그 값은 직전 값을 유지하고 위 칩이 “과거값”으로 바뀐다.',
+      '· 보유 코인은 업비트 원화 일봉(막히면 빗썸) 기준 → 김치프리미엄 변화가 수익률에 섞인다. 상장 몇 달 안 된 코인은 구간 통계가 “표본 부족”으로 나오는 게 정상.',
+      '· 데이터: Yahoo Finance, alternative.me, DefiLlama, Upbit, Bithumb, CoinGecko. 소스가 실패하면 그 값은 직전 값을 유지하고 위 칩이 “과거값”으로 바뀐다.',
     ].map(esc).join('<br>');
   }
 
+  // ── 1. 보유 코인 ─────────────────────────
+  const AVG_KEY = 'mj-avg';
+  function loadAvg() { try { return JSON.parse(localStorage.getItem(AVG_KEY) || '{}'); } catch (e) { return {}; } }
+  function saveAvg(o) { try { localStorage.setItem(AVG_KEY, JSON.stringify(o)); } catch (e) {} }
+  const won = v => v == null ? '–' : (v >= 100 ? Math.round(v).toLocaleString() : v.toLocaleString(undefined, { maximumFractionDigits: 2 })) + '원';
+  function spark(arr) {
+    const v = arr.filter(x => x != null);
+    if (v.length < 2) return '';
+    const lo = Math.min(...v), hi = Math.max(...v), W = 300, H = 44;
+    const pts = arr.map((x, i) => x == null ? null : [(i / (arr.length - 1) * (W - 4) + 2).toFixed(1), (H - 3 - (x - lo) / ((hi - lo) || 1) * (H - 6)).toFixed(1)]).filter(Boolean);
+    const up = v[v.length - 1] >= v[0];
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="${up ? '#FF7A45' : '#4C86C6'}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+  }
+  function mineBlock(x, avg) {
+    if (!avg) return `<span class="muted">평단을 넣으면 수익률과 기준선(-20%·+30%)이 보인다</span>`;
+    const pnl = (x.price / avg - 1) * 100;
+    const lv = [-25, -20, -15, 30, 50].map(p => {
+      const price = avg * (1 + p / 100), near = Math.abs(x.price / price - 1) < 0.03;
+      return `<span class="${near ? 'near' : ''}" title="${near ? '현재가가 3% 이내' : ''}">${p > 0 ? '+' : ''}${p}% ${won(price)}</span>`;
+    }).join('');
+    return `<div>내 수익률 <b class="${cls(pnl)}">${sgn(pnl)}</b></div><div class="lv">${lv}</div>`;
+  }
+  function renderHoldings() {
+    const H = D.holdings || [], el = $('holdings');
+    if (!H.length) { $('holdSec').hidden = true; return; }
+    const avg = loadAvg(), h = S.h, a = D.analog;
+    el.innerHTML = H.map(x => {
+      if (!x.available) return `<div class="hold"><div class="top"><span class="nm">${esc(x.name)}</span></div><div class="px muted">연동 대기</div>
+        <div class="ns">업비트·빗썸 둘 다 못 받음 — 상단 칩에 마우스를 올려 원인 확인</div></div>`;
+      const d = a?.available ? a.stats[x.key]?.[h] : null, b = a?.available ? a.base[x.key]?.[h] : null;
+      const ana = d?.n ? `비슷했던 날 기준 ${h}일: 상승 <b>${pc(d.up)}</b>${deltaChip(d, b)} · 중앙값 <b class="${cls(d.med)}">${sgn(d.med)}</b> · ${nLine(d)}`
+        : `비슷했던 날 기준 ${h}일: <span class="tag-thin">표본 없음 (상장 후 기간이 짧음)</span>`;
+      const rets = [['7일', x.r7], ['30일', x.r30], ['90일', x.r90], ['BTC 대비', x.vs_btc30]]
+        .map(([l, v]) => `<div><span>${l}</span><b class="${cls(v)}">${v == null ? '–' : (v > 0 ? '+' : '') + v.toFixed(1) + (l.startsWith('BTC') ? '%p' : '%')}</b></div>`).join('');
+      return `<div class="hold">
+        <div class="top"><span class="nm">${esc(x.name)}</span><span class="ns" style="margin:0">${esc(x.date)} 종가${x.stale ? ' · <span class="badge warn">과거값</span>' : ''}</span></div>
+        <div class="px">${won(x.price)}</div>
+        ${spark(x.spark || [])}
+        <div class="rets">${rets}</div>
+        <div class="row"><span>20일선 <b class="${cls(x.ma20_gap)}">${sgn(x.ma20_gap)}</b></span><span>데이터상 고점 대비 <b class="${cls(x.from_high)}">${sgn(x.from_high)}</b></span><span>${esc(x.since)}~ (${x.days}일)</span></div>
+        <div class="row" style="margin-top:6px"><span>${ana}</span></div>
+        <div class="mine"><label>내 평단 <input type="number" inputmode="decimal" min="0" step="any" data-avg="${esc(x.key)}" value="${avg[x.key] ?? ''}" placeholder="예) 613.3">원</label>
+          <div data-mine="${esc(x.key)}">${mineBlock(x, avg[x.key])}</div></div>
+      </div>`;
+    }).join('');
+    el.oninput = e => {
+      const k = e.target.dataset.avg; if (!k) return;
+      const o = loadAvg(), v = parseFloat(e.target.value);
+      if (v > 0) o[k] = v; else delete o[k];
+      saveAvg(o);
+      const x = H.find(y => y.key === k);
+      el.querySelector(`[data-mine="${k}"]`).innerHTML = mineBlock(x, o[k]);
+    };
+  }
+
   function renderAll() {
-    renderControls(); renderNow(); renderAnalog(); renderBuckets(); renderNotes();
+    renderControls(); renderHoldings(); renderNow(); renderAnalog(); renderBuckets(); renderNotes();
   }
 
   function boot(data) {

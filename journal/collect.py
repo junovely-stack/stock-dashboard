@@ -20,6 +20,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from holdings import HOLDINGS, col as hold_col
+
 # ─────────────────────────────────────────────
 # 설정 (여기만 고치면 됨)
 # ─────────────────────────────────────────────
@@ -129,11 +131,11 @@ def fetch_stablecoins() -> pd.DataFrame:
     return df.drop_duplicates("date", keep="last").set_index("date")
 
 
-def fetch_upbit_btc() -> pd.DataFrame:
-    """업비트 KRW-BTC 일봉 종가 (김치프리미엄 계산용). 업비트 일봉은 UTC 00:00 기준이라 야후 BTC-USD 와 구간이 같다."""
+def upbit_daily(market: str) -> pd.Series:
+    """업비트 일봉 종가(원). 업비트 일봉은 UTC 00:00 기준이라 야후 BTC-USD 와 구간이 같다."""
     rows, to = [], None
     for _ in range(40):  # 200일 × 40 = 약 22년치 상한
-        params = {"market": "KRW-BTC", "count": 200}
+        params = {"market": market, "count": 200}
         if to:
             params["to"] = to
         r = requests.get("https://api.upbit.com/v1/candles/days", params=params,
@@ -144,15 +146,54 @@ def fetch_upbit_btc() -> pd.DataFrame:
             break
         rows += js
         oldest = js[-1]["candle_date_time_utc"]
-        if oldest[:10] <= START:
+        if oldest[:10] <= START or len(js) < 200:
             break
         to = oldest + "Z"
         time.sleep(0.2)
-    df = pd.DataFrame({
-        "date": [x["candle_date_time_utc"][:10] for x in rows],
-        "upbit_btc_krw": [float(x["trade_price"]) for x in rows],
-    })
-    return df.drop_duplicates("date").set_index("date")
+    s = pd.Series([float(x["trade_price"]) for x in rows],
+                  index=[x["candle_date_time_utc"][:10] for x in rows])
+    return s[~s.index.duplicated()].sort_index()
+
+
+def bithumb_daily(pair: str) -> pd.Series:
+    """빗썸 일봉 종가(원) — 업비트가 막혔을 때 대체용.
+    빗썸 일봉은 KST 00:00 기준이라 업비트/야후(UTC 00:00)와 9시간 어긋난다 → status 에 표시."""
+    r = requests.get(f"https://api.bithumb.com/public/candlestick/{pair}/24h", headers=UA, timeout=HTTP_TIMEOUT)
+    r.raise_for_status()
+    js = r.json()
+    if js.get("status") != "0000" or not js.get("data"):
+        raise RuntimeError(f"빗썸 응답 이상: {str(js)[:120]}")
+    idx = [datetime.fromtimestamp(int(x[0]) / 1000, tz=KST).strftime("%Y-%m-%d") for x in js["data"]]
+    s = pd.Series([float(x[2]) for x in js["data"]], index=idx)
+    return s[~s.index.duplicated(keep="last")].sort_index()
+
+
+def fetch_upbit_btc() -> pd.DataFrame:
+    """업비트 KRW-BTC (김치프리미엄 계산용)"""
+    s = upbit_daily("KRW-BTC")
+    return s.rename("upbit_btc_krw").rename_axis("date").to_frame()
+
+
+HOLD_NOTES: dict[str, str] = {}
+
+
+def fetch_holdings() -> pd.DataFrame:
+    """보유 코인 원화 일봉. 코인마다 업비트 → 실패 시 빗썸 순서로 시도."""
+    out = {}
+    for key, h in HOLDINGS.items():
+        try:
+            out[hold_col(key)] = upbit_daily(h["upbit"])
+            HOLD_NOTES[key] = "업비트"
+        except Exception as e1:
+            try:
+                out[hold_col(key)] = bithumb_daily(h["bithumb"])
+                HOLD_NOTES[key] = "빗썸(대체, KST 기준 일봉)"
+            except Exception as e2:
+                HOLD_NOTES[key] = f"실패: 업비트 {type(e1).__name__} / 빗썸 {type(e2).__name__}"
+        time.sleep(0.2)
+    if not out:
+        raise RuntimeError("보유 코인 전부 실패 " + str(HOLD_NOTES))
+    return pd.DataFrame(out).rename_axis("date")
 
 
 def fetch_coingecko_global() -> dict:
@@ -173,6 +214,7 @@ SOURCES = {
     "fng": (fetch_fng, ["fng"], "공포탐욕지수 (alternative.me)"),
     "stablecoin": (fetch_stablecoins, ["stable_usd"], "스테이블코인 공급 (DefiLlama)"),
     "upbit": (fetch_upbit_btc, ["upbit_btc_krw"], "업비트 BTC 원화가 (김치프리미엄)"),
+    "holdings": (fetch_holdings, [hold_col(k) for k in HOLDINGS], "보유 코인 원화가 (업비트, 실패 시 빗썸)"),
 }
 
 
@@ -203,9 +245,17 @@ def main() -> int:
             df = df[df.index >= START]
             if df.dropna(how="all").empty:
                 raise RuntimeError("유효 행 0")
+            # 소스 안에서 일부 컬럼만 실패한 경우(예: 보유 코인 1개) 그 컬럼은 직전 값 유지
+            missing = [c for c in cols if c not in df.columns and old is not None and c in old.columns]
+            if missing:
+                df = df.join(old[missing], how="outer")
             frames.append(df)
             status[name] = {"state": "ok", "desc": desc, "rows": int(df.dropna(how="all").shape[0]),
                             "max_date": str(df.dropna(how="all").index.max())}
+            if name == "holdings":
+                status[name]["note"] = ", ".join(f"{HOLDINGS[k]['name']}: {v}" for k, v in HOLD_NOTES.items())
+                if any(v.startswith("실패") for v in HOLD_NOTES.values()):
+                    status[name]["state"] = "stale"
             print(f"  ✔ {status[name]['rows']}행, 최신 {status[name]['max_date']}")
         except Exception as e:
             msg = f"{type(e).__name__}: {e}"[:300]
