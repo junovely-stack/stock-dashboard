@@ -1,0 +1,59 @@
+name: 🧭 Market Journal (daily)
+
+on:
+  schedule:
+    # 매일 KST 09:20 — 코인 일봉 마감(KST 09:00) 직후. 주말 포함(코인은 주말에도 움직임)
+    - cron: "20 0 * * *"
+  workflow_dispatch:   # 최초 1회 수동 실행하면 2017년부터 백필됨
+
+permissions:
+  contents: write
+
+concurrency:
+  group: journal-data
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 📦 의존성
+        run: pip install yfinance pandas requests
+
+      - name: 🕷️ 수집 (전체 재추출)
+        run: python journal/collect.py
+
+      - name: 🧮 분석 · 일지 채점
+        run: python journal/analyze.py
+
+      - name: 💾 커밋 & 푸시
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/market data/journal
+          if git diff --staged --quiet; then echo "변경 없음"; exit 0; fi
+          git commit -m "🧭 시장 일지 데이터 $(TZ=Asia/Seoul date +'%Y-%m-%d')"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
+
+      - name: 🚨 핵심 소스 점검 (과거값이면 실패 처리 → GitHub 메일 알림)
+        run: |
+          python - <<'PY'
+          import json, sys
+          s = json.load(open("data/market/status.json", encoding="utf-8"))
+          bad = [k for k in s.get("critical", []) if s["sources"].get(k, {}).get("state") != "ok"]
+          others = [f"{k}={v['state']}" for k, v in s["sources"].items() if v.get("state") != "ok"]
+          print("소스 상태:", others or "전부 정상")
+          if bad or not s["gate"]["passed"]:
+              print("핵심 소스 이상:", bad, s["gate"])
+              sys.exit(1)
+          PY
