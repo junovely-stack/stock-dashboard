@@ -63,6 +63,16 @@
   .hold .mine .lv { display: flex; flex-wrap: wrap; gap: 4px; }
   .hold .mine .lv span { background: var(--card2); border-radius: 5px; padding: 1px 6px; font-size: .72rem; font-variant-numeric: tabular-nums; }
   .hold .mine .lv span.near { outline: 1px solid var(--accent); color: var(--text); }
+  .fc-lead { color: var(--sub); font-size: .84rem; margin: 4px 0 12px; max-width: 900px; }
+  .fc-lead b { color: var(--text); }
+  .verdict { display: inline-block; font-size: .74rem; font-weight: 700; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+  .verdict.up { background: rgba(255,122,69,.2); color: var(--up); }
+  .verdict.down { background: rgba(76,134,198,.22); color: #8DB5E2; }
+  .verdict.flat { background: var(--card2); color: var(--sub); }
+  .conf { font-size: .72rem; white-space: nowrap; }
+  .conf.low { color: var(--warn); } .conf.mid { color: var(--sub); } .conf.high { color: #7fd3aa; }
+  .fc-mini { margin-top: 8px; padding: 8px 10px; background: var(--card2); border-radius: 8px; font-size: .78rem; color: var(--sub); display: grid; gap: 3px; }
+  .fc-mini b { color: var(--text); }
   tr.holdrow td:first-child::after { content: '보유'; font-size: .62rem; color: var(--accent); margin-left: 6px; font-weight: 600; }
 
   section { margin-top: 28px; }
@@ -174,36 +184,42 @@
       <span class="lab">기간</span><div class="seg" id="hSeg"></div>
     </div>
 
+    <section>
+      <h2><span class="n">1</span><span>앞으로 <span id="fcH">30</span>일 전망</span> <span class="hint">가격 한 점이 아니라 “오를 확률”과 “10번 중 8번 끝난 가격 범위”</span></h2>
+      <p class="fc-lead" id="fcLead"></p>
+      <div class="panel"><div class="tbl-wrap" id="forecast"></div><div class="ns" id="fcNote"></div></div>
+    </section>
+
     <section id="holdSec">
-      <h2><span class="n">1</span>보유 코인 <span class="hint">업비트 원화가 · 평단은 이 브라우저에만 저장(저장소·서버에 안 올라감)</span></h2>
+      <h2><span class="n">2</span>보유 코인 <span class="hint">업비트 원화가 · 평단은 이 브라우저에만 저장(저장소·서버에 안 올라감)</span></h2>
       <div class="hgrid" id="holdings"></div>
     </section>
 
     <section>
-      <h2><span class="n">2</span>지금 어디에 있나 <span class="hint">카드의 숫자 = 과거에 이 구간이었을 때 이후 수익률</span></h2>
+      <h2><span class="n">3</span>지금 어디에 있나 <span class="hint">카드의 숫자 = 과거에 이 구간이었을 때 이후 수익률</span></h2>
       <p class="lead" id="nowLead"></p>
       <div class="grid" id="now"></div>
     </section>
 
     <section>
-      <h2><span class="n">3</span>지금과 비슷했던 날 <span class="hint">조건을 동시에 만족한 과거 날짜들의 이후 성적</span></h2>
+      <h2><span class="n">4</span>지금과 비슷했던 날 <span class="hint">조건을 동시에 만족한 과거 날짜들의 이후 성적</span></h2>
       <div class="panel" id="analog"></div>
     </section>
 
     <section>
-      <h2><span class="n">4</span>지표 구간별 이후 수익률 <span class="hint">셀 = 중앙값 · 아래 작은 글씨 = 상승확률/독립표본</span></h2>
+      <h2><span class="n">5</span>지표 구간별 이후 수익률 <span class="hint">셀 = 중앙값 · 아래 작은 글씨 = 상승확률/독립표본</span></h2>
       <div class="seg" id="indSeg" style="margin:8px 0 10px"></div>
       <div class="panel"><div class="tbl-wrap" id="bucketTbl"></div><div class="ns" id="bucketNote"></div></div>
     </section>
 
     <section>
-      <h2><span class="n">5</span>흐름 <span class="hint">위 = BTC(로그) · 아래 = 알트 강도(주황)·공포탐욕(회색)</span></h2>
+      <h2><span class="n">6</span>흐름 <span class="hint">위 = BTC(로그) · 아래 = 알트 강도(주황)·공포탐욕(회색)</span></h2>
       <div class="seg" id="rangeSeg" style="margin:8px 0 10px"></div>
       <div class="panel"><svg class="chart" id="flow" viewBox="0 0 1000 380" preserveAspectRatio="xMidYMid meet"></svg></div>
     </section>
 
     <section>
-      <h2><span class="n">6</span>내 일지 · 채점 <span class="hint">기간이 지나면 실제 수익률로 자동 채점</span></h2>
+      <h2><span class="n">7</span>내 일지 · 채점 <span class="hint">기간이 지나면 실제 수익률로 자동 채점</span></h2>
       <div id="journal"></div>
     </section>
 
@@ -528,6 +544,92 @@
     }).join('');
     return `<div>내 수익률 <b class="${cls(pnl)}">${sgn(pnl)}</b></div><div class="lv">${lv}</div>`;
   }
+  // ── 1. 전망 ─────────────────────────
+  // 판정 기준: 비슷했던 날의 상승확률이 평소보다 EDGE_PP 이상 높고(낮고) 지표 투표도 같은 쪽이면 우위
+  const EDGE_PP = 8, VOTE_PP = 5, VOL_SCALE_MIN = 0.5, VOL_SCALE_MAX = 3;
+  function volOf(arr) {
+    const r = [];
+    for (let i = 1; i < arr.length; i++) if (arr[i] != null && arr[i - 1] > 0) r.push(Math.log(arr[i] / arr[i - 1]));
+    if (r.length < 20) return null;
+    const m = r.reduce((x, y) => x + y, 0) / r.length;
+    return Math.sqrt(r.reduce((x, y) => x + (y - m) ** 2, 0) / (r.length - 1));
+  }
+  function forecast(key, h) {
+    const a = D.analog;
+    if (!a?.available) return null;
+    const isHold = D.config.targets.find(t => t.key === key)?.group === 'hold';
+    let d = a.stats[key]?.[h], b = a.base[key]?.[h], proxy = null, scale = 1;
+    // 상장한 지 얼마 안 돼 자체 표본이 없으면: 알트바스켓 결과를 쓰고 변동성 비율만큼 범위를 넓힘(대리 추정)
+    if (isHold && (!d?.n || tier(d) === 'thin')) {
+      const hx = (D.holdings || []).find(x => x.key === key);
+      const va = volOf((D.series.recent.alt_idx || []).slice(-91)), vh = hx?.spark ? volOf(hx.spark) : null;
+      scale = va && vh ? Math.min(VOL_SCALE_MAX, Math.max(VOL_SCALE_MIN, vh / va)) : 1;
+      proxy = { name: tname('alt'), scale };
+      d = a.stats.alt?.[h]; b = a.base.alt?.[h];
+    }
+    if (!d?.n) return null;
+    const vk = proxy ? 'alt' : key;
+    let pos = 0, neg = 0, neu = 0;
+    D.indicators.forEach(ind => {
+      const c = ind.current;
+      if (!c || c.bucket == null || c.stale) return;
+      const x = ind.buckets[c.bucket].stats[vk]?.[h], y = ind.base[vk]?.[h];
+      if (!x?.n || !y?.n || tier(x) === 'thin') { neu++; return; }
+      const dd = x.up - y.up;
+      if (dd >= VOTE_PP) pos++; else if (dd <= -VOTE_PP) neg++; else neu++;
+    });
+    const edge = d.up - (b?.up ?? d.up);
+    const verdict = edge >= EDGE_PP && pos >= neg ? 'up' : edge <= -EDGE_PP && neg >= pos ? 'down' : 'flat';
+    const eff = d.eff || 0, eps = a.n_episodes || 0;
+    const conf = proxy || eff < D.config.ref_eff || eps < 3 ? 'low' : eff >= 20 && eps >= 8 ? 'high' : 'mid';
+    const sc = v => v == null ? null : v * scale;
+    return { d, b, proxy, up: d.up, baseUp: b?.up, edge, med: sc(d.med), p10: sc(d.p10), p90: sc(d.p90), votes: { pos, neg, neu }, verdict, conf };
+  }
+  const VERDICT = { up: '상승 우위', down: '하락 우위', flat: '평소와 비슷' };
+  const CONF = { low: '신뢰도 낮음', mid: '신뢰도 보통', high: '신뢰도 높음' };
+  function curPrice(key) {
+    const hx = (D.holdings || []).find(x => x.key === key && x.available);
+    return hx ? hx.price : D.prices?.[key];
+  }
+  function fmtPrice(key, v) {
+    if (v == null) return '–';
+    const t = D.config.targets.find(x => x.key === key);
+    if (t?.group === 'hold') return won(v);
+    if (key === 'btc' || key === 'eth') return '$' + Math.round(v).toLocaleString();
+    return Math.round(v).toLocaleString();
+  }
+  function renderForecast() {
+    const h = S.h;
+    $('fcH').textContent = h;
+    $('fcLead').innerHTML = `<b>상승확률</b>: 과거에 지금과 비슷했던 날, ${h}일 뒤 올라 있던 비율. 괄호 안은 아무 조건 없을 때(평소). `
+      + `<b>예상 가격</b>: 그날들 수익률의 중앙값을 지금 가격에 적용. <b>80% 범위</b>: 10번 중 8번은 이 안에서 끝났다. `
+      + `판정은 상승확률이 평소보다 ${EDGE_PP}%p 이상 벌어지고 지표 투표도 같은 쪽일 때만 “우위”로 표시.`;
+    const order = [...D.config.targets.filter(t => t.group === 'hold'), ...D.config.targets.filter(t => t.group !== 'hold')];
+    const rows = order.map(t => {
+      const f = forecast(t.key, h), p = curPrice(t.key);
+      if (!f) return `<tr class="${t.group === 'hold' ? 'holdrow' : ''}"><td>${esc(t.name)}</td><td>${fmtPrice(t.key, p)}</td><td colspan="6" class="muted">데이터 부족 — 연동 대기 또는 표본 없음</td></tr>`;
+      const at = v => p == null || v == null ? '–' : fmtPrice(t.key, p * (1 + v / 100));
+      const basis = f.proxy ? `<span class="conf low" title="자체 이력이 짧아 ${esc(f.proxy.name)} 결과 사용, 범위는 변동성 ${f.proxy.scale.toFixed(1)}배">대리: ${esc(f.proxy.name)} ×${f.proxy.scale.toFixed(1)}</span>`
+        : `독립≈${Math.round(f.d.eff)}`;
+      return `<tr class="${t.key === S.tgt ? 'sel' : ''} ${t.group === 'hold' ? 'holdrow' : ''}">
+        <td>${esc(t.name)}</td>
+        <td>${fmtPrice(t.key, p)}</td>
+        <td><span class="verdict ${f.verdict}">${VERDICT[f.verdict]}</span></td>
+        <td><b>${pc(f.up)}</b> <span class="muted">(평소 ${pc(f.baseUp)})</span></td>
+        <td><b class="${cls(f.med)}">${at(f.med)}</b><span class="s">${sgn(f.med)}</span></td>
+        <td>${at(f.p10)} ~ ${at(f.p90)}<span class="s">${sgn(f.p10)} ~ ${sgn(f.p90)}</span></td>
+        <td><span class="up">▲${f.votes.pos}</span> <span class="down">▼${f.votes.neg}</span> <span class="muted">–${f.votes.neu}</span></td>
+        <td><span class="conf ${f.conf}">${CONF[f.conf]}</span><span class="s">${basis}</span></td>
+      </tr>`;
+    }).join('');
+    $('forecast').innerHTML = `<table><thead><tr><th>대상</th><th>지금</th><th>판정</th><th>상승확률</th><th>${h}일 뒤 예상 (중앙값)</th><th>80% 범위</th><th title="지표 10개 중 지금 구간이 상승 쪽 / 하락 쪽 / 중립">지표 투표</th><th>신뢰도</th></tr></thead><tbody>${rows}</tbody></table>`;
+    const a = D.analog;
+    $('fcNote').innerHTML = a?.available
+      ? `근거: ${esc(a.conditions.map(c => c.name + ' ' + c.label).join(' + '))} 인 날 ${a.n_days.toLocaleString()}일 (서로 떨어진 구간 ${a.n_episodes}개). `
+        + `구간이 5개 미만이면 신뢰도를 “낮음”으로 볼 것. 대리 추정 = 상장 기간이 짧아 알트바스켓 결과를 그 코인의 변동성 비율만큼 넓혀 쓴 것.`
+      : '';
+  }
+
   function renderHoldings() {
     const H = D.holdings || [], el = $('holdings');
     if (!H.length) { $('holdSec').hidden = true; return; }
@@ -546,7 +648,11 @@
         ${spark(x.spark || [])}
         <div class="rets">${rets}</div>
         <div class="row"><span>20일선 <b class="${cls(x.ma20_gap)}">${sgn(x.ma20_gap)}</b></span><span>데이터상 고점 대비 <b class="${cls(x.from_high)}">${sgn(x.from_high)}</b></span><span>${esc(x.since)}~ (${x.days}일)</span></div>
-        <div class="row" style="margin-top:6px"><span>${ana}</span></div>
+        ${(() => { const f = forecast(x.key, h); if (!f) return `<div class="row" style="margin-top:6px"><span>${ana}</span></div>`;
+          const at = v => v == null ? '–' : won(x.price * (1 + v / 100));
+          return `<div class="fc-mini"><div>${h}일 전망 <span class="verdict ${f.verdict}">${VERDICT[f.verdict]}</span> <span class="conf ${f.conf}">${CONF[f.conf]}${f.proxy ? ' (대리 추정)' : ''}</span></div>
+            <div>상승확률 <b>${pc(f.up)}</b> (평소 ${pc(f.baseUp)}) · 예상 <b class="${cls(f.med)}">${at(f.med)}</b></div>
+            <div>80% 범위 <b>${at(f.p10)} ~ ${at(f.p90)}</b></div></div>`; })()}
         <div class="mine"><label>내 평단 <input type="number" inputmode="decimal" min="0" step="any" data-avg="${esc(x.key)}" value="${avg[x.key] ?? ''}" placeholder="예) 613.3">원</label>
           <div data-mine="${esc(x.key)}">${mineBlock(x, avg[x.key])}</div></div>
       </div>`;
@@ -562,7 +668,7 @@
   }
 
   function renderAll() {
-    renderControls(); renderHoldings(); renderNow(); renderAnalog(); renderBuckets(); renderNotes();
+    renderControls(); renderForecast(); renderHoldings(); renderNow(); renderAnalog(); renderBuckets(); renderNotes();
   }
 
   function boot(data) {
