@@ -1,0 +1,113 @@
+name: 📝 오늘의 시장 일지
+description: 30초 기록 — 느낌 1개 + 예측 1개 + 근거 한 줄. 시장 수치는 자동으로 붙는다.
+title: "[일지] "
+labels: ["journal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        수치(BTC·공포탐욕·알트강도·달러·금리…)는 자동 수집되니 **적지 말 것.** 여기엔 사람만 알 수 있는 것만.
+        예측은 채점된다 — 기간이 지나면 실제 수익률로 적중/빗나감이 자동 판정된다.
+  - type: dropdown
+    id: mood
+    attributes:
+      label: 오늘 시장 느낌 (내 심리)
+      options:
+        - 1 극공포
+        - 2 공포
+        - 3 중립
+        - 4 탐욕
+        - 5 극탐욕
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: 예측 대상
+      description: 보유 코인(리·오원·온도)은 업비트 원화가로 채점된다
+      options:
+        - 리 RE
+        - 오원 O
+        - 온도 ONDO
+        - BTC
+        - ETH
+        - 알트바스켓
+        - 나스닥
+        - 러셀2000
+        - 코스피
+        - 코스닥
+    validations:
+      required: true
+  - type: dropdown
+    id: direction
+    attributes:
+      label: 예측 방향
+      description: "횡보 기준 — 코인 7일 ±3% / 30일 ±8%, 주식 7일 ±1.5% / 30일 ±4%"
+      options:
+        - 상승
+        - 하락
+        - 횡보
+    validations:
+      required: true
+  - type: dropdown
+    id: horizon
+    attributes:
+      label: 예측 기간
+      options:
+        - 7일
+        - 30일
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: 확신도
+      description: 50% = 동전 던지기. 90%는 10번 중 9번 맞힐 자신이 있을 때만.
+      options:
+        - 50%
+        - 60%
+        - 70%
+        - 80%
+        - 90%
+    validations:
+      required: true
+  - type: input
+    id: reason
+    attributes:
+      label: 근거 한 줄
+      placeholder: "예) FOMC 동결 예상인데 달러가 먼저 빠짐, 알트강도 50 돌파"
+    validations:
+      required: true
+  - type: dropdown
+    id: action
+    attributes:
+      label: 오늘 한 행동
+      options:
+        - 관망
+        - 매수
+        - 매도
+        - 비중 확대
+        - 비중 축소
+    validations:
+      required: true
+  - type: textarea
+    id: issues
+    attributes:
+      label: 오늘 본 이슈 (글로벌·매크로·코인)
+      placeholder: "예) 미 CPI 3.1% 예상 하회 / 트럼프 관세 발언 / 바이낸스 상장 공지"
+  - type: textarea
+    id: action_note
+    attributes:
+      label: 행동 메모
+      placeholder: "무엇을 얼마나, 왜 (선택)"
+  - type: input
+    id: tags
+    attributes:
+      label: 태그
+      placeholder: "FOMC, CPI, ETF, 전쟁 (쉼표 구분, 선택)"
+  - type: input
+    id: date
+    attributes:
+      label: 날짜 (비우면 오늘)
+      description: 지난 날짜를 쓰면 기록은 되지만 적중률 집계에서는 빠진다(사후 기록은 결과를 알고 쓰게 되므로).
+      placeholder: YYYY-MM-DD
