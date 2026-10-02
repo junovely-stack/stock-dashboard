@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>착용 장비 검토</title>
+<style>
+:root{
+  --bg:#0A1A2F; --card:#16263D; --card2:#1B2F4A; --line:#27405F;
+  --or:#FF6B1A; --sub:#AAB7C4; --tx:#FFFFFF;
+  --good:#2c8a5f; --warn:#c89010; --bad:#b3402a;
+  --sz-s:#FFA05C; --sz-m:#4C86C6; --sz-l:#8FA3B8; --own:#5EC3C8;
+  --font:"Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;line-height:1.55;
+  word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance;margin:0}
+a{color:#8CC4FF}
+section.pg{min-height:100vh;scroll-snap-align:start;padding:24px 64px 30px 40px;display:flex;flex-direction:column;gap:11px;position:relative}
+.eyebrow{font-size:12px;color:var(--or);font-weight:700;letter-spacing:.06em}
+.ttl{font-size:23px;font-weight:800;line-height:1.3}
+.lead{color:var(--sub);font-size:14px;max-width:1000px;margin:0}
+.lead b{color:var(--tx)}
+.hint{font-size:12px;color:var(--sub)}
+.row{display:flex;gap:14px;align-items:stretch}
+.card{background:var(--card);border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.card.lb{border-left:3px solid var(--or)}
+.demo{display:none}
+/* top meta */
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--sub);border-bottom:1px solid var(--line);padding-bottom:8px}
+.meta b{color:var(--tx);font-weight:600}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:var(--card);border-radius:8px;padding:9px 14px;border-top:3px solid var(--line)}
+.tile .n{font-size:26px;font-weight:800;line-height:1.1}
+.tile .n small{font-size:14px;font-weight:600;color:var(--sub);margin-left:3px}
+.tile .k{font-size:12.5px;color:var(--sub);margin-top:2px}
+/* badges */
+.bd{display:inline-block;font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 7px;line-height:1.6;white-space:nowrap}
+.sz-소{background:rgba(255,160,92,.16);color:var(--sz-s);border:1px solid rgba(255,160,92,.5)}
+.sz-중{background:rgba(76,134,198,.18);color:#7FB0E6;border:1px solid rgba(76,134,198,.6)}
+.sz-대{background:rgba(143,163,184,.16);color:#C3D0DC;border:1px solid rgba(143,163,184,.55)}
+.ct{display:inline-flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
+.ct i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ct-직접 i{background:var(--good)} .ct-경유 i{background:var(--warn)} .ct-회사 i{background:var(--bad)}
+.pf{font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.pf-A{background:#1f4d3a;color:#8fe0b8}
+.pf-B{background:#4a3d14;color:#f0cd6a}
+.pf-C{background:#3a2a28;color:#e6a596}
+.pf-제안{background:#2a2f3d;color:#c9d2de;border:1px dashed #6C8299}
+.star{color:var(--or);font-weight:800}
+/* map grid */
+.map{display:grid;gap:6px;grid-template-columns:62px repeat(var(--cols),1fr)}
+.map .hd{font-size:12px;color:var(--sub);font-weight:700;text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}
+.map .rh{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;border-radius:6px}
+.map .cell{background:var(--card);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:64px}
+.chip{display:flex;align-items:flex-start;gap:6px;background:var(--card2);border-radius:5px;padding:5px 7px;font-size:12.3px;line-height:1.35;cursor:pointer;border:1px solid transparent}
+.chip:hover,.chip:focus-visible{border-color:var(--or);outline:none}
+.chip i{flex:0 0 8px;height:8px;border-radius:50%;margin-top:4px}
+.chip.top{box-shadow:inset 3px 0 0 var(--or)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--sub);align-items:center}
+/* tabs + table */
+.tabs{display:flex;gap:6px}
+.tab{background:var(--card);color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--or);color:#fff;border-color:var(--or)}
+table.it{width:100%;border-collapse:collapse;font-size:13px}
+table.it th{font-size:12px;color:var(--sub);text-align:left;font-weight:600;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.it td{padding:6px 8px;border-bottom:1px solid rgba(39,64,95,.6);vertical-align:top;line-height:1.45}
+table.it tbody tr{cursor:pointer}
+table.it tbody tr:hover td,table.it tbody tr:focus-visible td{background:rgba(255,107,26,.07);outline:none}
+.nm{font-weight:700}
+.nm small{display:block;font-weight:400;color:var(--sub);font-size:12px;margin-top:1px}
+.case{color:var(--sub);font-size:12.5px}
+.case b{color:var(--tx);font-weight:600}
+/* channels */
+.cols3{display:grid;grid-template-columns:1.1fr 1fr 1.05fr;gap:12px;align-items:start}
+.cl h3{font-size:14px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cl ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.cl li{font-size:12.4px;line-height:1.42;padding-bottom:6px;border-bottom:1px solid rgba(39,64,95,.6)}
+.cl li:last-child{border-bottom:0;padding-bottom:0}
+.cl li b{font-size:13px}
+.cl li .u{display:block;color:#8CC4FF;font-size:11.5px;word-break:break-all}
+.cl li .s{color:var(--sub)}
+.ow{display:inline-block;font-size:10.5px;font-weight:700;border-radius:3px;padding:0 5px;line-height:1.6;white-space:nowrap;vertical-align:1px}
+.ow-운용{background:var(--own);color:#0A1A2F}
+.ow-시범{border:1px solid var(--own);color:var(--own)}
+.ow-없음{color:#6C8299;border:1px solid #3a4f68}
+.own-col{border-top:3px solid var(--own)}
+.expo{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.4px;align-items:baseline;padding:2px 2px}
+.expo > b{color:var(--or);font-size:12.6px}
+.expo a{color:var(--tx);font-weight:600;text-decoration:none;border-bottom:1px dotted var(--sub)}
+.inhouse{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.6px;padding:9px 14px;align-items:baseline}
+.inhouse > b{font-size:13px;color:var(--or);margin-right:4px}
+.inhouse span{color:var(--sub)} .inhouse span b{color:var(--tx);font-weight:600}
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan .card h3{font-size:14.5px;margin-bottom:6px}
+.plan ol{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:5px}
+.plan .when{font-size:12px;color:var(--or);font-weight:700}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dec .card{border-top:3px solid var(--or)}
+.dec .q{font-weight:700;font-size:14px;margin-bottom:4px}
+.dec .a{font-size:12.6px;color:var(--sub)}
+.lim{font-size:12px;line-height:1.45;color:var(--sub);display:flex;flex-direction:column;gap:1px;margin:0;padding-left:16px}
+/* modal */
+.mb{position:fixed;inset:0;background:rgba(3,10,20,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mb.on{display:flex}
+.md{background:var(--card);border-radius:10px;max-width:880px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:22px 26px;border-top:3px solid var(--or);position:relative}
+.md h2{font-size:20px;margin:6px 0 4px}
+.md .x{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--sub);font-size:22px;cursor:pointer}
+.md h4{font-size:13px;color:var(--or);margin:16px 0 6px}
+.md p{margin:0 0 6px;font-size:13.5px}
+.md .cs{background:var(--card2);border-radius:6px;padding:9px 12px;margin-bottom:7px;font-size:13px}
+.md .cs .src{display:block;font-size:11.5px;color:#8CC4FF;word-break:break-all;margin-top:3px}
+.md .vd{font-size:13px;margin-bottom:5px}
+.md .vd .u{font-size:11.5px;color:#8CC4FF;word-break:break-all}
+/* nav */
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:20}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--sub);background:transparent;padding:0;cursor:pointer}
+.dots button.on{background:var(--or);border-color:var(--or)}
+.prog{position:fixed;left:0;bottom:0;height:3px;background:var(--or);width:0;z-index:20;transition:width .2s}
+.pgno{position:absolute;right:64px;bottom:8px;font-size:11px;color:var(--sub)}
+.print-only{display:none}
+@media (max-width:900px){
+  html{scroll-snap-type:none}
+  section.pg{padding:24px 16px 40px;min-height:auto}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .cols3,.plan,.dec{grid-template-columns:1fr}
+  .map{grid-template-columns:44px repeat(var(--cols),minmax(120px,1fr));overflow-x:auto}
+  .mapwrap{overflow-x:auto}
+  .dots,.pgno{display:none}
+  table.it .hide-m{display:none}
+}
+@media print{
+  html{scroll-snap-type:none}
+  body{background:#fff;color:#111;font-size:11px}
+  section.pg{min-height:auto;page-break-after:always;padding:12px 6px}
+  .card,.tile,.map .cell,.chip,.md .cs{background:#fff;box-shadow:none;border:1px solid #ccd}
+  .lead,.hint,.meta,.case,.tile .k,.cl li .s,.dec .a,.lim{color:#444}
+  .tile .n,.nm,.ttl{color:#111}
+  .dots,.prog,.mb,.tabs,.pgno{display:none!important}
+  table.it tbody tr{display:table-row!important}
+  .print-only{display:block}
+  a,.u,.src{color:#1a4f8a!important}
+}
+
+.trd{display:inline-block;font-size:11px;font-weight:700;border-radius:3px;padding:0 6px;line-height:1.6;background:#24395a;color:#cfe0f5;white-space:nowrap}
+.pn{display:inline-block;font-size:11px;border-radius:3px;padding:0 5px;line-height:1.6;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.pf-미확인{background:#2a2f3d;color:#c9d2de;border:1px dashed #6C8299}
+.map .hd small{display:block;font-weight:400;font-size:10.5px;color:#7f93a8}
+.map .rh{background:var(--card2);color:var(--tx);font-size:14px}
+.map{grid-template-columns:64px repeat(var(--cols),1fr)}
+.chain{display:flex;flex-direction:column;gap:6px}
+.chh{font-size:14px}
+.chh b{color:var(--or)}
+.flow{display:flex;align-items:stretch;gap:6px}
+.map{gap:5px}
+.map .cell{padding:5px;gap:4px;min-height:48px}
+.map .chip{padding:4px 7px}
+.map .hd{padding:2px 2px 4px}
+.step{flex:1;min-width:0;background:var(--card);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:5px;border-top:3px solid var(--line)}
+.step.cut{border-top-color:var(--or);background:#1d2c45}
+.sw{font-size:11.5px;font-weight:700;color:var(--or)}
+.sx{font-size:13.5px;font-weight:700}
+.tools{display:flex;flex-direction:column;gap:4px}
+.cutnote{font-size:11.5px;color:var(--or);margin-top:auto}
+.arr{align-self:center;color:var(--or);font-size:20px;font-weight:800;flex:0 0 auto}
+.buys{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.minis{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.mini{font-size:11px;background:var(--card2);border-radius:3px;padding:1px 6px;cursor:pointer;color:var(--sub)}
+.mini:hover,.mini:focus-visible{color:var(--tx);outline:1px solid var(--or)}
+.plan{grid-template-columns:.95fr 1.1fr 1.3fr}
+.map .cell{gap:3px}
+.map .chip{padding:2px 7px;line-height:1.3}
+.map .hd{font-size:12px}
+@media (max-width:900px){
+  .flow{flex-direction:column}
+  .arr{transform:rotate(90deg)}
+  .map{grid-template-columns:52px repeat(var(--cols),minmax(130px,1fr))}
+}
+
+.ch3{font-size:14px;margin-bottom:6px}
+.cid{color:var(--or);font-weight:800;margin-right:2px}
+.ban{background:rgba(179,64,42,.13);border:1px solid rgba(179,64,42,.65);border-left:4px solid var(--bad);border-radius:8px;padding:9px 14px}
+.ban h3{font-size:14px;color:#ff9b85;margin-bottom:5px}
+.ban ol{margin:0;padding-left:18px;font-size:12.6px;line-height:1.45;display:flex;flex-direction:column;gap:5px}
+.ban .chk{display:block;color:#f0c4b8;font-size:12px}
+.acts{display:flex;flex-direction:column;gap:6px}
+.act{display:grid;grid-template-columns:minmax(150px,42%) 1fr;gap:8px;align-items:center;font-size:12.6px}
+.zmap{display:grid;grid-template-columns:150px repeat(3,1fr);gap:6px}
+.zmap .hd{font-size:12.5px;color:var(--sub);font-weight:700;text-align:center;padding:2px 2px 4px;border-bottom:1px solid var(--line)}
+.zmap .hd small{display:block;font-weight:400;font-size:10.5px;color:#7f93a8}
+.zmap .rh{background:var(--card2);border-radius:6px;padding:6px 10px;display:flex;flex-direction:column;justify-content:center;font-weight:800;font-size:13.5px}
+.zmap .rh small{font-weight:400;font-size:11px;color:var(--sub)}
+.zmap .cell{background:var(--card);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:4px;min-height:50px}
+.zmap .cell.empty{background:rgba(22,38,61,.45)}
+.excl{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.3px;color:var(--sub);align-items:baseline;background:var(--card);border-radius:8px;padding:8px 14px}
+.excl>b{color:var(--or)}
+.excl span b{color:var(--tx);font-weight:600}
+table.it td.fx b{display:block;font-weight:700;font-size:12.8px}
+table.it td small,.pr{display:block;font-size:11.5px;color:var(--sub);margin-top:1px}
+.none{color:#6C8299;font-size:12px}
+.fxn{display:block;font-size:12.5px;color:var(--sub)}
+.tw{overflow-x:auto}
+@media (max-width:900px){table.it{min-width:560px}}
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tl .when{font-size:12px;color:var(--or);font-weight:700}
+.tl .act{grid-template-columns:1fr;gap:3px}
+.meas{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.meas .q{font-weight:700;font-size:14px;margin-bottom:4px}
+.meas .a{font-size:12.6px;color:var(--sub)}
+table.ck{width:100%;border-collapse:collapse;font-size:12.8px}
+table.ck th{font-size:12px;color:var(--sub);text-align:left;font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.ck td{padding:6px 8px;border-bottom:1px solid rgba(39,64,95,.6);vertical-align:middle}
+table.ck tr:last-child td{border-bottom:0}
+@media (max-width:900px){
+  .zwrap{overflow-x:auto}
+  .zmap{grid-template-columns:110px repeat(3,minmax(140px,1fr))}
+  .tl,.meas{grid-template-columns:1fr}
+  .act{grid-template-columns:1fr}
+}
+@media print{
+  .ban{background:#fff;border-color:#b3402a}
+  .ban h3{color:#b3402a}
+  .ban .chk,.excl,.meas .a,table.ck th{color:#444}
+  .zmap .cell,.zmap .rh,.excl{background:#fff;border:1px solid #ccd;color:#111}
+  .cid{color:#b8520f}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<nav class="dots" id="dots" aria-label="장 이동"></nav>
+<main id="app"></main>
+<div class="mb" id="mb" role="dialog" aria-modal="true" aria-labelledby="mdT"><div class="md" id="md"></div></div>
+<script>
+const ITEMS = [
+ {
+  "id": "F6",
+  "trade": "취부",
+  "pain": [
+   "몸"
+  ],
+  "buy": "과 구매",
+  "proof": "B",
+  "own": "없음",
+  "name": "상향 취부·용접 무동력 어깨 보조 조끼",
+  "short": "상향작업 어깨 보조",
+  "one": "팔을 드는 상향 자세의 어깨 부담을 스프링으로 덜어줌",
+  "firstShort": "힐티 1벌 구매 + 엑스블 데모 비교",
+  "what": "배터리 없이 스프링으로 팔 무게를 받쳐주는 조끼형 장비. 상향 취부·상향 용접처럼 팔을 오래 드는 작업에 쓴다. 국내 정가가 공개된 제품이 있어 과 공구 예산으로 1벌부터 살 수 있다.",
+  "cases": [
+   {
+    "who": "Naval Group 로리앙 조선소 (프랑스)",
+    "year": "2019~ (원문 미열람)",
+    "what": "용접·취부공 약 400명 대상으로 어깨·허리 외골격 시험. 약 200명 교육, 정기 사용 약 40명(30대). 스패터에 견디게 가죽·금속으로 바꾼 맞춤형 별도 제작",
+    "short": "200명 교육 중 정기 사용 약 40명",
+    "effect": "정기 사용 약 40명 / 교육 약 200명 (기사)",
+    "srcName": "L'Usine Nouvelle",
+    "src": "https://www.usinenouvelle.com/editorial/chez-naval-group-un-recours-aux-exosquelettes-encore-limite-par-la-variete-des-operations.N2166802"
+   },
+   {
+    "who": "미 노퍽 해군 조선소",
+    "year": "2018",
+    "what": "Levitate 어깨 보조 도입, 작업자 교육·인증",
+    "effect": "",
+    "srcName": "UPI",
+    "src": "https://www.upi.com/Defense-News/2018/12/07/Norfolk-Navy-Shipyard-introducing-exoskeletons-for-workers/2201544203423/"
+   },
+   {
+    "who": "용접 경험자 15명 모의 시험",
+    "year": "연구",
+    "what": "ISO 9606-1 기준 모의 용접·그라인딩. 작업각·진행각·CTWD는 차이 없음",
+    "short": "상향(PE) 이동속도 품질 +28.87%",
+    "effect": "이동속도 품질척도 PF +5.80%, 상향 PE +28.87% (학술)",
+    "srcName": "PubMed",
+    "src": "https://pubmed.ncbi.nlm.nih.gov/38486892/"
+   },
+   {
+    "who": "현대차·기아 엑스블 숄더 (제품)",
+    "year": "2026-03 KS 인증",
+    "what": "무동력 1.9kg. 대한항공 정비·현대건설 현장 도입, 조선을 목표 업종으로 발표. 조선소 도입은 못 찾음",
+    "short": "KS 인증, 항공·건설 도입",
+    "effect": "어깨 관절 부하 최대 60% 감소 (제조사 발표)",
+    "srcName": "뉴스핌",
+    "src": "https://www.newspim.com/news/view/20260309000231"
+   }
+  ],
+  "apply": "대조립 상향 취부·상향 용접 작업자 2~3명이 2주 착용. 핵심 지표는 '2주 뒤에도 입고 있는 사람 수'다 — Naval Group은 교육받은 200명 중 40명만 남았다.",
+  "vendors": [
+   {
+    "name": "힐티코리아 EXO-S (2.4kg, 1,490,490원 VAT 별도)",
+    "url": "https://www.hilti.co.kr/c/CLS_HEALTH_SAFETY/CLS_CONSTRUCTION_EXOSKELETONS/r14012433",
+    "ch": "국내 정가"
+   },
+   {
+    "name": "현대차그룹 로보틱스랩 엑스블 숄더 (가격 비공개)",
+    "url": "https://robotics.hyundai.com/unveiled-robots/wearable/xBleShoulder.do",
+    "ch": "국내 — 데모 문의"
+   },
+   {
+    "name": "지후 (Levitate AIRFRAME 국내 취급)",
+    "url": "https://www.k-robot.co.kr/k-robot/en/view.php?idx=65027&page=1",
+    "ch": "국내"
+   },
+   {
+    "name": "Ottobock IX SHOULDER AIR (Paexo 후속, 독일 €2,900)",
+    "url": "https://exoskeletonreport.com/product/ix-shoulder-air/",
+    "ch": "국내 대리점 미확인"
+   }
+  ],
+  "first": "힐티 EXO-S 1벌을 과 예산으로 사고, 로보틱스랩에 엑스블 숄더 데모를 요청해 같은 반에서 2종 비교.",
+  "risk": "방염 사양이 확인된 제품이 없다 — 용접 때는 방염 덧옷 필수. 안전대 허리벨트 간섭, 폭 450mm급이라 맨홀 통과 여부 확인. 국내 조선소 적용 사례 없음.",
+  "zone": "상향",
+  "col": "몸",
+  "when": "11월 1차",
+  "price": "1,490,490원 (힐티 EXO-S, VAT 별도)",
+  "fx": "상향 용접 이동속도 품질 +28.87%",
+  "fxSrc": "학술, 15명 모의 시험",
+  "riskShort": "방염 제품 없음 — 용접 때 방염 덧옷. 폭 450mm급, 맨홀 통과 확인",
+  "num": true
+ },
+ {
+  "id": "C2",
+  "trade": "공통",
+  "pain": [
+   "환경",
+   "몸"
+  ],
+  "buy": "사내 확대",
+  "proof": "B",
+  "own": "운용",
+  "ownNote": "삼성중공업 직종별 에어쿨링 재킷(압축공기 순환)·냉동 생수 지급 (2026-07 보도).",
+  "name": "블록 내부 에어쿨링 재킷 지급 범위 확인",
+  "short": "에어쿨링 재킷",
+  "one": "사내 지급 중인 쿨링 재킷이 블록 내부 작업자까지 가는지",
+  "firstShort": "조립4과 지급·사용률 확인",
+  "what": "압축공기를 재킷 안에 돌려 체온을 낮춘다. 이미 사내에서 지급하므로, 블록 내부 용접·사상 작업자가 실제로 받고 쓰는지가 문제다.",
+  "cases": [
+   {
+    "who": "삼성중공업",
+    "year": "2026-07",
+    "what": "직종별 에어쿨링 재킷·냉동 생수 지급",
+    "short": "사내 직종별 에어쿨링 재킷 지급",
+    "effect": "",
+    "srcName": "파이낸셜뉴스 2026-07-13",
+    "src": "https://www.fnnews.com/news/202607131530116397"
+   },
+   {
+    "who": "부산시",
+    "year": "2026",
+    "what": "조선업 노동자 쿨링키트 지원",
+    "effect": "",
+    "srcName": "뉴스핌",
+    "src": "https://www.newspim.com/news/view/20260811000073"
+   },
+   {
+    "who": "고용노동부 재해 사례",
+    "year": "2005-09",
+    "what": "강교 박스 내부에서 산소 라인에 연결한 에어조끼를 입고 용접하다 불티 착화, 사망",
+    "short": "산소 라인 연결 에어조끼 화재 사망",
+    "effect": "",
+    "srcName": "고용노동부",
+    "src": "https://www.moel.go.kr/policy/policydata/view.do?bbs_seq=1193739161610"
+   }
+  ],
+  "apply": "블록 내부 용접·사상 작업자 지급 수량과 압축공기 라인 위치 확인.",
+  "vendors": [
+   {
+    "name": "사내: 안전 부서",
+    "url": "",
+    "ch": "먼저"
+   }
+  ],
+  "first": "내년 여름 전 조립4과 지급 수량·사용률 확인.",
+  "risk": "압축공기 라인이 블록 내부까지 와야 쓸 수 있다. 산소 라인 연결 금지를 지급 때 교육 — 블록 내부에서 산소 연결 에어조끼로 사망 재해가 있었다(2005).",
+  "zone": "내부",
+  "col": "환경",
+  "when": "올겨울 확인",
+  "price": "사내 지급 중",
+  "fx": "",
+  "fxSrc": "",
+  "riskShort": "압축공기 라인이 블록 안까지 와야 쓴다. 산소 라인 연결 금지",
+  "num": false
+ },
+ {
+  "id": "C3",
+  "trade": "공통",
+  "pain": [
+   "환경"
+  ],
+  "buy": "안전 지급",
+  "proof": "B",
+  "own": "없음",
+  "top": true,
+  "name": "블록 내부 PAPR(전동 송풍 호흡보호구) + 자동차광 용접면",
+  "short": "PAPR + 자동차광 용접면",
+  "one": "블록 안 용접·사상 흄·분진을 송풍 후드로 막음",
+  "why": "용접흄 IARC 1군 · 조선소 시험 사례 · 국산·국내 판매 있음",
+  "firstShort": "KCs 인증품 5~10세트 시범",
+  "what": "허리에 찬 송풍기가 필터를 거친 공기를 용접면 안으로 불어넣는다. 반면형 마스크보다 덜 답답해 쓰고 있는 시간이 길어진다. 자동차광 용접면 일체형이면 면을 올렸다 내렸다 할 필요가 없다.",
+  "cases": [
+   {
+    "who": "미국 대형 방산업체 조선소",
+    "year": "시험",
+    "what": "용접사 10명이 7주간 보호구 3종 비교",
+    "short": "용접사 10명 7주 비교 시험(조선소)",
+    "effect": "Adflo+Speedglas 착용자 '생산성 44% 향상' (작업자 자가 보고, 3M 측 사례 — 인용 금지)",
+    "srcName": "MSC",
+    "src": "https://www.mscdirect.com/knowledge-center/articles/case-study-evaluation-three-ppe-solutions-welding-productivity-large-defense-contractor"
+   },
+   {
+    "who": "IARC",
+    "year": "2017",
+    "what": "용접흄을 1군 발암물질(폐암)로 분류",
+    "effect": "",
+    "srcName": "OH&S",
+    "src": "https://ohsonline.com/articles/2017/04/25/iarc-classifies-welding-fumes-and-uv-radiation-as-group-1-carcinogens.aspx"
+   },
+   {
+    "who": "KOSHA GUIDE",
+    "year": "현행",
+    "what": "H-80-2021 밀폐공간 작업 프로그램(송기마스크 착용 포함), H-73 용접작업 보건관리",
+    "effect": "",
+    "srcName": "KOSHA",
+    "src": "https://kosha.or.kr/cms/resFileDownload.do?siteId=kosha&type=etc&fileName=KOSHA_Guide_%EB%B0%8F_%EB%B2%95%EB%A0%B9_%EA%B0%84_%EC%97%B0%EA%B3%84%EC%84%B1(%EA%B8%B0%EC%A4%80%EA%B7%9C%EC%B9%99_%EA%B8%B0%EC%A4%80).pdf"
+   }
+  ],
+  "apply": "밀폐 블록 내부 용접사·사상 작업자 5~10명, 2주 착용 후 착용 지속시간·불편 사항 기록.",
+  "vendors": [
+   {
+    "name": "사내: 안전 부서 (보호구 지급)",
+    "url": "",
+    "ch": "먼저"
+   },
+   {
+    "name": "한국3M (Adflo + Speedglas)",
+    "url": "https://www.3m.co.kr/3M/ko_KR/respiratory-protection-kr/products/papr/",
+    "ch": "국내"
+   },
+   {
+    "name": "오토스 (국산 PAPR)",
+    "url": "https://www.otos.co.kr/page/sub2_5",
+    "ch": "국내"
+   }
+  ],
+  "first": "안전 부서에 KCs 인증 PAPR 지급 기준 확인 → 블록 내부 작업자 시범 지급 요청.",
+  "risk": "전동식 호흡보호구는 KCs 안전인증 대상. 필터·배터리 관리 부담. 44%는 자가 보고 수치라 보고에 인용하지 말 것.",
+  "zone": "내부",
+  "col": "환경",
+  "when": "11월 1차",
+  "price": "안전 부서 지급",
+  "fx": "용접흄 1군 발암물질 분류",
+  "fxSrc": "IARC 2017 — 장비 효과 수치 아님",
+  "riskShort": "KCs 인증 대상. 필터·배터리 관리 부담. '생산성 44%'는 인용 금지",
+  "num": false
+ },
+ {
+  "id": "C4",
+  "trade": "공통",
+  "pain": [
+   "몸"
+  ],
+  "buy": "부서 협의",
+  "proof": "C",
+  "own": "없음",
+  "name": "무동력 허리 보조 웨어러블 (바닥 마킹·하향 작업·운반)",
+  "short": "허리 보조 웨어러블",
+  "one": "오래 허리를 굽히는 자세에서 허리 부담을 덜어줌",
+  "firstShort": "국산 2사에 실증 무상 시범 문의",
+  "what": "배터리 없이 스프링·탄성체로 허리를 굽힐 때 상체를 받쳐준다. 배재 바닥 마킹, 하향 용접·사상, 지그 운반처럼 허리를 오래 숙이는 일에 쓴다.",
+  "cases": [
+   {
+    "who": "HD현대삼호 × 엔젤로보틱스 (경쟁사)",
+    "year": "2024-06 MOU",
+    "what": "조선소 맞춤형 웨어러블 장비 공동 개발. 이후 적용 결과는 못 찾음",
+    "short": "조선소 맞춤형 웨어러블 개발 MOU",
+    "effect": "",
+    "srcName": "서울신문",
+    "src": "https://www.seoul.co.kr/news/economy/2024/06/16/20240616500017"
+   },
+   {
+    "who": "에프알티로보틱스 (국산)",
+    "year": "2026-09",
+    "what": "한국선급·KAIST 조선·해양 딥테크 실증 지원 6개사 선정. 조선소 실적은 아직 없음",
+    "short": "한국선급·KAIST 조선 실증 대상 선정",
+    "effect": "20kg 들 때 52%, 내릴 때 55% 근력 감소 (회사 내부 EMG 시험)",
+    "srcName": "파이낸셜뉴스",
+    "src": "https://www.fnnews.com/news/202609301014534019"
+   },
+   {
+    "who": "Naval Group 로리앙 조선소",
+    "year": "2019~",
+    "what": "어깨 보조와 함께 Laevo 허리 보조 시험",
+    "effect": "",
+    "srcName": "L'Usine Nouvelle",
+    "src": "https://www.usinenouvelle.com/editorial/chez-naval-group-un-recours-aux-exosquelettes-encore-limite-par-la-variete-des-operations.N2166802"
+   }
+  ],
+  "apply": "배재 바닥 마킹·하향 사상 작업자 2~3명. 어깨 보조(F6)와 같이 '2주 뒤에도 입는지'가 지표.",
+  "vendors": [
+   {
+    "name": "엔젤로보틱스 엔젤기어 ANGEL X (최대 32Nm, 가격 비공개)",
+    "url": "https://www.angel-robotics.com/ko/products/angel-gear/brand",
+    "ch": "국내"
+   },
+   {
+    "name": "에프알티로보틱스 스텝업 네오 (가격 비공개)",
+    "url": "https://kidd.co.kr/news/246943",
+    "ch": "국내 — 실증 참여 문의"
+   }
+  ],
+  "first": "두 국산 업체에 조선소 실증 형태로 무상 시범이 되는지 문의.",
+  "risk": "효과 수치는 회사 내부 시험뿐. 작업이 매번 달라 정기 사용으로 이어지기 어렵다는 조선소 평가(Naval Group). 방염·안전대 간섭 확인. 50인 미만 협력사는 스마트 안전장비 지원사업(근력보조슈트 품목) 해당 가능성 — 지원율 미확인.",
+  "zone": "하향",
+  "col": "몸",
+  "when": "올겨울 문의",
+  "price": "가격 비공개",
+  "fx": "20kg 들 때 근력 52%↓",
+  "fxSrc": "회사 내부 EMG 시험",
+  "riskShort": "작업이 매번 달라 정기 사용이 어렵다는 조선소 평가(Naval Group)",
+  "num": true
+ },
+ {
+  "id": "C5",
+  "trade": "공통",
+  "pain": [
+   "환경",
+   "몸"
+  ],
+  "buy": "안전 지급",
+  "proof": "C",
+  "own": "없음",
+  "name": "용접복 안에 입는 PCM·아이스팩 냉각조끼",
+  "short": "PCM·아이스팩 냉각조끼",
+  "one": "팬·호스 없이 냉매 팩으로 몸통을 식혀 용접복 안에도 입음",
+  "firstShort": "2027 하절기 전 5벌 시범",
+  "what": "조끼 주머니에 아이스팩이나 상변화물질(PCM) 팩을 넣어 몸통을 식힌다. 팬·전기·호스가 없어 용접복 안에 입을 수 있고, 압축공기 라인이 없는 자리에서도 된다. PCM 팩은 상온 수돗물로 재충전돼 냉동고 부담이 작다(제품 설명).",
+  "cases": [
+   {
+    "who": "HEAT-SHIELD 챔버 실험",
+    "year": "연구",
+    "what": "남성 10명, 35℃·50%RH, 2.5시간 보행",
+    "short": "PCM 조끼 심부체온 상승 0.2~0.5℃ 감소",
+    "effect": "PCM 조끼 심부체온 상승 0.2~0.5℃ 감소, 심박 103 vs 116bpm (학술)",
+    "srcName": "PubMed",
+    "src": "https://pubmed.ncbi.nlm.nih.gov/36796897/"
+   },
+   {
+    "who": "냉각 의복 메타분석",
+    "year": "2025",
+    "what": "전도형(팩) 조끼는 효과 있음, 증발·통풍형 의복은 효과 없거나 미미",
+    "effect": "전도형 심부체온 -0.3℃·심박 -12bpm (학술)",
+    "srcName": "AJIM",
+    "src": "https://onlinelibrary.wiley.com/doi/full/10.1002/ajim.23672"
+   },
+   {
+    "who": "HD현대중공업 (경쟁사)",
+    "year": "2026",
+    "what": "에어자켓·팬조끼·클립팬·냉방조끼 지급. 냉방조끼 종류는 불명",
+    "effect": "",
+    "srcName": "뉴스핌",
+    "src": "https://www.newspim.com/news/view/20260713000550"
+   },
+   {
+    "who": "안전보건규칙 개정",
+    "year": "2025-07 시행",
+    "what": "체감 33℃ 이상 2시간마다 20분 휴식. 휴식이 매우 곤란하면 개인 냉방장치·보냉장구 지급으로 예외 인정 (원문 미열람)",
+    "effect": "",
+    "srcName": "김앤장 해설",
+    "src": "https://www.kimchang.com/ko/insights/detail.kc?sch_section=4&idx=32261"
+   },
+   {
+    "who": "일본 아크용접 현장 (팬조끼 사고)",
+    "year": "2021-07",
+    "what": "아크 불꽃이 팬으로 빨려 들어가 속옷에 착화, 전신 30% 화상. 화기작업용 금속필터 미사용",
+    "effect": "",
+    "srcName": "労働新聞",
+    "src": "https://www.rodo.co.jp/news/114431/"
+   }
+  ],
+  "apply": "블록 내부 용접·사상 작업자 5명, 2027년 7~8월 2주. 에어쿨링 재킷(C2)이 못 가는 자리부터.",
+  "vendors": [
+   {
+    "name": "사내: 안전 부서 (보냉장구 지급)",
+    "url": "",
+    "ch": "먼저"
+   },
+   {
+    "name": "솔리렉스 PCM 냉각조끼",
+    "url": "https://solirex.com/product/%EB%83%89%EA%B0%81-%EC%A1%B0%EB%81%BCpcm/673/",
+    "ch": "국내"
+   },
+   {
+    "name": "엠팩플러스 MP-IV18 아이스팩 조끼 (126,320원)",
+    "url": "https://www.speedmall.co.kr/product/M4ZM2",
+    "ch": "국내"
+   }
+  ],
+  "first": "안전 부서에 2027 하절기 보냉장구 지급 계획에 PCM 조끼 시범분 5벌 넣어달라고 요청.",
+  "risk": "아이스팩은 약 1시간마다 교체. 팬조끼는 용접·사상 직종 금지 — 일본에서 아크 불꽃이 팬으로 빨려 들어가 전신 30% 화상(2021, 금속필터 미사용). 국내 방염 팬조끼는 못 찾음.",
+  "zone": "여름",
+  "col": "환경",
+  "when": "2027 여름",
+  "price": "126,320원 (엠팩플러스 아이스팩 조끼)",
+  "fx": "심부체온 -0.3℃·심박 -12bpm",
+  "fxSrc": "학술, 전도형 냉각 메타분석",
+  "riskShort": "아이스팩 약 1시간마다 교체. 팬조끼는 용접·사상 금지",
+  "num": true
+ },
+ {
+  "id": "C6",
+  "trade": "공통",
+  "pain": [
+   "사고"
+  ],
+  "buy": "과 구매",
+  "proof": "C",
+  "own": "없음",
+  "name": "추락보호 에어백 조끼 (블록 상부·고소 작업)",
+  "short": "추락보호 에어백 조끼",
+  "one": "떨어지는 순간 에어백이 부풀어 머리·목·척추를 감쌈",
+  "firstShort": "렌탈 2~3벌로 상부 작업자 2주",
+  "what": "센서가 추락을 감지하면 0.2초 안에 CO2로 에어백을 부풀린다(제조사). 인프라 없이 혼자 작동하고 가격이 공개돼 있어 과 단위로 시작할 수 있다. 안전대를 대신하는 장비가 아니라 같이 입는 보조 장비다.",
+  "cases": [
+   {
+    "who": "세이프웨어 (국산, 제품)",
+    "year": "2021~",
+    "what": "코레일·한국도로공사·방산·건설 등 600여 기업 계약 (회사 주장). 조선소 도입 자료는 못 찾음",
+    "short": "철도·도로·건설 도입, 조선소 기록 없음",
+    "effect": "추락 충격 최대 55.4% 감소 (제조사 발표)",
+    "srcName": "경향신문",
+    "src": "https://www.khan.co.kr/article/202112310925001"
+   },
+   {
+    "who": "세이프웨어 대표 인터뷰",
+    "year": "2026-01",
+    "what": "착용자 추락사고 23건에서 작업자 보호 (회사 발표, 독립 검증 없음)",
+    "effect": "",
+    "srcName": "다음",
+    "src": "https://v.daum.net/v/HzEOS5SrCa"
+   }
+  ],
+  "apply": "블록 상부·턴오버 전 고소 취부·용접 2~3명, 안전대와 같이 착용. 블록 내부(좁은 곳)에서는 쓰지 않는 조건으로 시작.",
+  "vendors": [
+   {
+    "name": "세이프웨어 C3 (70L, 다나와 최저 1,430,000원, 렌탈 있음)",
+    "url": "https://prod.danawa.com/info/?pcode=53522489",
+    "ch": "국내"
+   },
+   {
+    "name": "세이프웨어 C-Light (2~3m 추락용, 2025-12 출시)",
+    "url": "https://www.edaily.co.kr/News/Read?newsId=02538726642401472&mediaCodeNo=257",
+    "ch": "국내"
+   },
+   {
+    "name": "KSNT 에어착 / 엔세이프 OPUS",
+    "url": "https://www.ksnt.co.kr/ko/",
+    "ch": "국내"
+   }
+  ],
+  "first": "제조사에 용접 불티 난연 시험 성적·하네스 겹침 착용 가능 여부·국내 인증 여부를 먼저 받고, 렌탈로 2주.",
+  "risk": "국내 안전인증 확인 못 함(CE만 확인). 난연 사양 미확인 — 용접 불티 근처 착용 전 성적서 필수. 효과 수치는 전부 제조사 발표. 블록 내부 전개 시 영향 미확인.",
+  "zone": "고소",
+  "col": "사고",
+  "when": "11월 1차",
+  "price": "1,430,000원 (세이프웨어 C3, 다나와 최저)·렌탈 있음",
+  "fx": "추락 충격 최대 55.4%↓",
+  "fxSrc": "제조사 발표",
+  "riskShort": "국내 인증 미확인(CE만). 난연 성적서 먼저. 블록 안 좁은 곳 제외",
+  "num": true
+ },
+ {
+  "id": "C7",
+  "trade": "공통",
+  "pain": [
+   "사고",
+   "환경"
+  ],
+  "buy": "안전 지급",
+  "proof": "C",
+  "own": "없음",
+  "name": "무동작 경보·무선 연동 개인 복합가스감지기 (밀폐 블록)",
+  "short": "무선 개인 가스감지기",
+  "one": "몸에 찬 감지기가 산소 결핍·유해가스·쓰러짐을 바로 경보",
+  "firstShort": "지금 쓰는 가스측정기 운영 확인",
+  "what": "O2·CO·H2S·가연성가스를 상시 재서 기준을 넘으면 진동·소리로 알리고, 기종에 따라 움직임이 멈추면 무동작 경보와 SOS를 보낸다. 밀폐 블록 진입 전 측정 의무와 바로 이어져 안전 지급 경로가 있다.",
+  "cases": [
+   {
+    "who": "선박 밀폐공간 (MarineLink)",
+    "year": "2014",
+    "what": "무선 가스감지기로 선박 밀폐공간 H2S 고농도 확인",
+    "short": "선박 밀폐공간 H2S 고농도 감지",
+    "effect": "",
+    "srcName": "MarineLink",
+    "src": "https://www.marinelink.com/news/confinedspace-monitored378864"
+   },
+   {
+    "who": "HD현대중공업 (경쟁사)",
+    "year": "2025말~ 시범",
+    "what": "선체를 타고 신호를 보내는 금속표면파 통신으로 블록·선내 통신 음영구역 축소 확인 (수치 미공개). 2026 확대·비상벨 연동 계획",
+    "short": "금속표면파 통신으로 블록 내부 음영 축소 시범",
+    "effect": "",
+    "srcName": "쿠키뉴스",
+    "src": "https://www.kukinews.com/article/view/kuk202609290053"
+   },
+   {
+    "who": "국책과제 '조선해양 스마트 HSE'",
+    "year": "2017",
+    "what": "작업자 위치 인식·IoT 안전모·밀폐구역 환경 모니터링",
+    "effect": "",
+    "srcName": "ScienceON",
+    "src": "https://scienceon.kisti.re.kr/srch/selectPORSrchReport.do?cn=TRKO201700008857"
+   }
+  ],
+  "apply": "밀폐 블록 진입 인원과 감시인 5명. 1단계는 기기 자체 경보만, 원격 전송은 블록 입구 게이트웨이가 닿는 데까지.",
+  "vendors": [
+   {
+    "name": "사내: 안전 부서 (밀폐공간 측정 장비)",
+    "url": "",
+    "ch": "먼저"
+   },
+   {
+    "name": "한컴라이프케어 UEPL100Exi (무선 복합가스)",
+    "url": "https://www.hancomlifecare.com/user/product/detail.do?prctSeq=125&searchCat1Cd=4&searchCat2Cd=37",
+    "ch": "국내"
+   },
+   {
+    "name": "센코 (국산 가스감지기)",
+    "url": "https://senko.co.kr/",
+    "ch": "국내"
+   },
+   {
+    "name": "Blackline G7 (LTE·위성, 단독작업 감시)",
+    "url": "https://www.blacklinesafety.com/solutions/personal-gas-detection/g7-multi-gas",
+    "ch": "국내 대리점 미확인"
+   }
+  ],
+  "first": "안전 부서에 지금 밀폐 블록에서 쓰는 가스측정기 기종·운영을 확인. 휴대형을 이미 쓰면 쟁점은 '무동작 경보·무선 연동 추가'다.",
+  "risk": "철판 블록 안은 Wi-Fi·LTE가 막힌다 — 실시간 전송은 별도 통신 인프라 필요. 상시 위치 전송은 노사협의 사안. 10시간 배터리·가격 미확인.",
+  "zone": "내부",
+  "col": "사고",
+  "when": "11월 1차",
+  "price": "안전 부서 지급",
+  "fx": "",
+  "fxSrc": "",
+  "riskShort": "철판 블록 안 Wi-Fi·LTE 음영. 위치 상시 전송은 노사협의",
+  "num": false
+ },
+ {
+  "id": "C8",
+  "trade": "공통",
+  "pain": [
+   "환경",
+   "몸"
+  ],
+  "buy": "부서 협의",
+  "proof": "C",
+  "own": "없음",
+  "name": "열스트레스 워치 (심부체온 추정 경보)",
+  "short": "열스트레스 워치",
+  "one": "심박·온습도로 심부체온을 추정해 위험 단계에서 경보",
+  "firstShort": "겨울에 IT·안전·노사 협의 시작",
+  "what": "LTE 스마트워치가 심박과 현장 온습도로 심부체온을 추정하고, 체감온도 단계별로 작업자와 관리자에게 알린다. 냉각조끼(C5)가 몸을 식히는 쪽이라면 이건 누가 위험한지 먼저 아는 쪽이다.",
+  "cases": [
+   {
+    "who": "삼성전자 스마트싱스 프로 열스트레스 관리",
+    "year": "2026",
+    "what": "고용노동부 주관 개발. 삼성전자 평택 건설현장·한솔케미칼 적용. 체감 33/35/38℃ 단계 알림",
+    "short": "평택 건설현장·한솔케미칼 적용 (타업종)",
+    "effect": "심부체온 알고리즘 임상검증 완료 (회사 발표, 수치 미확인)",
+    "srcName": "이투데이",
+    "src": "https://www.etoday.co.kr/news/view/2600459"
+   },
+   {
+    "who": "포스코DX",
+    "year": "2026",
+    "what": "제철소·LNG 터미널 고위험 작업자에게 체온·맥박 밴드 지급, 올해 효과 검증 후 확대 계획",
+    "effect": "",
+    "srcName": "네이트",
+    "src": "https://m.news.nate.com/view/20260808n01366"
+   },
+   {
+    "who": "현대건설 H-체온밴드",
+    "year": "2026",
+    "what": "건설현장 체온 밴드",
+    "effect": "",
+    "srcName": "한국일보",
+    "src": "https://www.hankookilbo.com/news/article/A2026071510220004468"
+   }
+  ],
+  "apply": "2027년 6~8월 용접·사상 작업자 5~10명. 블록 안은 LTE가 약하니 조립공장 바닥 작업부터.",
+  "vendors": [
+   {
+    "name": "사내: IT·안전 부서 (LTE 회선·단말·보안)",
+    "url": "",
+    "ch": "먼저"
+   },
+   {
+    "name": "삼성전자 스마트싱스 프로 (관계사)",
+    "url": "https://www.fnnews.com/news/202607061812153627",
+    "ch": "관계사 협의"
+   },
+   {
+    "name": "에스비시스템즈 위드세이프",
+    "url": "https://www.sbsystems.co.kr/",
+    "ch": "국내"
+   }
+  ],
+  "first": "올겨울 IT·안전 부서와 회선·단말·생체정보 동의 절차부터 협의.",
+  "risk": "생체정보는 민감정보라 동의 필요. 블록 안 LTE 음영이면 실시간 경보가 안 간다. 용접장갑·소매 간섭, 배터리, 가격 미확인. 조선소 사례 없음.",
+  "zone": "여름",
+  "col": "환경",
+  "when": "올겨울 협의",
+  "price": "가격 미확인",
+  "fx": "심부체온 알고리즘 임상검증",
+  "fxSrc": "회사 발표, 수치 미확인",
+  "riskShort": "생체정보 동의 필요. 블록 안 LTE 음영이면 경보 안 감",
+  "num": false
+ }
+];
+/* ==========================================================================
+   설정·문구 블록 — 내용 수정은 여기만. ITEMS는 빌드 때 현장지원아이템 REV02 데이터에서
+   F6·C2~C8을 가져와 wear_extra.json(자리·시점·가격·효과 요약)과 합쳐 넣는다
+   ========================================================================== */
+const META = {
+  title: "착용 장비 검토",
+  rev: "REV01",
+  date: "2026-10-02",
+  basis: "웹 공개자료(제조사·연구·기사) 검색 기준",
+  scope: "삼성중공업 조립4과 — 작업자가 몸에 입거나 차는 보조·보호 장비"
+};
+const ZONES = [
+  { k: "상향", t: "상향 취부·용접", s: "팔을 드는 자세" },
+  { k: "하향", t: "바닥 마킹·하향·운반", s: "허리를 굽히는 자세" },
+  { k: "내부", t: "블록 내부(밀폐)", s: "흄·열·산소 결핍" },
+  { k: "고소", t: "블록 상부·고소", s: "추락" },
+  { k: "여름", t: "여름 전 작업", s: "폭염·온열질환" }
+];
+const COLS = [
+  { k: "몸", s: "근골격계 부담" },
+  { k: "환경", s: "흄·열" },
+  { k: "사고", s: "추락·질식·쓰러짐" }
+];
+const PROHIBIT = [
+  { t: "팬조끼는 용접·사상 직종 금지", d: "일본 아크용접 현장에서 불꽃이 팬으로 빨려 들어가 속옷에 불이 붙어 전신 30% 화상(2021, 화기작업용 금속필터 미사용).", chk: "조립4과 용접·사상반이 팬조끼를 쓰는지 확인" },
+  { t: "에어쿨링 재킷을 산소 라인에 연결 금지", d: "강교 박스 내부에서 산소 라인에 연결한 에어조끼를 입고 용접하다 불이 붙어 사망(2005, 고용노동부 재해 사례).", chk: "C2 지급 때 압축공기 전용 연결 교육을 하는지 확인" }
+];
+const LIMITS = [
+  "<b>효과 수치는 대부분 제조사·회사 발표</b>다. 우리 블록에서 2주 시범으로 직접 잰다.",
+  "국내 조선소가 착용 장비를 정식 운영한 공개 사례는 에어쿨링 재킷 말고는 거의 없다(경쟁사 MOU·시범 수준).",
+  "방염 성적·국내 인증이 확인 안 된 제품이 많다(F6·C4·C6). 원문 일부는 검색 요약 기준 — 인용 전 링크 대조."
+];
+const EXCLUDED = [
+  { t: "스마트 안전조끼", d: "위치·생체·가스를 한 벌에 — 조선소 운영 사례 없음" },
+  { t: "위치추적·근접경보 태그", d: "IT·노사협의 사안이라 이번 범위 밖" },
+  { t: "팬조끼(용접·사상)", d: "아크 불꽃 흡입 화상 — 금지" }
+];
+const TEXT = {
+  h1: "착용 장비 {N}종 — 과 예산으로 바로 시범할 수 있는 건 {BUY}종이다",
+  l1: "어깨 보조(F6)와 에어백 조끼(C6)는 과 예산으로 2주 시범이 된다. 나머지 {REST}종은 안전 부서 지급이나 IT·노사 협의가 먼저다.",
+  h2: "몸은 상향·하향 자세, 환경은 블록 안과 여름, 사고는 고소와 밀폐다",
+  l2: "자리마다 필요한 장비가 다르다. 한 벌로 다 막는 조끼는 없어서 자리별로 하나씩 시범한다.",
+  h3: "효과 수치가 있는 건 {FX}종뿐이고, 우리 현장에서 잰 숫자는 없다",
+  l3: "수치는 제조사·연구·회사 발표다. 출처를 옆에 붙였고, 보고에는 시범에서 잰 값만 쓴다.",
+  h4: "11월에 4종을 움직이고, 냉각 장비는 2027 여름에 붙인다",
+  l4: "바로 되는 것부터 하고 협의가 필요한 건 겨울 동안 길을 낸다. 평가는 제조사 수치 대신 '2주 뒤에도 입는가'로 본다.",
+  h5: "결정할 것은 시범 자리·예산·평가 기준 3가지다",
+  l5: "장비 값보다 어느 반이 2주를 입어줄지가 먼저다. 인증·방염은 사기 전에 안전 부서와 같이 확인한다."
+};
+const PLAN = [
+  { when: "11월 1차", h: "바로 움직인다", acts: [
+    { id: "F6", a: "1벌 과 구매 → 상향 취부·용접 2~3명 2주 착용" },
+    { id: "C6", a: "렌탈 2주 → 블록 상부 고소 2~3명, 안전대와 같이" },
+    { id: "C3", a: "안전 부서에 KCs PAPR 시범 지급 요청 → 밀폐 블록 5~10명" },
+    { id: "C7", a: "지금 쓰는 가스측정기 기종·운영부터 확인" }
+  ]},
+  { when: "올겨울", h: "협의로 길을 낸다", acts: [
+    { id: "C4", a: "국산 2개사에 조선소 실증 무상 시범 문의" },
+    { id: "C8", a: "IT·안전 부서와 회선·단말·생체정보 동의 협의" },
+    { id: "C2", a: "조립4과 지급 수량·블록 내부 사용률 확인" }
+  ]},
+  { when: "2027 여름 전", h: "냉각 장비를 붙인다", acts: [
+    { id: "C5", a: "하절기 보냉장구 계획에 PCM 조끼 5벌 시범분" },
+    { id: "C8", a: "6~8월 5~10명, 조립공장 바닥 작업부터" },
+    { id: "C2", a: "압축공기 라인이 닿는 블록 내부로 지급 확대" }
+  ]}
+];
+const MEASURES = [
+  { t: "착용 지속", d: "2주 뒤에도 입고 있는 사람 수. Naval Group은 교육한 200명 중 약 40명만 남았다(기사)." },
+  { t: "불편 기록", d: "덥다·무겁다·작업 방해 — 착용자가 매일 한 줄. 시간 단위로 벗은 이유를 남긴다." },
+  { t: "간섭 체크", d: "안전대·하네스 겹침, 맨홀 통과, 용접면·호흡보호구와 같이 쓸 수 있는지." }
+];
+const DECISIONS = [
+  { q: "시범 자리를 어디로 할지", a: "상향 취부·용접 2~3명(F6), 블록 상부 고소 2~3명(C6), 밀폐 블록 용접·사상 5~10명(C3·C7). 반장 1명이 기록을 맡을 반부터." },
+  { q: "비용을 어느 예산으로 할지", a: "F6·C6은 과 예산(F6 1벌 1,490,490원, VAT 별도 / C6은 렌탈). C3·C5·C7은 안전 부서 보호구 지급, C4·C8은 실증·부서 협의." },
+  { q: "평가를 무엇으로 볼지", a: "제조사 효과 수치(60%·55.4% 등)는 쓰지 않는다. 착용 지속·불편 기록·간섭 체크 3가지만 2주 뒤에 본다." }
+];
+const CHECKS = [
+  { t: "방염 성적서", ids: ["F6", "C4", "C6"], w: "용접 불티 근처에서 입는다 — 성적서 없으면 방염 덧옷 필수" },
+  { t: "국내 안전인증", ids: ["C3", "C6"], w: "PAPR은 KCs 인증 대상, 에어백 조끼는 CE만 확인" },
+  { t: "안전대·하네스 간섭", ids: ["F6", "C4", "C6"], w: "고소 작업은 안전대가 먼저 — 겹쳐 입을 수 있어야 한다" },
+  { t: "블록 안 통신", ids: ["C7", "C8"], w: "철판 블록 안은 Wi-Fi·LTE 음영 — 실시간 경보는 별도 인프라" },
+  { t: "개인정보 동의", ids: ["C8", "C7"], w: "심박·체온은 민감정보, 위치 상시 전송은 노사협의 사안" }
+];
+
+/* ==========================================================================
+   엔진부
+   ========================================================================== */
+const BUY = ["과 구매","자체 제작","사내 확대","안전 지급","부서 협의"];
+const BUY_DESC = {"과 구매":"과 공구·소모품 예산으로 바로","사내 확대":"사내에 이미 있음 — 범위 확대 요청","안전 지급":"안전 부서 보호구 지급(인증품)","부서 협의":"IT·안전·실증 협의 필요"};
+const BUY_COLOR = {"과 구매":"var(--good)","자체 제작":"#4C86C6","사내 확대":"var(--own)","안전 지급":"var(--warn)","부서 협의":"#8FA3B8"};
+const PF_DESC = {"A":"조선소 사용 확인 — 공식·연구 자료","B":"조선소 사용 확인 — 기사·유통","C":"조선소 시험 단계 또는 타 업종 사용","미확인":"제품은 있으나 조선소 사용 기록 못 찾음"};
+const PF_LABEL = {"A":"사용 A","B":"사용 B","C":"시험·타업종","미확인":"근거 없음"};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pfB = p => `<span class="pf pf-${p}" title="${esc(PF_DESC[p])}">${PF_LABEL[p]}</span>`;
+const buyB = b => `<span class="ct"><i style="background:${BUY_COLOR[b]}"></i>${esc(b)}</span>`;
+const pnB = p => `<span class="pn">${esc(p)}</span>`;
+const ownB = o => o === "운용" || o === "시범" ? `<span class="ow ow-${o}">사내 ${o}</span>` : "";
+const byId = id => ITEMS.find(i => i.id === id);
+const zoneT = k => (ZONES.find(z => z.k === k) || {}).t || k;
+const link = u => u ? `<a class="u" href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>` : "";
+const ids = arr => arr.map(id => `<span class="mini" tabindex="0" data-id="${id}">${id}</span>`).join("");
+function cnt(){
+  const n = ITEMS.length;
+  return {
+    N: n,
+    BUY: ITEMS.filter(i => i.buy === "과 구매").length,
+    SAFE: ITEMS.filter(i => i.buy === "안전 지급" || i.buy === "사내 확대").length,
+    PROOFB: ITEMS.filter(i => i.proof === "A" || i.proof === "B").length,
+    FX: ITEMS.filter(i => i.num).length,
+    REST: n - ITEMS.filter(i => i.buy === "과 구매").length
+  };
+}
+function tpl(s){ const c = cnt(); return String(s || "").replace(/\{(\w+)\}/g, (m, k) => k in c ? c[k] : m); }
+const chip = i => `<div class="chip${i.top ? " top" : ""}" tabindex="0" data-id="${i.id}"><i style="background:${BUY_COLOR[i.buy]}"></i><span><b class="cid">${i.id}</b> ${esc(i.short)}${ownB(i.own) ? " " + ownB(i.own) : ""}</span></div>`;
+const idsOf = f => ITEMS.filter(f).map(i => i.id).join("·");
+const fxCell = i => !i.fx ? `<span class="none">수치 없음</span>` : (i.num ? `<b>${esc(i.fx)}</b>` : `<span class="fxn">${esc(i.fx)}</span>`) + `<small>${esc(i.fxSrc)}</small>`;
+
+function render(){
+  const app = document.getElementById("app");
+  const c = cnt();
+  const byCol = k => ITEMS.filter(i => i.col === k).length;
+
+  const s1 = `
+  <section class="pg" id="s1" data-t="결론">
+    <div class="meta"><span><b>${esc(META.title)}</b> ${esc(META.rev)}</span><span>작성 ${esc(META.date)}</span><span>근거 ${esc(META.basis)}</span><span>범위 ${esc(META.scope)}</span></div>
+    <div class="eyebrow">01 · 결론</div>
+    <h1 class="ttl">${tpl(TEXT.h1)}</h1>
+    <p class="lead">${tpl(TEXT.l1)}</p>
+    <div class="tiles">
+      <div class="tile" style="border-top-color:var(--or)"><div class="n">${c.N}<small>종</small></div><div class="k">착용 장비 — 몸 ${byCol("몸")}·환경 ${byCol("환경")}·사고 ${byCol("사고")}</div></div>
+      <div class="tile" style="border-top-color:var(--good)"><div class="n">${c.BUY}<small>종</small></div><div class="k">과 예산으로 바로 시범 (${idsOf(i => i.buy === "과 구매")})</div></div>
+      <div class="tile" style="border-top-color:var(--warn)"><div class="n">${c.SAFE}<small>종</small></div><div class="k">안전 부서 지급·사내 확대 (${idsOf(i => i.buy === "안전 지급" || i.buy === "사내 확대")})</div></div>
+      <div class="tile" style="border-top-color:#8FA3B8"><div class="n">${c.PROOFB}<small>종</small></div><div class="k">조선소 사용 기록 확인 — 나머지 ${c.N - c.PROOFB}종은 시험·타업종</div></div>
+    </div>
+    <div class="ban">
+      <h3>먼저 확인 — 금지 2건</h3>
+      <ol>${PROHIBIT.map(p => `<li><b>${esc(p.t)}</b> — ${esc(p.d)}<span class="chk">→ ${esc(p.chk)}</span></li>`).join("")}</ol>
+    </div>
+    <div class="row">
+      <div class="card lb" style="flex:1.25">
+        <h3 class="ch3">11월 1차 — 이 4가지부터</h3>
+        <div class="acts">${PLAN[0].acts.map(a => `<div class="act">${chip(byId(a.id))}<span>${esc(a.a)}</span></div>`).join("")}</div>
+      </div>
+      <div class="card" style="flex:1">
+        <h3 class="ch3">이 보고서가 못 하는 것</h3>
+        <ul class="lim">${LIMITS.map(l => `<li>${l}</li>`).join("")}</ul>
+      </div>
+    </div>
+    <div class="pgno">1 / 5 · PageDown으로 다음 장</div>
+  </section>`;
+
+  const s2 = `
+  <section class="pg" id="s2" data-t="자리별 지도">
+    <div class="eyebrow">02 · 작업 자리 × 줄이는 것</div>
+    <h2 class="ttl">${tpl(TEXT.h2)}</h2>
+    <p class="lead">${tpl(TEXT.l2)}</p>
+    <div class="legend"><span>칩 색 = 구매 경로</span>${BUY.filter(b => ITEMS.some(i => i.buy === b)).map(buyB).join("")}<span><span class="star">▌</span> 오렌지 띠 = 우선 시범 ★</span><span class="hint">칩 클릭 → 근거·제품·주의점</span></div>
+    <div class="zwrap"><div class="zmap">
+      <div></div>${COLS.map(k => `<div class="hd">${esc(k.k)}<small>${esc(k.s)}</small></div>`).join("")}
+      ${ZONES.map(z => `
+        <div class="rh">${esc(z.t)}<small>${esc(z.s)}</small></div>
+        ${COLS.map(k => { const its = ITEMS.filter(i => i.zone === z.k && i.col === k.k); return `<div class="cell${its.length ? "" : " empty"}">${its.map(chip).join("")}</div>`; }).join("")}
+      `).join("")}
+    </div></div>
+    <div class="excl"><b>뺀 것</b>${EXCLUDED.map(e => `<span><b>${esc(e.t)}</b> ${esc(e.d)}</span>`).join("")}</div>
+    <div class="pgno">2 / 5</div>
+  </section>`;
+
+  const s3 = `
+  <section class="pg" id="s3" data-t="8종 비교">
+    <div class="eyebrow">03 · 8종 비교</div>
+    <h2 class="ttl">${tpl(TEXT.h3)}</h2>
+    <p class="lead">${tpl(TEXT.l3)}</p>
+    <div class="card tw" style="padding:4px 10px">
+      <table class="it"><thead><tr><th>장비</th><th class="hide-m">자리</th><th>근거</th><th>효과 수치 (출처)</th><th>구매·가격</th><th class="hide-m">주의</th></tr></thead>
+      <tbody>${ITEMS.map(i => `
+        <tr tabindex="0" data-id="${i.id}">
+          <td style="width:25%"><div class="nm">${i.top ? '<span class="star">★ </span>' : ""}<b class="cid">${i.id}</b> ${esc(i.name)} ${ownB(i.own)}<small>${esc(i.one)}</small></div></td>
+          <td class="hide-m" style="width:11%">${esc(zoneT(i.zone))}</td>
+          <td style="width:9%">${pfB(i.proof)}</td>
+          <td style="width:17%" class="fx">${fxCell(i)}</td>
+          <td style="width:16%">${buyB(i.buy)}<small class="pr">${esc(i.price)}</small></td>
+          <td class="hide-m" style="width:22%;font-size:12.3px;color:var(--sub)">${esc(i.riskShort)}</td>
+        </tr>`).join("")}</tbody></table>
+    </div>
+    <div class="hint">행 클릭 → 조선소 근거 원문 링크·제품·구매처·첫 액션</div>
+    <div class="pgno">3 / 5</div>
+  </section>`;
+
+  const s4 = `
+  <section class="pg" id="s4" data-t="시범 순서">
+    <div class="eyebrow">04 · 시범 순서와 평가</div>
+    <h2 class="ttl">${tpl(TEXT.h4)}</h2>
+    <p class="lead">${tpl(TEXT.l4)}</p>
+    <div class="tl">${PLAN.map((p, k) => `
+      <div class="card lb"><div class="when">${esc(p.when)}</div><h3 class="ch3">${esc(p.h)}</h3>
+        <div class="acts">${p.acts.map(a => `<div class="act">${chip(byId(a.id))}<span>${esc(a.a)}</span></div>`).join("")}</div>
+      </div>`).join("")}
+    </div>
+    <div class="eyebrow" style="margin-top:2px">2주 뒤에 볼 것 3가지</div>
+    <div class="meas">${MEASURES.map((m, k) => `<div class="card"><div class="q">${k + 1}. ${esc(m.t)}</div><div class="a">${esc(m.d)}</div></div>`).join("")}</div>
+    <div class="hint">효과 수치(60%·55.4% 등)는 제조사 발표라 평가에 쓰지 않는다.</div>
+    <div class="pgno">4 / 5</div>
+  </section>`;
+
+  const s5 = `
+  <section class="pg" id="s5" data-t="결정 필요">
+    <div class="eyebrow">05 · 결정 필요 사항</div>
+    <h2 class="ttl">${tpl(TEXT.h5)}</h2>
+    <p class="lead">${tpl(TEXT.l5)}</p>
+    <div class="dec">${DECISIONS.map((d, k) => `<div class="card"><div class="q">${k + 1}. ${esc(d.q)}</div><div class="a">${esc(d.a)}</div></div>`).join("")}</div>
+    <div class="eyebrow" style="margin-top:4px">사기 전에 받을 것</div>
+    <div class="card" style="padding:4px 10px">
+      <table class="ck"><thead><tr><th>확인 항목</th><th>해당 장비</th><th>이유</th></tr></thead>
+      <tbody>${CHECKS.map(k => `<tr><td><b>${esc(k.t)}</b></td><td><div class="minis">${ids(k.ids)}</div></td><td>${esc(k.w)}</td></tr>`).join("")}</tbody></table>
+    </div>
+    <div class="pgno">5 / 5</div>
+  </section>`;
+
+  const appendix = `<div class="print-only"><h2>부록 · 장비별 상세와 출처</h2>${ITEMS.map(detailHTML).join("<hr>")}</div>`;
+  app.innerHTML = s1 + s2 + s3 + s4 + s5 + appendix;
+}
+
+function detailHTML(it){
+  const cases = (it.cases || []).map(c => `<div class="cs"><b>${esc(c.who)}</b> · ${esc(c.year)}<br>${esc(c.what)}${c.effect ? `<br><span class="hint">공개 수치: ${esc(c.effect)}</span>` : ""}<span class="src">${c.srcName ? esc(c.srcName) + " — " : ""}${link(c.src)}</span></div>`).join("")
+    || `<div class="cs">조선소 기록 못 찾음.</div>`;
+  const vend = (it.vendors || []).map(v => `<div class="vd"><b>${esc(v.name)}</b> <span class="hint">${esc(v.ch || "")}</span>${v.url ? "<br>" + link(v.url) : ""}</div>`).join("");
+  return `
+    <div class="eyebrow">${esc(zoneT(it.zone))} · ${esc(it.id)}</div>
+    <h2 id="mdT">${it.top ? '<span class="star">★ </span>' : ""}${esc(it.name)}</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${it.pain.map(pnB).join(" ")} ${pfB(it.proof)} ${buyB(it.buy)} ${ownB(it.own)} <span class="hint">${esc(it.when)}</span></div>
+    <h4>무엇을</h4><p>${esc(it.what || it.one)}</p>
+    ${it.ownNote ? `<h4>삼성중공업 사내 현황</h4><p>${esc(it.ownNote)}</p>` : ""}
+    <h4>조선소·현장 근거</h4>${cases}
+    <h4>조립4과에 넣는다면</h4><p>${esc(it.apply || "")}</p>
+    <h4>제품·구매처 (사내 → 외부 순)</h4>${vend}<p style="margin-top:6px"><b>첫 액션</b> — ${esc(it.first || "")}</p>
+    <h4>주의점</h4><p>${esc(it.risk || "")}</p>
+    <p class="hint" style="margin-top:14px;border-top:1px solid var(--line);padding-top:8px">공개 수치는 출처 표기 그대로(대부분 제조사·회사 발표). 보고에는 시범 측정값만 쓴다. 일부 원문 미열람 — 인용 전 링크 대조.</p>`;
+}
+
+/* modal */
+const mb = document.getElementById("mb"), md = document.getElementById("md");
+let lastFocus = null;
+function openItem(id){
+  const it = byId(id); if(!it) return;
+  lastFocus = document.activeElement;
+  md.innerHTML = `<button class="x" aria-label="닫기">×</button>` + detailHTML(it);
+  mb.classList.add("on"); md.scrollTop = 0; md.querySelector(".x").focus();
+}
+function closeModal(){ mb.classList.remove("on"); if(lastFocus) lastFocus.focus(); }
+mb.addEventListener("click", e => { if(e.target === mb || e.target.classList.contains("x")) closeModal(); });
+
+/* nav */
+function secs(){ return [...document.querySelectorAll("section.pg")]; }
+function curIdx(){
+  const y = window.scrollY + window.innerHeight * 0.4; let k = 0;
+  secs().forEach((s, i) => { if(s.offsetTop <= y) k = i; }); return k;
+}
+function go(i){ const s = secs(); i = Math.max(0, Math.min(s.length - 1, i)); const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches; s[i].scrollIntoView({behavior: rm ? "auto" : "smooth"}); }
+function syncNav(){
+  const k = curIdx();
+  document.querySelectorAll("#dots button").forEach((b, i) => b.classList.toggle("on", i === k));
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById("prog").style.width = (max > 0 ? window.scrollY / max * 100 : 0) + "%";
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-id]"); if(t && !mb.classList.contains("on")) openItem(t.dataset.id);
+});
+document.addEventListener("keydown", e => {
+  if(mb.classList.contains("on")){ if(e.key === "Escape") closeModal(); return; }
+  const tag = (e.target.tagName || "").toLowerCase();
+  if(tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+  if(e.key === "Enter" && e.target.dataset && e.target.dataset.id){ openItem(e.target.dataset.id); return; }
+  if(window.matchMedia("(max-width:900px)").matches) return;
+  if(e.key === "PageDown" || (e.key === " " && !e.shiftKey)){ e.preventDefault(); go(curIdx() + 1); }
+  else if(e.key === "PageUp" || (e.key === " " && e.shiftKey)){ e.preventDefault(); go(curIdx() - 1); }
+  else if(e.key === "Home"){ e.preventDefault(); go(0); }
+  else if(e.key === "End"){ e.preventDefault(); go(secs().length - 1); }
+});
+window.addEventListener("scroll", syncNav, {passive:true});
+
+render();
+document.getElementById("dots").innerHTML = secs().map((s, i) => `<button aria-label="${i+1}장 ${esc(s.dataset.t)}" title="${esc(s.dataset.t)}"></button>`).join("");
+document.querySelectorAll("#dots button").forEach((b, i) => b.addEventListener("click", () => go(i)));
+syncNav();
+</script>
+</body>
+</html>
