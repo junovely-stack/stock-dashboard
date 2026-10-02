@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>직종별 현장 지원 아이템</title>
+<style>
+:root{
+  --bg:#0A1A2F; --card:#16263D; --card2:#1B2F4A; --line:#27405F;
+  --or:#FF6B1A; --sub:#AAB7C4; --tx:#FFFFFF;
+  --good:#2c8a5f; --warn:#c89010; --bad:#b3402a;
+  --sz-s:#FFA05C; --sz-m:#4C86C6; --sz-l:#8FA3B8; --own:#5EC3C8;
+  --font:"Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;line-height:1.55;
+  word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance;margin:0}
+a{color:#8CC4FF}
+section.pg{min-height:100vh;scroll-snap-align:start;padding:24px 64px 30px 40px;display:flex;flex-direction:column;gap:11px;position:relative}
+.eyebrow{font-size:12px;color:var(--or);font-weight:700;letter-spacing:.06em}
+.ttl{font-size:23px;font-weight:800;line-height:1.3}
+.lead{color:var(--sub);font-size:14px;max-width:1000px;margin:0}
+.lead b{color:var(--tx)}
+.hint{font-size:12px;color:var(--sub)}
+.row{display:flex;gap:14px;align-items:stretch}
+.card{background:var(--card);border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.card.lb{border-left:3px solid var(--or)}
+.demo{display:none}
+/* top meta */
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--sub);border-bottom:1px solid var(--line);padding-bottom:8px}
+.meta b{color:var(--tx);font-weight:600}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:var(--card);border-radius:8px;padding:9px 14px;border-top:3px solid var(--line)}
+.tile .n{font-size:26px;font-weight:800;line-height:1.1}
+.tile .n small{font-size:14px;font-weight:600;color:var(--sub);margin-left:3px}
+.tile .k{font-size:12.5px;color:var(--sub);margin-top:2px}
+/* badges */
+.bd{display:inline-block;font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 7px;line-height:1.6;white-space:nowrap}
+.sz-소{background:rgba(255,160,92,.16);color:var(--sz-s);border:1px solid rgba(255,160,92,.5)}
+.sz-중{background:rgba(76,134,198,.18);color:#7FB0E6;border:1px solid rgba(76,134,198,.6)}
+.sz-대{background:rgba(143,163,184,.16);color:#C3D0DC;border:1px solid rgba(143,163,184,.55)}
+.ct{display:inline-flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
+.ct i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ct-직접 i{background:var(--good)} .ct-경유 i{background:var(--warn)} .ct-회사 i{background:var(--bad)}
+.pf{font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.pf-A{background:#1f4d3a;color:#8fe0b8}
+.pf-B{background:#4a3d14;color:#f0cd6a}
+.pf-C{background:#3a2a28;color:#e6a596}
+.pf-제안{background:#2a2f3d;color:#c9d2de;border:1px dashed #6C8299}
+.star{color:var(--or);font-weight:800}
+/* map grid */
+.map{display:grid;gap:6px;grid-template-columns:62px repeat(var(--cols),1fr)}
+.map .hd{font-size:12px;color:var(--sub);font-weight:700;text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}
+.map .rh{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;border-radius:6px}
+.map .cell{background:var(--card);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:64px}
+.chip{display:flex;align-items:flex-start;gap:6px;background:var(--card2);border-radius:5px;padding:5px 7px;font-size:12.3px;line-height:1.35;cursor:pointer;border:1px solid transparent}
+.chip:hover,.chip:focus-visible{border-color:var(--or);outline:none}
+.chip i{flex:0 0 8px;height:8px;border-radius:50%;margin-top:4px}
+.chip.top{box-shadow:inset 3px 0 0 var(--or)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--sub);align-items:center}
+/* tabs + table */
+.tabs{display:flex;gap:6px}
+.tab{background:var(--card);color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--or);color:#fff;border-color:var(--or)}
+table.it{width:100%;border-collapse:collapse;font-size:13px}
+table.it th{font-size:12px;color:var(--sub);text-align:left;font-weight:600;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.it td{padding:6px 8px;border-bottom:1px solid rgba(39,64,95,.6);vertical-align:top;line-height:1.45}
+table.it tbody tr{cursor:pointer}
+table.it tbody tr:hover td,table.it tbody tr:focus-visible td{background:rgba(255,107,26,.07);outline:none}
+.nm{font-weight:700}
+.nm small{display:block;font-weight:400;color:var(--sub);font-size:12px;margin-top:1px}
+.case{color:var(--sub);font-size:12.5px}
+.case b{color:var(--tx);font-weight:600}
+/* channels */
+.cols3{display:grid;grid-template-columns:1.1fr 1fr 1.05fr;gap:12px;align-items:start}
+.cl h3{font-size:14px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cl ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.cl li{font-size:12.4px;line-height:1.42;padding-bottom:6px;border-bottom:1px solid rgba(39,64,95,.6)}
+.cl li:last-child{border-bottom:0;padding-bottom:0}
+.cl li b{font-size:13px}
+.cl li .u{display:block;color:#8CC4FF;font-size:11.5px;word-break:break-all}
+.cl li .s{color:var(--sub)}
+.ow{display:inline-block;font-size:10.5px;font-weight:700;border-radius:3px;padding:0 5px;line-height:1.6;white-space:nowrap;vertical-align:1px}
+.ow-운용{background:var(--own);color:#0A1A2F}
+.ow-시범{border:1px solid var(--own);color:var(--own)}
+.ow-없음{color:#6C8299;border:1px solid #3a4f68}
+.own-col{border-top:3px solid var(--own)}
+.expo{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.4px;align-items:baseline;padding:2px 2px}
+.expo > b{color:var(--or);font-size:12.6px}
+.expo a{color:var(--tx);font-weight:600;text-decoration:none;border-bottom:1px dotted var(--sub)}
+.inhouse{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.6px;padding:9px 14px;align-items:baseline}
+.inhouse > b{font-size:13px;color:var(--or);margin-right:4px}
+.inhouse span{color:var(--sub)} .inhouse span b{color:var(--tx);font-weight:600}
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan .card h3{font-size:14.5px;margin-bottom:6px}
+.plan ol{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:5px}
+.plan .when{font-size:12px;color:var(--or);font-weight:700}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dec .card{border-top:3px solid var(--or)}
+.dec .q{font-weight:700;font-size:14px;margin-bottom:4px}
+.dec .a{font-size:12.6px;color:var(--sub)}
+.lim{font-size:12px;line-height:1.45;color:var(--sub);display:flex;flex-direction:column;gap:1px;margin:0;padding-left:16px}
+/* modal */
+.mb{position:fixed;inset:0;background:rgba(3,10,20,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mb.on{display:flex}
+.md{background:var(--card);border-radius:10px;max-width:880px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:22px 26px;border-top:3px solid var(--or);position:relative}
+.md h2{font-size:20px;margin:6px 0 4px}
+.md .x{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--sub);font-size:22px;cursor:pointer}
+.md h4{font-size:13px;color:var(--or);margin:16px 0 6px}
+.md p{margin:0 0 6px;font-size:13.5px}
+.md .cs{background:var(--card2);border-radius:6px;padding:9px 12px;margin-bottom:7px;font-size:13px}
+.md .cs .src{display:block;font-size:11.5px;color:#8CC4FF;word-break:break-all;margin-top:3px}
+.md .vd{font-size:13px;margin-bottom:5px}
+.md .vd .u{font-size:11.5px;color:#8CC4FF;word-break:break-all}
+/* nav */
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:20}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--sub);background:transparent;padding:0;cursor:pointer}
+.dots button.on{background:var(--or);border-color:var(--or)}
+.prog{position:fixed;left:0;bottom:0;height:3px;background:var(--or);width:0;z-index:20;transition:width .2s}
+.pgno{position:absolute;right:64px;bottom:8px;font-size:11px;color:var(--sub)}
+.print-only{display:none}
+@media (max-width:900px){
+  html{scroll-snap-type:none}
+  section.pg{padding:24px 16px 40px;min-height:auto}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .cols3,.plan,.dec{grid-template-columns:1fr}
+  .map{grid-template-columns:44px repeat(var(--cols),minmax(120px,1fr));overflow-x:auto}
+  .mapwrap{overflow-x:auto}
+  .dots,.pgno{display:none}
+  table.it .hide-m{display:none}
+}
+@media print{
+  html{scroll-snap-type:none}
+  body{background:#fff;color:#111;font-size:11px}
+  section.pg{min-height:auto;page-break-after:always;padding:12px 6px}
+  .card,.tile,.map .cell,.chip,.md .cs{background:#fff;box-shadow:none;border:1px solid #ccd}
+  .lead,.hint,.meta,.case,.tile .k,.cl li .s,.dec .a,.lim{color:#444}
+  .tile .n,.nm,.ttl{color:#111}
+  .dots,.prog,.mb,.tabs,.pgno{display:none!important}
+  table.it tbody tr{display:table-row!important}
+  .print-only{display:block}
+  a,.u,.src{color:#1a4f8a!important}
+}
+
+.trd{display:inline-block;font-size:11px;font-weight:700;border-radius:3px;padding:0 6px;line-height:1.6;background:#24395a;color:#cfe0f5;white-space:nowrap}
+.pn{display:inline-block;font-size:11px;border-radius:3px;padding:0 5px;line-height:1.6;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.pf-미확인{background:#2a2f3d;color:#c9d2de;border:1px dashed #6C8299}
+.map .hd small{display:block;font-weight:400;font-size:10.5px;color:#7f93a8}
+.map .rh{background:var(--card2);color:var(--tx);font-size:14px}
+.map{grid-template-columns:64px repeat(var(--cols),1fr)}
+.chain{display:flex;flex-direction:column;gap:6px}
+.chh{font-size:14px}
+.chh b{color:var(--or)}
+.flow{display:flex;align-items:stretch;gap:6px}
+.map{gap:5px}
+.map .cell{padding:5px;gap:4px;min-height:48px}
+.map .chip{padding:4px 7px}
+.map .hd{padding:2px 2px 4px}
+.step{flex:1;min-width:0;background:var(--card);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:5px;border-top:3px solid var(--line)}
+.step.cut{border-top-color:var(--or);background:#1d2c45}
+.sw{font-size:11.5px;font-weight:700;color:var(--or)}
+.sx{font-size:13.5px;font-weight:700}
+.tools{display:flex;flex-direction:column;gap:4px}
+.cutnote{font-size:11.5px;color:var(--or);margin-top:auto}
+.arr{align-self:center;color:var(--or);font-size:20px;font-weight:800;flex:0 0 auto}
+.buys{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.minis{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.mini{font-size:11px;background:var(--card2);border-radius:3px;padding:1px 6px;cursor:pointer;color:var(--sub)}
+.mini:hover,.mini:focus-visible{color:var(--tx);outline:1px solid var(--or)}
+.plan{grid-template-columns:1.15fr 1.15fr 1fr}
+@media (max-width:900px){
+  .flow{flex-direction:column}
+  .arr{transform:rotate(90deg)}
+  .map{grid-template-columns:52px repeat(var(--cols),minmax(130px,1fr))}
+}
+</style>
+
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<nav class="dots" id="dots" aria-label="장 이동"></nav>
+<main id="app"></main>
+<div class="mb" id="mb" role="dialog" aria-modal="true" aria-labelledby="mdT"><div class="md" id="md"></div></div>
+
+<script>
+/* =====================================================================
+   설정·데이터 블록 — 내용 수정은 여기만. 아래 엔진부는 건드리지 않아도 됨
+   ===================================================================== */
+const META = {
+  title: "직종별 현장 지원 아이템",
+  rev: "REV01",
+  date: "2026-10-02",
+  basis: "웹 공개자료(제조사·연구·기사) 검색 기준",
+  scope: "삼성중공업 조립4과 — 배재·취부·용접·사상 현장 작업자가 직접 쓰는 공구·지그·보호구·소모품"
+};
+const TRADES = ["배재","취부","용접","사상","공통"];
+const TRADE_DESC = {
+  "배재":"부재 배치·마킹 — 측정·번호 표기·판재 인양",
+  "취부":"피트업 — 임시 피스·간극·상향 자세",
+  "용접":"조건 관리·자동 대차·흄·신규 용접사 교육",
+  "사상":"그라인딩·스패터·피스 제거 — 진동·소음·시간",
+  "공통":"전 직종 — 다국어 작업 기준·흄·폭염"
+};
+const PAINS = ["시간","품질","몸","환경","소통"];
+const PAIN_DESC = {"시간":"측정·피스·재작업 시간","품질":"간극·조건 이탈·R","몸":"진동·근골격계","환경":"흄·분진·소음·열","소통":"외국인 작업자 언어"};
+
+/* 장 제목·설명 — {N} {BUY} {SELF} {PROOF} {BODY} {TOP} 은 ITEMS에서 자동 집계 */
+const TEXT = {
+  h1: "직종마다 하나씩, 2주 시범으로 바로 넣을 것 {TOP}건",
+  l1: "{N}건 중 <b>{BUY}건은 과 공구·소모품 예산으로 바로 사서</b> 시범할 수 있다. 효과 수치는 거의 제조사 발표라, 우리 블록에서 2주 시범으로 직접 재야 한다.",
+  h2: "시간 칸이 가장 많고, 몸·환경은 사상·용접에 몰린다",
+  l2: "배재·취부는 측정·피스 시간을 줄이는 쪽, 사상은 진동, 용접·공통은 흄·열이다. 소통 칸은 QR 작업카드 하나뿐이다.",
+  h3: "사상 일을 가장 크게 줄이는 손잡이는 사상이 아니라 취부에 있다",
+  l3: "임시 피스 하나가 용접·제거·그라인딩 세 번의 일을 만든다. 미 해군 조선소 연구도 그라인딩 감축 기회로 '그라인딩이 필요 없는 임시 부착물'을 꼽았다.",
+  h4: "직종별 {N}건 — 탭으로 보고, 행을 누르면 근거·제품·주의점",
+  l4: "근거 칸은 조선소에서 실제로 쓴 기록이 있는지다. 제품이 있어도 조선소 기록을 못 찾았으면 '근거 없음'으로 뒀다.",
+  h5: "같은 유형 블록 두 개로 2주 비교 — 효과는 우리 숫자로 말한다",
+  l5: "제조사 수치(최대 60%·70%·100배)는 보고에 쓰지 않는다. 블록당 작업시간·피스 수·사상 시간·디스크 소모를 시범 전후로 재서 그걸로 보고한다."
+};
+
+/* 아이템 — trade: 직종 · pain: 줄이는 것(첫 번째가 주) · buy: 구매 경로 · proof: 조선소 근거 · own: 삼성중공업 사내(운용/시범/없음) · top: 우선 시범 */
+const ITEMS = [
+  /* ---------------- 배재 ---------------- */
+  { id:"B1", trade:"배재", pain:["시간","품질"], buy:"부서 협의", proof:"C", own:"없음",
+    name:"CAD 연동 레이저 프로젝터 (부재 위치 투사)", short:"레이저 프로젝터 배재",
+    one:"판 위에 부재 윤곽·마킹선을 레이저로 그려 줄자·먹줄 측정을 없앰",
+    firstShort:"데모 영상으로 적용성만 확인",
+    what:"천장이나 거치대에 단 프로젝터가 CAD 데이터로 부재 위치·윤곽을 판 위에 그려준다. 배재사는 선에 맞춰 놓기만 하면 되고 측정·마킹 시간이 빠진다.",
+    cases:[
+      { who:"LAP (조선 적용 페이지)", year:"제조사", what:"요트 데크·선체 내장품·격벽 배치 투사 사례. 상선 블록 조립공장 공개 사례는 못 찾음", short:"요트 사례뿐, 상선 블록 사례 미확인", effect:"", srcName:"LAP", src:"https://www.lap-laser.com/industry/shipbuilding/" },
+      { who:"LAP (철골 제작)", year:"제조사", what:"철골 작업대에서 수작업 마킹·측정 대체", effect:"기존 방식 대비 최대 70% 빠름 (제조사 발표, 철골 기준)", srcName:"LAP", src:"https://www.lap-laser.com/company/news/detail/creating-efficiency-with-laser-projection-for-steel-fabrication/" },
+      { who:"Virtek 고객 Weldall (조선 아님)", year:"제조사 사례", what:"레이저 투사로 셋업 시간 단축", effect:"셋업 6~7시간 → 1.5시간 (제조사 사례)", srcName:"Virtek", src:"https://virtekvision.com/blogs/case-studies" }
+    ],
+    apply:"판넬·소조립 정반처럼 한 판에 부재를 여러 개 앉히는 곳. 블록마다 배치가 달라 측정이 많은 구간에서 효과가 크다.",
+    vendors:[
+      { name:"LAP CAD-PRO", url:"https://www.lap-laser.com/products/cad-pro/", ch:"국내 대리점 미확인" },
+      { name:"Virtek Iris 3D", url:"https://virtekvision.com/products/virtek-iris-3d", ch:"국내 대리점 미확인" },
+      { name:"Z-LASER", url:"https://z-laser.com/en/product-area-laser-projectors", ch:"국내 대리점 미확인" }
+    ],
+    first:"업체 데모 영상으로 조립 정반 적용 가능성만 먼저 본다. 설비·IT 승인 전 단계.",
+    risk:"고정 설치·CAD 데이터 변환·레이저 안전 검토가 필요해 과 단독 시범이 어렵다. 상선 블록 조립 공개 사례 없음." },
+
+  { id:"B2", trade:"배재", pain:["시간","소통"], buy:"과 구매", proof:"미확인", own:"없음",
+    name:"휴대형 잉크젯 마킹기 (부재번호 인쇄)", short:"잉크젯 부재번호 마킹",
+    one:"손글씨 부재번호·블록번호를 인쇄로 바꿔 오독을 줄임",
+    firstShort:"1대로 배재 1개 반 2주 사용",
+    what:"손에 들고 판 위를 밀면 부재번호·블록번호·방향 표시가 인쇄된다. 손글씨 번호를 외국인 작업자가 잘못 읽는 문제를 줄인다.",
+    cases:[
+      { who:"Reiner JetStamp 등 (제품)", year:"판매 중", what:"금속판·관에 일련번호를 인쇄하는 용도로 공급사가 소개. 조선소 사용 기록은 못 찾음", short:"금속 마킹 제품 확인, 조선소 기록 없음", effect:"", srcName:"공급사", src:"http://handheldinkjet.com/printing-on-metal-parts/" }
+    ],
+    apply:"배재 때 부재번호 표기, 블록 내 방향·위치 표시. 번호 체계가 정해진 반복 블록부터.",
+    vendors:[
+      { name:"Reiner JetStamp (QDX 속건 잉크)", url:"http://handheldinkjet.com/printing-on-metal-parts/", ch:"국내 판매 미확인" },
+      { name:"BENTSAI 휴대형 마킹기", url:"https://www.bentsaishop.com/aerospace-and-automotive-part-marking", ch:"국내 판매 미확인" }
+    ],
+    first:"1대 사서 배재 1개 반에서 2주 사용. 번호 오독·재확인 횟수를 반장이 기록.",
+    risk:"용제 잉크는 MSDS 확인(산안법 제110조). 표면처리 때 지워지는지 확인. 조선소 사례 없음." },
+
+  { id:"B3", trade:"배재", pain:["몸","시간"], buy:"부서 협의", proof:"C", own:"없음",
+    name:"판재·부재 인양용 영구자석·진공 리프터", short:"인양 마그넷 리프터",
+    one:"클램프·러그 체결 없이 판재·부재를 들어 배재",
+    firstShort:"보유 호이스트 장착 가능 여부 확인",
+    what:"스위치로 자력을 켜고 끄는 리프터로 판재를 들어 옮긴다. 클램프 체결·해체와 러그 용접이 빠진다. 전영구자석형은 정전 때도 하중을 유지한다.",
+    cases:[
+      { who:"조선소용 리프팅 마그넷 (제조사 설명)", year:"제조사", what:"강판 하역, 굴곡판을 레벨러로 이송하는 용도. 고객명 없음", short:"제조사 일반 설명뿐, 고객명 없음", effect:"", srcName:"HVR Magnet", src:"https://www.hvrmagnet.com/blog/lifting-magnets-in-shipyards/" },
+      { who:"Walmag GP 250 (제품 사양)", year:"판매 중", what:"두께 3mm부터 취급, 적재 더미에서 1장 분리는 4mm부터", effect:"", srcName:"Walmag", src:"https://eshop.walmagmagnetics.com/NextCategory/en-US/P122/handling-and-lifting" }
+    ],
+    apply:"소조립·배재장 판재 이동 중 지금 클램프로 체결하는 구간.",
+    vendors:[
+      { name:"매그스위치테크놀로지코리아 (국내 법인, 중량물 리프팅)", url:"https://www.komachine.com/ko/companies/mag-switch/products/series/21818", ch:"국내" },
+      { name:"Schmalz 진공 리프터", url:"https://www.schmalz.com/en/solutions/industries-and-applications/metal-and-sheet-metal", ch:"국내 판매 미확인" }
+    ],
+    first:"보유 크레인·호이스트에 달 수 있는지 설비·안전 부서와 먼저 확인.",
+    risk:"양중 도구라 사내 양중 안전 승인 필수. 리프팅 마그넷 자체의 안전인증 대상 여부 미확인. 판 두께·녹·도막에 따라 흡착력이 달라진다." },
+
+  { id:"B4", trade:"배재", pain:["시간","품질"], buy:"사내 확대", proof:"B", own:"운용", top:true,
+    ownNote:"삼성중공업 3D 디지털 생산도면 전면 적용(2024 보도). 조립4과 배재·취부 반장까지 태블릿으로 쓰는지는 미확인.",
+    name:"태블릿 3D 배재도·부재 위치 조회", short:"태블릿 3D 배재도",
+    one:"사내 3D 디지털 도면을 배재·취부 반장 태블릿으로",
+    why:"사내 무도면 조선소 운용 중 · 새로 살 것 없음",
+    firstShort:"반장 태블릿 지급 범위 확인",
+    what:"종이 배재도 대신 태블릿에서 3D 모델을 돌려 부재 위치·방향을 확인한다. '어느 쪽이 위냐'를 묻고 확인하는 시간이 줄고, 외국인 작업자에게는 말보다 화면이 빠르다.",
+    cases:[
+      { who:"삼성중공업 무도면 조선소", year:"2024", what:"3D 디지털 생산도면 전면 적용", short:"사내 3D 디지털 도면 전면 적용", effect:"연간 종이 생산도면 60만 매, LNG선 의장 설치도 기준 설계 공수 45% 절감 기대 (회사 발표)", srcName:"뉴스핌 2024-09-30", src:"https://www.newspim.com/news/view/20240930000211" },
+      { who:"업계 기사", year:"-", what:"태블릿에 3D 도면을 담아 공정을 파악하고 모델 정보로 부재 위치를 찾음", effect:"", srcName:"인더스트리뉴스", src:"https://www.industrynews.co.kr/news/articleView.html?idxno=41523" }
+    ],
+    apply:"배재·취부 반장 1인 1태블릿부터. 부재 찾기·방향 확인에 걸리는 시간을 반장이 2주 기록.",
+    vendors:[ { name:"사내: 스마트야드·DX 부서 (3D 도면 운영, 부서명 사내 확인)", url:"", ch:"먼저" } ],
+    first:"DX 부서에 조립 현장 태블릿 지급 기준·앱 권한 확인 → 조립4과 반장 지급 요청.",
+    risk:"현장 파손·분실 관리, 사내망(와이파이) 범위. 3D 모델과 실제 배재 순서가 다를 때 누가 고치는지 정해둘 것." },
+
+  /* ---------------- 취부 ---------------- */
+  { id:"F1", trade:"취부", pain:["시간","몸"], buy:"과 구매", proof:"B", own:"없음", top:true,
+    name:"스위치형 자석 피팅툴 (임시 피스 대체)", short:"자석 피팅툴",
+    one:"도그·웨지·러그를 용접하지 않고 자석으로 판을 당기고 맞춤",
+    why:"피스 용접→제거→사상 세 번 일을 취부에서 끊음",
+    firstShort:"국내 법인에 견적·데모 요청",
+    what:"스위치로 켜고 끄는 영구자석에 당김·밀기 기구를 붙인 공구. 판 이음 단차·간극을 맞출 때 임시 피스를 용접하지 않으니, 그 뒤의 피스 절단과 그라인딩이 함께 없어진다. 전원이 필요 없다.",
+    cases:[
+      { who:"Magswitch", year:"업계지", what:"전 세계 40여 개 조선소에서 사용", short:"40여 개 조선소 사용(업계지)", effect:"", srcName:"Contractor Supply", src:"https://contractorsupplymagazine.com/pages/Spre/Magswitch-Technology-MagPress.php" },
+      { who:"Magswitch 조선 고객 (고객명 미공개)", year:"제조사", what:"하부구조 1개에서 피팅·그라인딩 절감. MagPress는 판 2장 맞춤", effect:"주당 20시간 이상 절감, 도그·웨지 대비 100배 빠름, 고정력 1,100 lb (모두 제조사 발표)", srcName:"Magswitch", src:"https://magswitch.com/pages/magnetic-shipbuilding-equipment-material-handling" },
+      { who:"Newport News 조선소 (NSRP 2013-440)", year:"미 해군 조선 연구", what:"그라인딩 공수 감축 기회로 '그라인딩이 필요 없는 임시 부착물'을 제시", effect:"", srcName:"NSRP", src:"https://www.nsrp.org/wp-content/uploads/2015/10/Deliverable-2013-440-Reduce_Grinding_Labor_Final_Report-Newport_News_Shipbuilding.pdf" }
+    ],
+    apply:"판 이음 단차 맞춤, 론지 취부 때 당김. 같은 유형 블록 2개로 피스 개수·피스 제거 시간·사상 시간을 비교한다. 사상반 공수까지 같이 재야 효과가 보인다.",
+    vendors:[
+      { name:"매그스위치테크놀로지코리아 (2006 설립, 국내 조선소 엔지니어와 조선용 치공구 개발 이력)", url:"https://www.komachine.com/ko/companies/mag-switch/products/series/21818", ch:"국내 법인" },
+      { name:"Magswitch 조선용 제품군", url:"https://magswitch.com/collections/shipyard-infrastructure-products", ch:"본사" }
+    ],
+    first:"국내 법인에 MagPress 등 조선용 피팅툴 취급 여부와 데모 요청. 2~3세트로 시범.",
+    risk:"자석 무게(들고 옮겨야 함), 판 두께·도막·곡면에서 흡착력 저하. 블록 위 미끄러짐 안전 확인. 국내 법인의 MagPress 취급 여부 미확인." },
+
+  { id:"F2", trade:"취부", pain:["시간","품질"], buy:"과 구매", proof:"B", own:"없음",
+    name:"온·오프 자석 직각 지그 (매그스퀘어·매그지그)", short:"자석 직각 지그",
+    one:"소부재를 자석으로 세워 직각을 잡고 바로 가접",
+    firstShort:"취부반 1개 반에 5~10개",
+    what:"작은 스위치형 자석 블록으로 브래킷·스티프너 같은 소부재를 세워 직각을 잡는다. 받침목·임시 가접이 줄고 혼자서도 취부할 수 있다.",
+    cases:[
+      { who:"국내 공구 유통 웹진", year:"-", what:"'조선소 용접현장 필수'로 소개. 특정 조선소명은 없음", short:"국내 유통, '조선소 현장 필수'로 소개", effect:"", srcName:"크레텍 웹진", src:"https://www.cretec.kr/webzine/sub/wz_view.jsp?bid=4&col=&sw=&pg=1&num=3400" }
+    ],
+    apply:"소조립 브래킷·칼라플레이트 취부. 가장 싸서 반 단위로 먼저 돌려보기 좋다.",
+    vendors:[
+      { name:"매그스위치 MSQ-50 (매그스퀘어)", url:"https://www.komachine.com/ko/companies/mag-switch/products/119626-50mm-magsquare-magsquare-magswitch-magnetssingle-type-magnets-msq-50", ch:"국내 판매" },
+      { name:"매그스위치 MJG-40 (매그지그)", url:"https://www.komachine.com/ko/companies/mag-switch/products/119636-40mm-magjig-(magjig)-magswitch-magnets(single-type-magnets)-mjg-40", ch:"국내 판매" }
+    ],
+    first:"취부반 1개 반에 5~10개 지급하고 2주 뒤 '계속 쓰겠다' 비율 확인.",
+    risk:"자석 가까이에서 아크가 쏠릴 수 있어 가접 위치와의 거리를 현장에서 확인. 제품별 사용 조건은 견적 때 확인." },
+
+  { id:"F3", trade:"취부", pain:["시간"], buy:"과 구매", proof:"C", own:"없음",
+    name:"무용접 피팅 보조구 (용접식 도그·웨지 대체)", short:"무용접 도그·웨지",
+    one:"판 이음 갭·단차를 피스 용접 없이 맞추는 수공구",
+    firstShort:"해외 구매 가능 여부 확인",
+    what:"판 가장자리에 걸거나 자석으로 붙여 갭을 벌리거나 당기는 공구. 자석 피팅툴이 못 미치는 판 이음·너클부를 보완한다.",
+    cases:[
+      { who:"NSRP 0528 (미 조선 연구 프로그램)", year:"연구", what:"'용접식 임시 부착물 감축·제거' — 클램프·전자석·접착제 대안 연구", short:"미 조선 연구: 용접식 임시 부착물 감축", effect:"", srcName:"NSRP 0528", src:"https://www.academia.edu/48231548/" },
+      { who:"FitUpGear Gunny Dog·No-Mar Mag-Pry (제품)", year:"판매 중", what:"용접·그라인딩 없는 임시 고정. 조선소 사용 기록은 못 찾음", effect:"최대 100배 빠름 (제조사 발표)", srcName:"FitUpGear", src:"https://www.fitupgear.com/" }
+    ],
+    apply:"수직 이음·데크 이음 단차 맞춤.",
+    vendors:[ { name:"FitUpGear", url:"https://www.fitupgear.com/fitupgear-products/fitupgear-gunny-dog/", ch:"해외 구매, 국내 판매 미확인" } ],
+    first:"구매 부서에 해외 구매 가능 여부 확인 → 2~3세트 비교 시험.",
+    risk:"해외 구매·통관. 고장력 소재라 본체에 용접하면 안 된다(제조사 주의)." },
+
+  { id:"F4", trade:"취부", pain:["시간","몸"], buy:"자체 제작", proof:"C", own:"없음",
+    name:"자석식 보강재 취부 지그 — 개선제안으로 사내 제작", short:"사내 제작 취부 지그",
+    one:"특허로 공개된 지그 구조를 참고해 공무에서 제작",
+    firstShort:"피스 가장 많이 붙이는 곳 3곳 뽑기",
+    what:"자석으로 판에 붙여 보강재를 세우고 누르는 지그를 현장 개선제안으로 만든다. 우리 블록 형상에 맞춰 만들 수 있다는 게 시판품보다 나은 점.",
+    cases:[
+      { who:"현대중공업 특허 KR20130007412U", year:"특허", what:"자석으로 부착력을 높여 중장비 없이 강판에 탈착하는 보강재 취부지그", short:"경쟁사 특허: 자석식 보강재 취부지그", effect:"", srcName:"Google Patents", src:"https://patents.google.com/patent/KR20130007412U/ko" },
+      { who:"특허 KR20130047347A (출원인 미확인)", year:"특허", what:"주판·프레임 용접용 단차 조정 지그", effect:"", srcName:"Google Patents", src:"https://patents.google.com/patent/KR20130047347A/ko" }
+    ],
+    apply:"조립4과에서 피스를 가장 많이 쓰는 취부 구간을 골라 지그 1종부터.",
+    vendors:[ { name:"사내: 공무·치공구 제작 부서", url:"", ch:"제작" }, { name:"사내: 지식재산 담당 (특허 권리 확인)", url:"", ch:"확인" } ],
+    first:"반장 인터뷰로 '피스 제일 많이 붙이는 곳' 3곳을 뽑아 개선제안 등록.",
+    risk:"타사 특허의 권리 범위·존속 여부 확인 필요. 제작 지그의 하중·안전 검증." },
+
+  { id:"F5", trade:"취부", pain:["품질"], buy:"과 구매", proof:"미확인", own:"없음",
+    name:"취부 간극·단차 게이지 (디지털·Hi-Lo)", short:"취부 간극 게이지",
+    one:"루트 갭·개선 각도·단차를 눈대중 대신 측정",
+    firstShort:"R 다발 블록 1유형에서 측정",
+    what:"용접 전에 루트 갭·단차를 게이지로 재서 기준을 벗어난 곳을 취부 단계에서 거른다. 정도불량·용접불량으로 넘어가기 전에 잡는 용도.",
+    cases:[
+      { who:"SISCO 디지털 용접 게이지·G.A.L. Hi-Lo (제품)", year:"판매 중", what:"0~20mm 디지털 측정, Hi-Lo는 스톱으로 갭 판정. 조선소 사용 기록은 못 찾음", short:"제품 확인, 조선소 기록 없음", effect:"", srcName:"SISCO", src:"https://www.sisco.com/digital-weld-gauge" }
+    ],
+    apply:"용접불량 R이 반복되는 블록 유형에서 취부 완료 시점에 간극을 재고, R 발생과 대조.",
+    vendors:[
+      { name:"SISCO Digital Weld Gauge", url:"https://www.sisco.com/digital-weld-gauge", ch:"국내 판매 미확인" },
+      { name:"G.A.L. Hi-Lo 게이지", url:"https://greatlakesgages.com/product/hi-lo-welding-gauge-from-gal-gage-co/", ch:"국내 판매 미확인" }
+    ],
+    first:"R 다발 블록 유형 1개에서 취부 완료 시 간극 측정 기록 → R 발생과 대조.",
+    risk:"측정만 늘고 기록을 안 쓰면 일만 는다. 측정 대상 블록을 좁게 잡을 것." },
+
+  { id:"F6", trade:"취부", pain:["몸"], buy:"과 구매", proof:"C", own:"없음",
+    name:"상향 취부·용접 무동력 어깨 보조", short:"상향작업 어깨 보조",
+    one:"팔을 드는 상향 자세의 어깨 부담을 스프링으로 덜어줌",
+    firstShort:"체험 대여 가능 여부 문의",
+    what:"배터리 없이 스프링으로 팔 무게를 받쳐주는 조끼형 장비. 상향 취부·상향 용접처럼 팔을 오래 드는 작업에 쓴다.",
+    cases:[
+      { who:"미 노퍽 해군 조선소", year:"시험 (연도 미확인)", what:"Levitate Airframe 어깨 보조 시험", short:"해군 조선소 어깨 보조 시험", effect:"", srcName:"Maritime Executive", src:"https://maritime-executive.com/article/norfolk-naval-shipyard-tests-exoskeleton-for-heavy-lifting" },
+      { who:"Baltic Yachts", year:"시험", what:"Paexo Shoulder를 생산직 6명이 시험, 결과 '매우 긍정적' (제조사 보도 성격)", effect:"", srcName:"Maritime Executive", src:"https://maritime-executive.com/corporate/german-designed-shoulder-exoskeleton-ready-for-shipbuilding" },
+      { who:"현대차그룹 엑스블 숄더 (제품)", year:"2025 판매", what:"무동력, 약 1.9kg", effect:"어깨 관절 부하 최대 60%, 삼각근 활성도 최대 30% 감소 (제조사 발표)", srcName:"현대차그룹", src:"https://www.hyundaimotorgroup.com/ko/story/CONT0000000000165361" }
+    ],
+    apply:"대조립 상향 취부·상향 용접 작업자 2~3명이 2주 착용. '계속 쓰겠다' 비율과 불편 사항만 기록한다.",
+    vendors:[
+      { name:"현대차그룹 로보틱스랩 (엑스블 숄더)", url:"https://robotics.hyundai.com/unveiled-robots/wearable/xBleShoulder.do", ch:"외부 판매 조건 확인 필요" },
+      { name:"Ottobock Paexo", url:"https://corporate.ottobock.com/en/media/newsroom/paexo-exoskeleton-enters-series-production-following-successful-testing", ch:"국내 판매 미확인" }
+    ],
+    first:"로보틱스랩·Ottobock에 체험 대여 가능 여부 문의.",
+    risk:"용접 불꽃·협소부 걸림, 보호구·안전대와 간섭은 사내 안전 검토. 국내 조선소 적용 사례 없음." },
+
+  /* ---------------- 용접 ---------------- */
+  { id:"W1", trade:"용접", pain:["시간","품질"], buy:"과 구매", proof:"C", own:"없음", top:true,
+    name:"배터리·마그넷 무궤도 필릿 캐리지", short:"무궤도 필릿 캐리지",
+    one:"긴 수평·수직 필릿을 소형 자동 대차가 따라가며 용접",
+    why:"숙련도 편차↓ · 국산 4.9kg급 바로 구매 가능",
+    firstShort:"보유 캐리지 활용률부터 확인",
+    what:"자석으로 판에 붙어 레일 없이 용접선을 따라가는 소형 대차에 토치를 단다. 용접사는 조건을 맞추고 지켜보면 되고, 한 사람이 두 대를 돌릴 수도 있다. 배터리형은 케이블이 줄어 블록 안에서 다루기 쉽다.",
+    cases:[
+      { who:"Gullco MOGGY (제조사 비교)", year:"제조사", what:"5mm 필릿 8시간 기준 용접 길이 비교", short:"수동 40m vs 캐리지 220m/8h (제조사)", effect:"수동 40m, MIG 60~65m, 듀얼토치 캐리지 220m(아크 50%)·308m(아크 70%) (제조사 발표)", srcName:"Gullco", src:"https://catalog.gullco.com/item/weld-automation/ggy-portable-fillet-welding-travel-carriage-system/item-1271" },
+      { who:"ESAB Miggytrac B501", year:"제조사", what:"배터리 구동, 'ship and offshore yards'용으로 발표", effect:"", srcName:"ESAB", src:"https://southeasteurope.esab.com/southeasteurope/en/news/archive/esab-launches-new-miggytrac.cfm" },
+      { who:"Koike Wel-Handy Multi Next", year:"제조사", what:"조선소·파이프라인용, 120 ft-lb 마그넷, 직선·스티치·위빙", effect:"", srcName:"Koike", src:"https://www.koike.com/wel-handy-multi-next-portable-trackless-fillet-welding-carriage/" }
+    ],
+    apply:"대조립 론지·웹 긴 필릿, 블록 내부 수직 필릿. 같은 블록 유형에서 용접사 1인당 하루 용접 길이를 시범 전후로 비교.",
+    vendors:[
+      { name:"SK Weld MINI-V (국산, 4.9kg)", url:"http://www.skweld.co.kr/home_kr/bbs/board.php?bo_table=pro_02", ch:"국내" },
+      { name:"청송산업기계 KOWELD 벽면주행 필릿 캐리지", url:"https://www.koweld.co.kr/products/fillet-carriage/wall-travelingl-fillet/", ch:"국내" },
+      { name:"Gullco / ESAB / Koike", url:"https://catalog.gullco.com/item/weld-automation/ggy-portable-fillet-welding-travel-carriage-system/item-1271", ch:"국내 대리점 미확인" }
+    ],
+    first:"조립4과 보유 캐리지·트랙터 대수와 실제 가동률부터 확인. 있는데 안 쓰는 거라면 그 이유가 먼저다.",
+    risk:"조선소 실명 사례는 못 찾음(제조사 홍보만). 사내 WPS에 캐리지 조건이 있는지 확인. 이미 쓰는 곳이 많으면 '추가 도입'보다 '활용률' 문제일 수 있다." },
+
+  { id:"W2", trade:"용접", pain:["품질"], buy:"부서 협의", proof:"미확인", own:"없음",
+    name:"용접기 조건 잠금 (WPS 범위 밖 조정 차단)", short:"용접기 조건 잠금",
+    one:"전류·전압을 WPS 범위 안에서만 돌리게 잠금",
+    firstShort:"보유 용접기 잠금 기능 확인",
+    what:"디지털 용접기의 잠금·범위 제한 기능으로 작업자가 조건을 WPS 밖으로 바꾸지 못하게 한다. 지원 기종이면 새 장비 없이 설정만으로 된다.",
+    cases:[
+      { who:"Miller 'Locks and Limits'", year:"제품 기능", what:"전압·와이어 송급속도를 WPS 범위로 제한(limit), 프로그램 변경 차단(lock). 조선소 사용 기록은 못 찾음", short:"제품 기능 확인, 조선소 기록 없음", effect:"", srcName:"유통 페이지", src:"https://www.serviceweldingsupply.com/product/continuum-500-w-auxiliary-power/" },
+      { who:"Lincoln Power Wave", year:"제품 기능", what:"패널 단계별 잠금", effect:"", srcName:"Lincoln 매뉴얼", src:"https://ch-delivery.lincolnelectric.com/api/public/content/8687a3970503433594c63d450ea5e9cc?v=60ee5150" }
+    ],
+    apply:"용접불량 R이 반복되는 반의 용접기부터. 시범 전후 용접불량률을 같은 잣대로 비교.",
+    vendors:[ { name:"사내: 설비·용접기술 부서 (보유 용접기 기종 확인)", url:"", ch:"먼저" } ],
+    first:"보유 용접기 브랜드·기종에 잠금 기능이 있는지 설비 부서에 확인.",
+    risk:"국산 CO2 용접기의 잠금 기능 지원 여부 미확인. 완전 잠금은 자세별 조정을 막아 불편하니 범위 제한(limit)으로." },
+
+  { id:"W3", trade:"용접", pain:["환경"], buy:"부서 협의", proof:"A", own:"없음",
+    name:"흄 흡입 토치·이동식 국소배기 (블록 내부)", short:"흄 흡입·국소배기",
+    one:"용접 지점에서 흄을 바로 빨아들임",
+    firstShort:"블록 내부 흄 측정 결과 받기",
+    what:"토치 끝이나 이동식 흡입구로 용접 지점의 흄을 바로 빨아낸다. 블록 내부처럼 공기가 안 도는 곳에서 송풍만으로는 부족하다는 연구가 있다.",
+    cases:[
+      { who:"NIOSH 미국 조선소 밀폐공간 연구", year:"연구", what:"국소배기와 기존 송풍 비교. 두 방식 모두 8시간 기준은 초과", short:"국소배기가 송풍 대비 흄 75% 감소", effect:"국소배기가 기존 송풍보다 흄 75%(58~85%) 감소", srcName:"CDC/NIOSH", src:"https://stacks.cdc.gov/view/cdc/193953" },
+      { who:"미국 조선소 2곳 관찰", year:"연구", what:"환기를 해도 용접사가 환기 사각지대에서 작업한 경우가 53%", effect:"", srcName:"PubMed", src:"https://pubmed.ncbi.nlm.nih.gov/25245587/" },
+      { who:"국내 조선소 조립작업장 연구", year:"2006 (원문 미열람)", what:"흄토치·이동식 팬 효과 측정. 흄토치는 무게·비용·작업성 문제 보고", effect:"흄토치로 헬멧 안 흄 23.5~34.8% 감소, 이동식 팬 전면 흡입 71.7% 감소", srcName:"한국산업위생학회지", src:"https://www.jksoeh.org/main/abstract_view.htm?scode=J&code=J00902007&vol=9&no=2&type=aissue" }
+    ],
+    apply:"밀폐 블록 내부 용접 구간. 용접사가 흡입구를 옮기며 쓰는 이동식이 현실적이고, PAPR(C3)과 같이 간다.",
+    vendors:[ { name:"사내: 안전·설비 부서 (국소배기 설비)", url:"", ch:"먼저" } ],
+    first:"블록 내부 작업 구간의 지금 환기 방식과 흄 측정 결과를 안전 부서에서 받기.",
+    risk:"흄토치는 무겁고 비싸며 실드가스 보강이 필요하다는 보고. 국소배기만으로도 기준 초과 가능 → 호흡보호구 병행." },
+
+  { id:"W4", trade:"용접", pain:["품질","소통"], buy:"부서 협의", proof:"A", own:"없음",
+    ownNote:"국내 공급사 고객 목록에 삼성중공업 관련 표기가 있다는 검색 요약이 있으나 확인 못 함. 사내 기술교육 부서에 보유 여부 확인 필요.",
+    name:"VR 용접 시뮬레이터 (외국인 신규 용접사 기본기)", short:"VR 용접 훈련",
+    one:"가스·와이어 없이 토치 각도·속도·거리를 반복 연습",
+    firstShort:"사내 교육 부서 보유 여부 확인",
+    what:"VR·AR 화면에서 실제 토치를 들고 용접 동작을 연습하면 각도·속도·거리가 점수로 나온다. 말보다 점수가 빨라 언어 장벽이 있는 신규 용접사에게 맞다.",
+    cases:[
+      { who:"HII Ingalls 조선소", year:"2026-09 발표", what:"2025년 1월 개소한 VR 용접랩 교육생 1,000명 돌파", short:"VR 용접랩 교육생 1,000명, 실습량 최대 10배", effect:"실습량 최대 10배 (회사 발표)", srcName:"GlobeNewswire", src:"https://www.globenewswire.com/news-release/2026/09/18/3364832/14858/en/ingalls-shipbuilding-s-virtual-reality-welding-lab-surpasses-1-000-trainees.html" },
+      { who:"Strategic Marine (싱가포르 조선사)", year:"-", what:"Seabery Soldamatic 사용", effect:"", srcName:"Seabery", src:"https://seaberyat.com/en/case-studies-soldamatic/" },
+      { who:"울산과학대", year:"-", what:"조선·중공업 VR 용접 훈련", effect:"", srcName:"울산매일", src:"https://www.iusm.co.kr/news/articleView.html?idxno=1063714" }
+    ],
+    apply:"신규 투입 외국인 용접사의 현장 배치 전 1~2일. 시범 후 첫 2주 용접불량을 기존 신규자와 비교.",
+    vendors:[
+      { name:"사내: 기술교육 부서", url:"", ch:"먼저" },
+      { name:"영일교육시스템 (Soldamatic 국내 공급)", url:"https://yes01.co.kr/", ch:"국내" }
+    ],
+    first:"사내 기술교육 부서에 시뮬레이터 보유 여부 확인 → 조립4과 신규 용접사 교육 일정에 넣기.",
+    risk:"가격 미확인. 시뮬레이터 점수와 현장 품질의 관계는 우리 데이터로 확인해야 한다." },
+
+  { id:"W5", trade:"용접", pain:["시간","품질"], buy:"과 구매", proof:"C", own:"없음",
+    name:"세라믹 백킹재 일면용접 확대", short:"세라믹 백킹 확대",
+    one:"이면 가우징·그라인딩 없이 한쪽에서 이면 비드까지",
+    firstShort:"일면용접 WPS 적용 범위 확인",
+    what:"맞대기 이음 뒷면에 세라믹 백킹재를 붙이고 한쪽에서 용접해 이면 비드까지 만든다. 뒤집기·이면 가우징·이면 그라인딩이 빠진다.",
+    cases:[
+      { who:"조선 맞대기 일면용접 공법 특허", year:"특허", what:"세라믹 백킹재 + FCAW 2패스", short:"조선 일면용접 특허 공법", effect:"", srcName:"Google Patents", src:"https://patents.google.com/patent/KR20080081796A/ko" },
+      { who:"(주)경은 (제품)", year:"판매 중", what:"FCAW·GMAW·SAW·EGW 일면용접으로 이면 가우징·그라인딩 최소화", effect:"수치 미공개", srcName:"코머신", src:"https://www.komachine.com/ko/companies/kyung-eun/products/78082-fcaw-(flux-cored-arc-welding)" }
+    ],
+    apply:"지금 양면용접 + 이면 가우징 하는 맞대기 이음 중 일면용접으로 바꿀 수 있는 곳 찾기. WPS 승인 범위 안에서만.",
+    vendors:[ { name:"(주)경은 등 국내 판매", url:"https://www.komachine.com/ko/companies/kyung-eun/products/78082-fcaw-(flux-cored-arc-welding)", ch:"국내" }, { name:"사내: 용접기술 부서", url:"", ch:"WPS 확인" } ],
+    first:"용접기술 부서에 일면용접 WPS 적용 범위 확인.",
+    risk:"WPS·선급 승인 범위 밖이면 바꿀 수 없다. 이미 쓰는 곳이면 새 아이템이 아니라 적용 범위 문제." },
+
+  { id:"W6", trade:"용접", pain:["품질"], buy:"과 구매", proof:"미확인", own:"없음",
+    name:"예열 온도 지시 크레용", short:"예열 온도 크레용",
+    one:"그어보고 녹는지로 예열 온도 도달 여부를 바로 판정",
+    firstShort:"예열 대상 반에 2~3종 지급",
+    what:"정해진 온도에서 녹는 크레용을 그어 예열·층간온도를 눈으로 판정한다. 온도계 읽는 법을 몰라도 쓸 수 있다.",
+    cases:[
+      { who:"Tempilstik (제품)", year:"판매 중", what:"38~1093°C 116종, 교정 불필요. 제조사가 조선업 용도·AWS D1.1 예열 요건 명시. 조선소 사용 기록은 못 찾음", short:"제조사가 조선 용도 명시, 사용 기록 없음", effect:"정확도 ±1%(°F) (제조사 발표)", srcName:"Markal", src:"https://markal.com/products/tempilstik" }
+    ],
+    apply:"후판·고장력강 예열 구간.",
+    vendors:[ { name:"Markal Tempilstik", url:"https://markal.com/products/tempilstik", ch:"국내 판매 미확인" } ],
+    first:"예열 대상 블록 반에 온도별 2~3종 지급.",
+    risk:"국내 판매 미확인. 이미 온도계로 관리하고 있으면 효과가 작다." },
+
+  /* ---------------- 사상 ---------------- */
+  { id:"G1", trade:"사상", pain:["몸"], buy:"과 구매", proof:"C", own:"없음", top:true,
+    name:"저진동 그라인더·방진 사이드 핸들", short:"저진동 그라인더·방진 핸들",
+    one:"핸들 교체·저진동 공구로 손 진동 노출을 줄임",
+    why:"국내 조선 그라인딩 진동 실측 있음 · 법정 진동작업 · 핸들은 부품값",
+    firstShort:"방진 핸들 교체 + 전후 진동 측정",
+    what:"기존 그라인더 사이드 핸들을 방진형으로 바꾸고, 사용 시간이 긴 작업자부터 저진동(오토밸런서) 그라인더로 교체한다. 방진장갑은 법정 지급품이지만 장갑만으로 보호를 기대할 수 없다는 게 영국 HSE 입장이다.",
+    cases:[
+      { who:"국내 선박건조업 그라인더 6종 실측", year:"한국산업보건학회지", what:"ISO 5349 기준 진동 측정과 수지진동증후군 예측", short:"국내 조선 그라인딩 진동 6.23 m/s²(4h 등가)", effect:"용접 후 그라인딩 4시간 등가 6.23 m/s², 도장 전 13.39 m/s², 평균 공구 파지 4.64시간, 레이노 예측 유병률 12.04%", srcName:"DBpia", src:"https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE09726674" },
+      { who:"미 해군 조선소 인간공학 지침", year:"NAVFAC", what:"저진동 공구 사용 권고", effect:"", srcName:"NAVFAC", src:"https://www.navfac.navy.mil/Portals/68/Documents/Business-Lines/Safety/ergonomics/Ergonomic%20Guidelines%20for%20Shipyard.pdf?ver=5zdXycT4-bWBvVfL4OqzaQ%3D%3D" },
+      { who:"Metabo (제조사 발언)", year:"-", what:"방진(AV) 사이드 핸들", effect:"진동 최대 60% 감소, 하루 사용 가능 시간 2시간 → 6시간 (제조사)", srcName:"The Fabricator", src:"https://www.thefabricator.com/thewelder/article/shopmanagement/shake-rattle-and-the-toll" },
+      { who:"법 근거", year:"현행", what:"안전보건규칙 제512조(동력 연삭기 사용 작업 = 진동작업), 제518조(진동보호구 지급 의무)", effect:"", srcName:"국가법령정보센터", src:"https://www.law.go.kr/LSW//lsSideInfoP.do?lsiSeq=273603&joNo=0512&joBrNo=00&docCls=jo&urlMode=lsScJoRltInfoR" }
+    ],
+    apply:"사상 시간이 긴 작업자 3~5명. 안전 부서 진동 측정기로 교체 전후를 재고, 제조사 수치 대신 우리 측정값으로 보고한다.",
+    vendors:[
+      { name:"Atlas Copco 저진동 그라인더 (국내 공식 대리점망)", url:"https://www.atlascopco.com/ko-kr/itba/products/material-removal-tools/grinders", ch:"국내" },
+      { name:"Metabo·Bosch·Makita 방진 핸들", url:"https://makitatools.com/products/details/162258-0", ch:"보유 기종 맞춤" },
+      { name:"Reactec HAVwear (작업자별 진동 노출 기록)", url:"https://www.reactec.com/about/news/forth-ports-rolls-out-reactecs-innovative-havwear-system-across-all-uk-ports/", ch:"국내 판매 미확인" }
+    ],
+    first:"보유 그라인더 기종에 맞는 방진 핸들부터 사서 교체 → 안전 부서에 교체 전후 진동 측정 요청.",
+    risk:"에어 그라인더는 압축공기 사양 확인. 방진장갑을 대책으로 착각하지 않게 — 저주파에서 손끝 진동을 오히려 키울 수 있다는 연구가 있다." },
+
+  { id:"G2", trade:"사상", pain:["몸","시간"], buy:"과 구매", proof:"미확인", own:"없음",
+    name:"저진동 니들 스케일러 (스패터·슬래그 제거)", short:"저진동 니들 스케일러",
+    one:"그라인더 대신 스패터·슬래그를 두드려 떼는 저진동 공구",
+    firstShort:"1~2대로 스패터 제거 구간 비교",
+    what:"바늘 다발이 두드려 스패터·슬래그·녹을 떼어낸다. 저진동형은 제조사 표기 진동이 1.5~2.75 m/s² 수준이다.",
+    cases:[
+      { who:"저진동 니들 스케일러 3종 (제품)", year:"판매 중", what:"Trelawny VL303, UT HP002PGLV, M7 SN-1350. 조선소 사용 기록은 못 찾음", short:"제조사 진동 1.5~2.75 m/s², 조선 기록 없음", effect:"2.3 / 2.75 / 1.5 m/s² (제조사·판매사 표기)", srcName:"LS Engineers", src:"https://www.lsengineers.co.uk/trelawny-vl303-low-vibration-needle-scaler.html" }
+    ],
+    apply:"스패터 제거를 그라인더로 하는 구간을 니들 스케일러로 바꿔 진동·분진·시간 비교.",
+    vendors:[
+      { name:"CS Unitec Vibro-Lo", url:"https://www.csunitec.com/specialty-construction-power-tools/low-vibration-anti-vibration-tools/vibro-lotm-low-vibration-needle-scalers", ch:"국내 판매 미확인" },
+      { name:"Trelawny VL303", url:"https://www.lsengineers.co.uk/trelawny-vl303-low-vibration-needle-scaler.html", ch:"국내 판매 미확인" }
+    ],
+    first:"1~2대 사서 스패터 제거 구간에서 그라인더와 비교.",
+    risk:"소음이 커서 귀마개(G5)와 같이 가야 한다. 일반형과 비교한 시험값은 미확인." },
+
+  { id:"G3", trade:"사상", pain:["시간"], buy:"과 구매", proof:"미확인", own:"없음",
+    name:"세라믹 플랩디스크·플렉시블 휠", short:"세라믹 플랩디스크",
+    one:"같은 그라인더로 더 빨리 깎고 덜 갈아끼움",
+    firstShort:"기존 디스크와 같은 블록에서 비교",
+    what:"세라믹 연마재 디스크로 바꿔 절삭 속도와 수명을 늘린다. 공구는 그대로 두고 소모품만 바꾸는 가장 쉬운 시범.",
+    cases:[
+      { who:"3M Cubitron II (제품)", year:"판매 중", what:"조선소 사용 기록은 못 찾음", short:"제조사: 30% 빠르고 수명 2배", effect:"기존 세라믹 연마재 대비 절삭 30% 빠르고 수명 2배 (제조사 발표)", srcName:"3M", src:"https://www.3m.com/3M/en_US/metalworking-us/products/featured-products/cubitronII/" }
+    ],
+    apply:"용접 비드 정리 구간에서 기존 디스크와 2주 비교 — 블록당 사상 시간·디스크 소모 개수.",
+    vendors:[ { name:"3M Cubitron II (RS Korea 등재)", url:"https://kr.rs-online.com/web/p/abrasive-wheels/1262198", ch:"국내 구매" } ],
+    first:"기존 디스크와 같은 규격으로 1박스 사서 같은 블록 유형에서 비교.",
+    risk:"단가가 높을 수 있어 소모 개수와 시간을 같이 봐야 한다." },
+
+  { id:"G4", trade:"사상", pain:["몸","시간"], buy:"부서 협의", proof:"C", own:"없음",
+    name:"공구 무게 지지 암 (zeroG)·툴 밸런서", short:"공구 지지 암",
+    one:"무거운 그라인더 무게를 암이 받쳐 상향·수직 사상 부담을 줄임",
+    firstShort:"고정점 확보 구간 1곳 선정",
+    what:"작업대·비계에 단 기계식 암이 그라인더 무게를 받쳐준다. 작업자는 방향만 잡으면 되고 팔과 어깨에 걸리는 무게와 진동이 준다.",
+    cases:[
+      { who:"NSRP 2012-438 (미국 조선소 2곳)", year:"시험", what:"zeroG 암을 그라인딩 등에 시험", short:"미국 조선소 2곳 그라인딩 시험", effect:"", srcName:"NSRP", src:"https://www.nsrp.org/project/application-of-mechanical-arm-systems/" },
+      { who:"NIOSH 문헌 (조선소 예비 시험)", year:"연구", what:"상향 그라인딩 등에서 생산성 향상 가능", effect:"생산성 50% 이상 향상 가능 (예비 시험)", srcName:"CDC/NIOSH", src:"https://stacks.cdc.gov/view/cdc/195907/cdc_195907_DS1.pdf" },
+      { who:"특허 KR101709575B1 '사상작업용 그라인더 지그'", year:"특허", what:"그라인더를 지지해 근골격계 질환 예방. 조선소용 여부 미확인", effect:"", srcName:"Google Patents", src:"https://patents.google.com/patent/KR101709575B1/ko" }
+    ],
+    apply:"상향·수직 사상이 몰리는 대조립 구간. 고소작업대·비계에 고정점이 있어야 한다.",
+    vendors:[ { name:"Ekso Bionics EksoZeroG (최대 42 lb 공구)", url:"https://eksobionics.com/what-does-a-zero-gravity-tool-holder-do/", ch:"국내 판매 미확인" }, { name:"사내: 안전·설비 부서", url:"", ch:"장착 검토" } ],
+    first:"고정점(작업대·비계) 확보가 되는 구간 1곳을 안전·설비 부서와 같이 고르기.",
+    risk:"장착 구조 검토 필요, 국내 판매 미확인." },
+
+  { id:"G5", trade:"사상", pain:["환경"], buy:"안전 지급", proof:"미확인", own:"없음",
+    name:"귀마개 밀착도 검사(Fit test)·형태 다양화", short:"귀마개 밀착도 검사",
+    one:"개인별 차음값을 재서 맞는 귀마개로 바꿈",
+    firstShort:"안전 부서에 검사 장비 확인",
+    what:"귀마개를 낀 상태에서 실제로 얼마나 막히는지 개인별로 재고, 기준에 못 미치면 착용법 교육이나 귀마개 형태를 바꾼다. 결과가 숫자로 나와 외국인 작업자도 이해가 쉽다.",
+    cases:[
+      { who:"산업안전보건연구원 직업성 난청 사례", year:"-", what:"그라인더 작업 소음 측정", short:"그라인더 작업 113.6 dBA", effect:"113.6 dBA (Lmax 123.3 dBA)", srcName:"Annals of OEM", src:"https://e-asr.org/upload/pdf/asr-7-1-89.pdf" },
+      { who:"국내 제조업 17개소 119명 연구", year:"-", what:"개인 차음값 15dB 미만자를 교육·형태 변경으로 개선", effect:"", srcName:"DBpia", src:"https://www.dbpia.co.kr/journal/detail?nodeId=T16653862" }
+    ],
+    apply:"사상·니들 스케일러 작업자 전원 1회 검사.",
+    vendors:[ { name:"3M E-A-Rfit 밀착도 검사", url:"https://www.3msafety.co.kr/3M/ko_KR/worker-health-safety-kr/safety-equipment/hearing-conservation/hearing-protection-fit-testing/", ch:"국내" }, { name:"사내: 안전·보건 부서", url:"", ch:"먼저" } ],
+    first:"안전 부서에 밀착도 검사 장비 보유나 외부 검사 가능 여부 확인.",
+    risk:"귀마개는 안전인증 제품을 쓴다. 검사 뒤 바꿔 끼울 수 있게 여러 형태를 비치해야 의미가 있다." },
+
+  { id:"G6", trade:"사상", pain:["시간"], buy:"부서 협의", proof:"미확인", own:"없음",
+    name:"수성·무실리콘 안티스패터 (스패터 부착 방지)", short:"안티스패터",
+    one:"용접 전에 뿌려 스패터가 붙지 않게 → 사상 감소",
+    firstShort:"도장 부서 호환 조건 확인",
+    what:"용접 전에 모재에 뿌려두면 스패터가 들러붙지 않아 나중에 긁어내거나 갈아낼 일이 준다. 도장 전 표면에 남아도 되는 수성·무실리콘 제품이어야 한다.",
+    cases:[
+      { who:"수성·무실리콘·도장 호환 제품 (Engweld LR6708)", year:"판매 중", what:"조선소 사용 기록은 못 찾음", short:"도장 호환 제품 확인, 조선 기록 없음", effect:"", srcName:"Engweld", src:"https://www.engweld.co.uk/product/water-based-anti-spatter-paint-lr6708" }
+    ],
+    apply:"도장 전 사상이 많은 노출면(외판·데크) 용접 구간.",
+    vendors:[ { name:"우원 AT-750S (국내 유통)", url:"https://www.globalmro.com/m/sub/prdview.php?prdcode=123375&catcode=50101122", ch:"국내" }, { name:"사내: 도장 부서 (호환성 승인)", url:"", ch:"먼저" } ],
+    first:"도장 부서에 도장 호환 조건 확인 → 승인 제품만 시범.",
+    risk:"실리콘계는 도막 부착 불량을 일으킬 수 있어 도장 승인 없이 쓰면 안 된다. 조선소 사례 미확인." },
+
+  { id:"G7", trade:"사상", pain:["시간"], buy:"부서 협의", proof:"C", own:"없음",
+    name:"임시 피스 제거 전용 공구 (절단·평탄 한 번에)", short:"피스 제거 공구",
+    one:"피스를 잘라내고 자국까지 한 번에 정리",
+    firstShort:"F1 시범 후 남는 피스 보고 결정",
+    what:"피스를 가스로 따고 그라인더로 미는 두 단계를 회전 커터나 플라즈마 가우징으로 줄인다. 다만 피스를 아예 안 붙이는 게(F1) 먼저다.",
+    cases:[
+      { who:"특허 KR101343751B1 '족장 피스 제거 장치'", year:"특허", what:"회전 커터로 절단·사상. 출원인·상용 여부 미확인", short:"국내 특허: 피스 절단·사상 일체 장치", effect:"", srcName:"Google Patents", src:"https://patents.google.com/patent/KR101343751B1/ko" },
+      { who:"Hypertherm 플라즈마 가우징", year:"제조사", what:"기존 대비 빠르고 후속 작업이 적다고 설명", effect:"수치 미공개", srcName:"Hypertherm", src:"https://www.hypertherm.com/solutions/industries/shipbuilding/" }
+    ],
+    apply:"자석 피팅툴로도 못 없애는 피스 구간.",
+    vendors:[ { name:"사내: 설비 부서", url:"", ch:"검토" }, { name:"Hypertherm", url:"https://www.hypertherm.com/solutions/industries/shipbuilding/", ch:"국내 판매 미확인" } ],
+    first:"F1 시범 후 남는 피스 유형을 보고 결정.",
+    risk:"플라즈마는 설비·전원·화재 검토 필요. 특허 제품의 상용 여부 미확인." },
+
+  /* ---------------- 공통 ---------------- */
+  { id:"C1", trade:"공통", pain:["소통","품질"], buy:"자체 제작", proof:"C", own:"시범",
+    ownNote:"삼성중공업 안전교육에 QR 방식 실시간 통역 '스콘챗' 시범(2026 보도). 작업 기준 카드로 쓴 사례는 미확인.",
+    name:"QR 다국어 작업카드 (배재 순서·취부 기준·WPS·안전수칙)", short:"QR 다국어 작업카드",
+    one:"작업장에 붙인 QR을 찍으면 모국어 작업 기준이 뜸",
+    firstShort:"WPS 카드 1장 시제품",
+    what:"배재 순서·취부 간극 기준·WPS 조건·안전수칙을 한 장 카드로 만들고, QR을 찍으면 인도네시아어·우즈베크어·싱할라어로 보이게 한다. 번역은 사내 SOLA로 초안을 만들고 반장·통역이 검수한다.",
+    cases:[
+      { who:"삼성중공업 '스콘챗'", year:"2026 시범", what:"인도네시아·우즈베키스탄·스리랑카 등 국적 안전교육. 앱 설치 없이 QR 스캔 후 언어 선택", short:"사내 QR 통역 안전교육 시범", effect:"", srcName:"한경매거진 2026-02", src:"https://magazine.hankyung.com/money/article/202602119632c" },
+      { who:"Kemppi WeldEye (제품)", year:"판매 중", what:"디지털 WPS로 인쇄 WPS를 대체, 용접사 자격 대조", effect:"", srcName:"WeldEye", src:"https://www.weldeye.com/" },
+      { who:"HD한국조선해양 (경쟁사)", year:"2024", what:"조선 용어 1만3천 개·작업지시 문장 4,200개로 번역 앱. 1단계 언어에 인도네시아어·싱할라어 없음", effect:"", srcName:"한국경제", src:"https://www.hankyung.com/article/2024070926091" }
+    ],
+    apply:"R 다발 블록 유형 1개의 WPS·취부 기준부터. 카드 1장 = 사진 + 숫자 3개 + QR.",
+    vendors:[ { name:"사내: SOLA API (번역 초안)", url:"", ch:"자체" }, { name:"사내: 스콘챗 시범 부서", url:"", ch:"QR 방식 협의" } ],
+    first:"WPS 카드 1장 시제품을 만들어 반장 2명·외국인 작업자 5명에게 읽혀보기.",
+    risk:"번역 오류가 작업 오류로 이어질 수 있어 숫자(전류·간극)는 번역하지 않고 그대로 표기. 외부 클라우드 번역은 정보보호 검토." },
+
+  { id:"C2", trade:"공통", pain:["환경","몸"], buy:"사내 확대", proof:"B", own:"운용",
+    ownNote:"삼성중공업 직종별 에어쿨링 재킷(압축공기 순환)·냉동 생수 지급 (2026-07 보도).",
+    name:"블록 내부 에어쿨링 재킷 지급 범위 확인", short:"에어쿨링 재킷",
+    one:"사내 지급 중인 쿨링 재킷이 블록 내부 작업자까지 가는지",
+    firstShort:"조립4과 지급·사용률 확인",
+    what:"압축공기를 재킷 안에 돌려 체온을 낮춘다. 이미 사내에서 지급하므로, 블록 내부 용접·사상 작업자가 실제로 받고 쓰는지가 문제다.",
+    cases:[
+      { who:"삼성중공업", year:"2026-07", what:"직종별 에어쿨링 재킷·냉동 생수 지급", short:"사내 직종별 에어쿨링 재킷 지급", effect:"", srcName:"파이낸셜뉴스 2026-07-13", src:"https://www.fnnews.com/news/202607131530116397" },
+      { who:"부산시", year:"2026", what:"조선업 노동자 쿨링키트 지원", effect:"", srcName:"뉴스핌", src:"https://www.newspim.com/news/view/20260811000073" }
+    ],
+    apply:"블록 내부 용접·사상 작업자 지급 수량과 압축공기 라인 위치 확인.",
+    vendors:[ { name:"사내: 안전 부서", url:"", ch:"먼저" } ],
+    first:"내년 여름 전 조립4과 지급 수량·사용률 확인.",
+    risk:"압축공기 라인이 블록 내부까지 와야 쓸 수 있다." },
+
+  { id:"C3", trade:"공통", pain:["환경"], buy:"안전 지급", proof:"B", own:"없음", top:true,
+    name:"블록 내부 PAPR(전동 송풍 호흡보호구) + 자동차광 용접면", short:"PAPR + 자동차광 용접면",
+    one:"블록 안 용접·사상 흄·분진을 송풍 후드로 막음",
+    why:"용접흄 IARC 1군 · 조선소 시험 사례 · 국산·국내 판매 있음",
+    firstShort:"KCs 인증품 5~10세트 시범",
+    what:"허리에 찬 송풍기가 필터를 거친 공기를 용접면 안으로 불어넣는다. 반면형 마스크보다 덜 답답해 쓰고 있는 시간이 길어진다. 자동차광 용접면 일체형이면 면을 올렸다 내렸다 할 필요가 없다.",
+    cases:[
+      { who:"미국 대형 방산업체 조선소", year:"시험", what:"용접사 10명이 7주간 보호구 3종 비교", short:"용접사 10명 7주 비교 시험(조선소)", effect:"Adflo+Speedglas 착용자 '생산성 44% 향상' (작업자 자가 보고, 3M 측 사례 — 인용 금지)", srcName:"MSC", src:"https://www.mscdirect.com/knowledge-center/articles/case-study-evaluation-three-ppe-solutions-welding-productivity-large-defense-contractor" },
+      { who:"IARC", year:"2017", what:"용접흄을 1군 발암물질(폐암)로 분류", effect:"", srcName:"OH&S", src:"https://ohsonline.com/articles/2017/04/25/iarc-classifies-welding-fumes-and-uv-radiation-as-group-1-carcinogens.aspx" },
+      { who:"KOSHA GUIDE", year:"현행", what:"H-80-2021 밀폐공간 작업 프로그램(송기마스크 착용 포함), H-73 용접작업 보건관리", effect:"", srcName:"KOSHA", src:"https://kosha.or.kr/cms/resFileDownload.do?siteId=kosha&type=etc&fileName=KOSHA_Guide_%EB%B0%8F_%EB%B2%95%EB%A0%B9_%EA%B0%84_%EC%97%B0%EA%B3%84%EC%84%B1(%EA%B8%B0%EC%A4%80%EA%B7%9C%EC%B9%99_%EA%B8%B0%EC%A4%80).pdf" }
+    ],
+    apply:"밀폐 블록 내부 용접사·사상 작업자 5~10명, 2주 착용 후 착용 지속시간·불편 사항 기록.",
+    vendors:[
+      { name:"사내: 안전 부서 (보호구 지급)", url:"", ch:"먼저" },
+      { name:"한국3M (Adflo + Speedglas)", url:"https://www.3m.co.kr/3M/ko_KR/respiratory-protection-kr/products/papr/", ch:"국내" },
+      { name:"오토스 (국산 PAPR)", url:"https://www.otos.co.kr/page/sub2_5", ch:"국내" }
+    ],
+    first:"안전 부서에 KCs 인증 PAPR 지급 기준 확인 → 블록 내부 작업자 시범 지급 요청.",
+    risk:"전동식 호흡보호구는 KCs 안전인증 대상. 필터·배터리 관리 부담. 44%는 자가 보고 수치라 보고에 인용하지 말 것." }
+];
+
+/* 연결 흐름 — 한 직종의 도구가 다른 직종 일을 줄이는 고리 */
+const CHAINS = [
+  { title:"임시 피스 하나 = 일 세 번", note:"취부에서 끊으면 뒤 두 단계가 같이 없어진다", steps:[
+    { who:"취부", what:"피스(러그·도그·스트롱백) 용접", tools:["F1","F3","F4"], cut:true },
+    { who:"사상", what:"피스 절단·가우징", tools:["G7"] },
+    { who:"사상", what:"피스 자국 그라인딩", tools:["G1","G3"] },
+    { who:"검사", what:"자국 결함 → 재사상", tools:[] }
+  ]},
+  { title:"스패터·이면 비드", note:"용접 단계 소모품·설정이 사상 시간을 정한다", steps:[
+    { who:"용접", what:"조건 이탈·스패터·이면 비드", tools:["W2","W5","G6"], cut:true },
+    { who:"사상", what:"스패터 제거·이면 가우징", tools:["G2","G3"] },
+    { who:"사상", what:"진동·소음 노출", tools:["G1","G5"] }
+  ]}
+];
+
+const PLAN_STEPS = [
+  "같은 유형 블록 2개 — 하나는 지금 방식, 하나는 새 도구",
+  "블록당 4가지 기록: 작업시간(반장 일보) · 임시 피스 개수·제거 시간 · 사상 시간·디스크 소모 · 용접불량 R",
+  "작업자 설문 3문항(다국어): 계속 쓰겠다 / 무겁거나 불편하다 / 위험한 점",
+  "진동·소음은 안전 부서 측정기로 전후 측정",
+  "보고는 우리 측정값만 — 제조사 수치는 인용하지 않는다"
+];
+const FIRST_BATCH = [
+  "<b>취부반 + 같은 블록을 받는 사상반을 한 세트로</b> — F1·F2 시범, G1·G3로 사상 쪽 변화 측정",
+  "<b>용접</b> — W1 보유 캐리지 활용률 확인, W2 잠금 기능 확인",
+  "<b>안전 부서 요청</b> — C3 PAPR 시범 지급, G5 밀착도 검사, C2 쿨링 재킷 범위",
+  "<b>DX 부서 요청</b> — B4 반장 태블릿 지급"
+];
+const DECISIONS = [
+  { q:"시범 반·블록을 어디로 할지", a:"취부 1개 반과 그 블록을 받는 사상 1개 반을 한 세트로 묶어야 피스 감소가 사상 시간으로 이어지는지 보인다." },
+  { q:"시범 비용을 어느 예산으로 할지", a:"공구·소모품은 과 예산, 보호구는 안전 부서, 협력사 반은 2027 안전보건 상생협력 공고. 견적을 받은 뒤 나눈다." },
+  { q:"평가를 반별이 아니라 블록 총 공수로 볼지", a:"자석 지그는 취부반 셋업이 늘 수도 있지만 사상반 공수가 준다. 반별로 보면 좋은 도구가 탈락한다." }
+];
+const LIMITS = [
+  "<b>원문 일부 미열람</b> — 기사·제조사 페이지 일부가 프록시에 막혀 검색 요약으로 확인했다. 인용 전 링크 대조 필요.",
+  "<b>효과 수치는 거의 제조사 발표</b>다. 우리 공장 효과는 넣지 않았고 시범으로 잰다. 가격·국내 대리점은 대부분 미조사.",
+  "국내 조선 3사 현장 공구 개선 사례는 공개 자료에 거의 없다. 조선소 근거는 대부분 미국(NSRP·NIOSH·해군 조선소)이다.",
+  "<b>조립4과에 이미 있는 공구일 수 있다</b>(캐리지·세라믹 백킹·방진장갑·쿨링 재킷 등). 보유 현황 확인이 먼저.",
+  "레이저 라인·상향 리프트·블록 내부 LED 조명·QR 부재 태그 사례는 찾지 못했다."
+];
+
+
+/* =====================================================================
+   엔진부
+   ===================================================================== */
+const BUY = ["과 구매","자체 제작","사내 확대","안전 지급","부서 협의"];
+const BUY_DESC = {"과 구매":"과 공구·소모품 예산으로 바로","자체 제작":"과·공무에서 직접 만듦","사내 확대":"사내에 이미 있음 — 범위 확대 요청","안전 지급":"안전 부서 보호구 지급(인증품)","부서 협의":"설비·도장·교육·IT 승인 필요"};
+const BUY_COLOR = {"과 구매":"var(--good)","자체 제작":"#4C86C6","사내 확대":"var(--own)","안전 지급":"var(--warn)","부서 협의":"#8FA3B8"};
+const PF_DESC = {"A":"조선소 사용 확인 — 공식·연구 자료","B":"조선소 사용 확인 — 기사·유통","C":"조선소 시험 단계 또는 타 업종 사용","미확인":"제품은 있으나 조선소 사용 기록 못 찾음"};
+const PF_LABEL = {"A":"사용 A","B":"사용 B","C":"시험·타업종","미확인":"근거 없음"};
+const OWN_DESC = {"운용":"삼성중공업 사내 운용 중 (공개 보도 기준)","시범":"사내 시범 중 (또는 유사 방식 시범)"};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pfB = p => `<span class="pf pf-${p}" title="${esc(PF_DESC[p])}">${PF_LABEL[p]}</span>`;
+const ownB = o => o === "운용" || o === "시범" ? `<span class="ow ow-${o}" title="${esc(OWN_DESC[o])}">사내 ${o}</span>` : "";
+const buyB = b => `<span class="ct"><i style="background:${BUY_COLOR[b]}"></i>${esc(b)}</span>`;
+const trB = t => `<span class="trd">${esc(t)}</span>`;
+const pnB = p => `<span class="pn">${esc(p)}</span>`;
+const byId = id => ITEMS.find(i => i.id === id);
+function tpl(s){
+  const cnt = {
+    N: ITEMS.length,
+    BUY: ITEMS.filter(i => i.buy === "과 구매").length,
+    SELF: ITEMS.filter(i => i.buy === "자체 제작").length,
+    PROOF: ITEMS.filter(i => i.proof === "A" || i.proof === "B").length,
+    BODY: ITEMS.filter(i => i.pain.includes("몸") || i.pain.includes("환경")).length,
+    TOP: ITEMS.filter(i => i.top).length
+  };
+  return String(s || "").replace(/\{(\w+)\}/g, (m, k) => k in cnt ? cnt[k] : m);
+}
+const link = u => u ? `<a class="u" href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>` : "";
+function caseLine(it){
+  const c = it.cases && it.cases[0];
+  if(!c) return `<span class="case">조선소 기록 못 찾음</span>`;
+  const more = it.cases.length > 1 ? ` 외 ${it.cases.length - 1}건` : "";
+  return `<span class="case"><b>${esc(c.who)}</b> · ${esc(c.short || c.what)}${more}</span>`;
+}
+const chip = (i, extra) => `<div class="chip${i.top ? " top" : ""}" tabindex="0" data-id="${i.id}"><i style="background:${BUY_COLOR[i.buy]}"></i><span>${esc(i.short)}${i.own === "운용" || i.own === "시범" ? " " + ownB(i.own) : ""}${extra || ""}</span></div>`;
+
+function render(){
+  const app = document.getElementById("app");
+  const n = ITEMS.length;
+  const tops = ITEMS.filter(i => i.top);
+  const cBuy = ITEMS.filter(i => i.buy === "과 구매").length;
+  const cProof = ITEMS.filter(i => i.proof === "A" || i.proof === "B").length;
+  const cBody = ITEMS.filter(i => i.pain.includes("몸") || i.pain.includes("환경")).length;
+
+  const s1 = `
+  <section class="pg" id="s1" data-t="결론">
+    <div class="meta"><span><b>${esc(META.title)}</b> ${esc(META.rev)}</span><span>작성 ${esc(META.date)}</span><span>근거 ${esc(META.basis)}</span><span>범위 ${esc(META.scope)}</span></div>
+    <div class="eyebrow">01 · 결론</div>
+    <h1 class="ttl">${tpl(TEXT.h1)}</h1>
+    <p class="lead">${tpl(TEXT.l1)}</p>
+    <div class="tiles">
+      <div class="tile" style="border-top-color:var(--or)"><div class="n">${n}<small>건</small></div><div class="k">현장 아이템 (${TRADES.map(t => `${t} ${ITEMS.filter(i => i.trade === t).length}`).join(" · ")})</div></div>
+      <div class="tile" style="border-top-color:var(--good)"><div class="n">${cBuy}<small>건</small></div><div class="k">과 공구·소모품 예산으로 바로 시범</div></div>
+      <div class="tile" style="border-top-color:#8FA3B8"><div class="n">${cBody}<small>건</small></div><div class="k">작업자 몸·환경(진동·흄·소음·열) 부담 감소</div></div>
+      <div class="tile" style="border-top-color:var(--good)"><div class="n">${cProof}<small>건</small></div><div class="k">조선소 사용 확인 (사용 A·B)</div></div>
+    </div>
+    <div class="row" style="flex-wrap:wrap">
+      <div class="card lb" style="flex:1.6;min-width:300px">
+        <h3 style="font-size:14.5px;margin-bottom:8px">우선 시범 ★ — 직종마다 하나, 클릭하면 상세</h3>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${tops.map(i => `<div class="chip top" tabindex="0" data-id="${i.id}"><i style="background:${BUY_COLOR[i.buy]}"></i><div>${trB(i.trade)} <b>${esc(i.name)}</b> ${ownB(i.own)} <span class="hint">· ${esc(i.why || "")}</span><div class="hint" style="margin-top:2px">${esc(i.buy)} · 첫 액션 → <span style="color:var(--tx)">${esc(i.firstShort || "")}</span></div></div></div>`).join("")}
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-width:260px">
+        <h3 style="font-size:14.5px;margin-bottom:6px">판정 기준</h3>
+        <div style="font-size:12.3px;line-height:1.45;display:flex;flex-direction:column;gap:2px">
+          <div>${BUY.map(b => `${buyB(b)} <span class="hint">${BUY_DESC[b]}</span>`).join("<br>")}</div>
+          <div style="margin-top:4px">${Object.keys(PF_DESC).map(p => `${pfB(p)} <span class="hint">${PF_DESC[p]}</span>`).join("<br>")}</div>
+          <div style="margin-top:4px">${ownB("운용")} ${ownB("시범")} <span class="hint">삼성중공업 사내에 이미 있음</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:10px 14px">
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">이 보고서가 못 하는 것</div>
+      <ul class="lim">${LIMITS.map(l => `<li>${l}</li>`).join("")}</ul>
+    </div>
+    <div class="pgno">1 / 5 · PageDown으로 다음 장</div>
+  </section>`;
+
+  const s2 = `
+  <section class="pg" id="s2" data-t="아이템 지도">
+    <div class="eyebrow">02 · 직종 × 줄이는 것</div>
+    <h2 class="ttl">${tpl(TEXT.h2)}</h2>
+    <p class="lead">${tpl(TEXT.l2)}</p>
+    <div class="legend"><span>칩 색 = 구매 경로</span>${BUY.map(b => buyB(b)).join("")}<span><span class="star">▌</span> 오렌지 띠 = 우선 시범 ★</span><span class="hint">칩 클릭 → 근거·제품·주의점</span></div>
+    <div class="mapwrap"><div class="map" style="--cols:${PAINS.length}">
+      <div></div>${PAINS.map(p => `<div class="hd">${esc(p)}<small>${esc(PAIN_DESC[p])}</small></div>`).join("")}
+      ${TRADES.map(t => `
+        <div class="rh">${esc(t)}</div>
+        ${PAINS.map(p => `<div class="cell">${ITEMS.filter(i => i.trade === t && i.pain[0] === p).map(i => chip(i)).join("")}</div>`).join("")}
+      `).join("")}
+    </div></div>
+    <div class="pgno">2 / 5</div>
+  </section>`;
+
+  const stepHTML = (st, k, arr) => `
+    <div class="step${st.cut ? " cut" : ""}">
+      <div class="sw">${esc(st.who)}</div>
+      <div class="sx">${esc(st.what)}</div>
+      <div class="tools">${st.tools.length ? st.tools.map(id => chip(byId(id))).join("") : `<span class="hint">도구로 못 끊음 — 앞 단계에서 줄여야 함</span>`}</div>
+      ${st.cut ? `<div class="cutnote">여기서 끊으면 뒤 단계가 같이 준다</div>` : ""}
+    </div>${k < arr.length - 1 ? `<div class="arr" aria-hidden="true">→</div>` : ""}`;
+  const s3 = `
+  <section class="pg" id="s3" data-t="직종 연결">
+    <div class="eyebrow">03 · 한 직종 도구가 다른 직종 일을 줄인다</div>
+    <h2 class="ttl">${tpl(TEXT.h3)}</h2>
+    <p class="lead">${tpl(TEXT.l3)}</p>
+    ${CHAINS.map(ch => `
+      <div class="chain">
+        <div class="chh"><b>${esc(ch.title)}</b> <span class="hint">${esc(ch.note)}</span></div>
+        <div class="flow" style="--n:${ch.steps.length}">${ch.steps.map(stepHTML).join("")}</div>
+      </div>`).join("")}
+    <div class="card" style="padding:9px 14px;font-size:12.5px;color:var(--sub)">
+      근거 — 미 해군 조선소 NSRP 2013-440(Newport News): 그라인딩 공수 감축 기회로 '그라인딩이 필요 없는 임시 부착물' 제시.
+      Magswitch: 조선 고객이 하부구조 1개에서 주당 20시간 이상 피팅·그라인딩 절감(제조사 발표, 고객명 미공개).
+      <b style="color:var(--tx)">그래서 시범은 취부반과 그 블록을 받는 사상반을 한 세트로 묶는다.</b>
+    </div>
+    <div class="pgno">3 / 5</div>
+  </section>`;
+
+  const rowsFor = t => ITEMS.filter(i => i.trade === t).map(i => `
+    <tr tabindex="0" data-id="${i.id}" data-tr="${t}">
+      <td style="width:27%"><div class="nm">${i.top ? '<span class="star">★ </span>' : ""}${esc(i.name)} ${ownB(i.own)}<small>${esc(i.one)}</small></div></td>
+      <td style="width:9%">${i.pain.map(pnB).join(" ")}</td>
+      <td style="width:9%">${pfB(i.proof)}</td>
+      <td class="hide-m" style="width:28%">${caseLine(i)}</td>
+      <td style="width:11%">${buyB(i.buy)}</td>
+      <td class="hide-m" style="width:16%;font-size:12.5px;color:var(--sub)">${esc(i.firstShort || "")}</td>
+    </tr>`).join("");
+  const s4 = `
+  <section class="pg" id="s4" data-t="아이템 목록">
+    <div class="eyebrow">04 · 직종별 아이템</div>
+    <h2 class="ttl">${tpl(TEXT.h4)}</h2>
+    <p class="lead">${tpl(TEXT.l4)}</p>
+    <div class="tabs" role="tablist">${TRADES.map((t, k) => `<button class="tab" role="tab" aria-selected="${k===0}" data-tr="${t}">${t} ${ITEMS.filter(i=>i.trade===t).length}</button>`).join("")}<span class="hint" id="trHint" style="align-self:center;margin-left:8px">${TRADE_DESC[TRADES[0]]}</span></div>
+    <div class="card" style="padding:4px 10px">
+      <table class="it"><thead><tr><th>아이템</th><th>줄이는 것</th><th>조선소 근거</th><th class="hide-m">대표 근거</th><th>구매 경로</th><th class="hide-m">첫 액션</th></tr></thead>
+      <tbody>${TRADES.map(rowsFor).join("")}</tbody></table>
+    </div>
+    <div class="hint">행 클릭 → 근거 원문 링크·제품·구매처·주의점</div>
+    <div class="pgno">4 / 5</div>
+  </section>`;
+
+  const buyList = b => ITEMS.filter(i => i.buy === b).map(i => `<span class="mini" tabindex="0" data-id="${i.id}">${esc(i.short)}</span>`).join("");
+  const s5 = `
+  <section class="pg" id="s5" data-t="시범 방법">
+    <div class="eyebrow">05 · 시범 방법과 결정 필요 사항</div>
+    <h2 class="ttl">${tpl(TEXT.h5)}</h2>
+    <p class="lead">${tpl(TEXT.l5)}</p>
+    <div class="plan">
+      <div class="card lb"><div class="when">2주 비교 시범</div><h3>재는 방법</h3><ol>${PLAN_STEPS.map(s => `<li>${s}</li>`).join("")}</ol></div>
+      <div class="card lb"><div class="when">11월 1차 묶음</div><h3>무엇부터</h3><ol>${FIRST_BATCH.map(s => `<li>${s}</li>`).join("")}</ol></div>
+      <div class="card lb"><div class="when">구매 경로별</div><h3>누구 돈으로</h3>
+        <div class="buys">${BUY.map(b => `<div>${buyB(b)} <span class="hint">${ITEMS.filter(i=>i.buy===b).length}건</span><div class="minis">${buyList(b)}</div></div>`).join("")}</div>
+      </div>
+    </div>
+    <div class="eyebrow" style="margin-top:4px">결정 필요 3건</div>
+    <div class="dec">${DECISIONS.map((d, k) => `<div class="card"><div class="q">${k+1}. ${esc(d.q)}</div><div class="a">${d.a}</div></div>`).join("")}</div>
+    <div class="pgno">5 / 5</div>
+  </section>`;
+
+  const appendix = `<div class="print-only"><h2>부록 · 아이템 상세와 출처</h2>${ITEMS.map(detailHTML).join("<hr>")}</div>`;
+  app.innerHTML = s1 + s2 + s3 + s4 + s5 + appendix;
+}
+
+function detailHTML(it){
+  const cases = (it.cases || []).map(c => `<div class="cs"><b>${esc(c.who)}</b> · ${esc(c.year)}<br>${esc(c.what)}${c.effect ? `<br><span class="hint">공개 수치: ${esc(c.effect)}</span>` : ""}<span class="src">${c.srcName ? esc(c.srcName) + " — " : ""}${link(c.src)}</span></div>`).join("")
+    || `<div class="cs">조선소 기록 못 찾음.</div>`;
+  const vend = (it.vendors || []).map(v => `<div class="vd"><b>${esc(v.name)}</b> <span class="hint">${esc(v.ch || "")}</span>${v.url ? "<br>" + link(v.url) : ""}</div>`).join("") || `<div class="vd hint">외부 구매 불필요</div>`;
+  return `
+    <div class="eyebrow">${esc(it.trade)} · ${esc(it.id)}</div>
+    <h2 id="mdT">${it.top ? '<span class="star">★ </span>' : ""}${esc(it.name)}</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${trB(it.trade)} ${it.pain.map(pnB).join(" ")} ${pfB(it.proof)} ${buyB(it.buy)} ${ownB(it.own)}</div>
+    <h4>무엇을</h4><p>${esc(it.what || it.one)}</p>
+    ${it.ownNote ? `<h4>삼성중공업 사내 현황</h4><p>${esc(it.ownNote)}</p>` : ""}
+    <h4>조선소 근거</h4>${cases}
+    <h4>조립4과에 넣는다면</h4><p>${esc(it.apply || "")}</p>
+    <h4>제품·구매처 (사내 → 외부 순)</h4>${vend}<p style="margin-top:6px"><b>첫 액션</b> — ${esc(it.first || "")}</p>
+    <h4>주의점</h4><p>${esc(it.risk || "")}</p>
+    <p class="hint" style="margin-top:14px;border-top:1px solid var(--line);padding-top:8px">공개 수치는 출처 표기 그대로(대부분 제조사 발표). 보고에는 시범 측정값만 쓴다. 일부 원문 미열람 — 인용 전 링크 대조.</p>`;
+}
+
+/* modal */
+const mb = document.getElementById("mb"), md = document.getElementById("md");
+let lastFocus = null;
+function openItem(id){
+  const it = byId(id); if(!it) return;
+  lastFocus = document.activeElement;
+  md.innerHTML = `<button class="x" aria-label="닫기">×</button>` + detailHTML(it);
+  mb.classList.add("on"); md.scrollTop = 0; md.querySelector(".x").focus();
+}
+function closeModal(){ mb.classList.remove("on"); if(lastFocus) lastFocus.focus(); }
+mb.addEventListener("click", e => { if(e.target === mb || e.target.classList.contains("x")) closeModal(); });
+
+/* tabs */
+function setTab(t){
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.dataset.tr === t));
+  document.querySelectorAll("table.it tbody tr").forEach(r => r.style.display = r.dataset.tr === t ? "" : "none");
+  const h = document.getElementById("trHint"); if(h) h.textContent = TRADE_DESC[t];
+}
+
+/* nav */
+function secs(){ return [...document.querySelectorAll("section.pg")]; }
+function curIdx(){
+  const y = window.scrollY + window.innerHeight * 0.4; let k = 0;
+  secs().forEach((s, i) => { if(s.offsetTop <= y) k = i; }); return k;
+}
+function go(i){ const s = secs(); i = Math.max(0, Math.min(s.length - 1, i)); const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches; s[i].scrollIntoView({behavior: rm ? "auto" : "smooth"}); }
+function syncNav(){
+  const k = curIdx();
+  document.querySelectorAll("#dots button").forEach((b, i) => b.classList.toggle("on", i === k));
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById("prog").style.width = (max > 0 ? window.scrollY / max * 100 : 0) + "%";
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-id]"); if(t && !mb.classList.contains("on")) { openItem(t.dataset.id); return; }
+  const tb = e.target.closest(".tab"); if(tb) setTab(tb.dataset.tr);
+});
+document.addEventListener("keydown", e => {
+  if(mb.classList.contains("on")){ if(e.key === "Escape") closeModal(); return; }
+  const tag = (e.target.tagName || "").toLowerCase();
+  if(tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+  if(e.key === "Enter" && e.target.dataset && e.target.dataset.id){ openItem(e.target.dataset.id); return; }
+  if(window.matchMedia("(max-width:900px)").matches) return;
+  if(e.key === "PageDown" || (e.key === " " && !e.shiftKey)){ e.preventDefault(); go(curIdx() + 1); }
+  else if(e.key === "PageUp" || (e.key === " " && e.shiftKey)){ e.preventDefault(); go(curIdx() - 1); }
+  else if(e.key === "Home"){ e.preventDefault(); go(0); }
+  else if(e.key === "End"){ e.preventDefault(); go(secs().length - 1); }
+});
+window.addEventListener("scroll", syncNav, {passive:true});
+window.addEventListener("beforeprint", () => document.querySelectorAll("table.it tbody tr").forEach(r => r.style.display = ""));
+window.addEventListener("afterprint", () => setTab(document.querySelector('.tab[aria-selected="true"]')?.dataset.tr || TRADES[0]));
+
+render();
+document.getElementById("dots").innerHTML = secs().map((s, i) => `<button aria-label="${i+1}장 ${esc(s.dataset.t)}" title="${esc(s.dataset.t)}"></button>`).join("");
+document.querySelectorAll("#dots button").forEach((b, i) => b.addEventListener("click", () => go(i)));
+setTab(TRADES[0]); syncNav();
+
+</script>
+</body>
+</html>
