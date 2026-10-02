@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>조립공장 자동화 아이템</title>
+<style>
+:root{
+  --bg:#0A1A2F; --card:#16263D; --card2:#1B2F4A; --line:#27405F;
+  --or:#FF6B1A; --sub:#AAB7C4; --tx:#FFFFFF;
+  --good:#2c8a5f; --warn:#c89010; --bad:#b3402a;
+  --sz-s:#FFA05C; --sz-m:#4C86C6; --sz-l:#8FA3B8; --own:#5EC3C8;
+  --font:"Pretendard Variable",Pretendard,"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;line-height:1.55;
+  word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance;margin:0}
+a{color:#8CC4FF}
+section.pg{min-height:100vh;scroll-snap-align:start;padding:24px 64px 30px 40px;display:flex;flex-direction:column;gap:11px;position:relative}
+.eyebrow{font-size:12px;color:var(--or);font-weight:700;letter-spacing:.06em}
+.ttl{font-size:23px;font-weight:800;line-height:1.3}
+.lead{color:var(--sub);font-size:14px;max-width:1000px;margin:0}
+.lead b{color:var(--tx)}
+.hint{font-size:12px;color:var(--sub)}
+.row{display:flex;gap:14px;align-items:stretch}
+.card{background:var(--card);border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.card.lb{border-left:3px solid var(--or)}
+.demo{display:none}
+/* top meta */
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--sub);border-bottom:1px solid var(--line);padding-bottom:8px}
+.meta b{color:var(--tx);font-weight:600}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:var(--card);border-radius:8px;padding:9px 14px;border-top:3px solid var(--line)}
+.tile .n{font-size:26px;font-weight:800;line-height:1.1}
+.tile .n small{font-size:14px;font-weight:600;color:var(--sub);margin-left:3px}
+.tile .k{font-size:12.5px;color:var(--sub);margin-top:2px}
+/* badges */
+.bd{display:inline-block;font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 7px;line-height:1.6;white-space:nowrap}
+.sz-소{background:rgba(255,160,92,.16);color:var(--sz-s);border:1px solid rgba(255,160,92,.5)}
+.sz-중{background:rgba(76,134,198,.18);color:#7FB0E6;border:1px solid rgba(76,134,198,.6)}
+.sz-대{background:rgba(143,163,184,.16);color:#C3D0DC;border:1px solid rgba(143,163,184,.55)}
+.ct{display:inline-flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
+.ct i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ct-직접 i{background:var(--good)} .ct-경유 i{background:var(--warn)} .ct-회사 i{background:var(--bad)}
+.pf{font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.pf-A{background:#1f4d3a;color:#8fe0b8}
+.pf-B{background:#4a3d14;color:#f0cd6a}
+.pf-C{background:#3a2a28;color:#e6a596}
+.pf-제안{background:#2a2f3d;color:#c9d2de;border:1px dashed #6C8299}
+.star{color:var(--or);font-weight:800}
+/* map grid */
+.map{display:grid;gap:6px;grid-template-columns:62px repeat(var(--cols),1fr)}
+.map .hd{font-size:12px;color:var(--sub);font-weight:700;text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}
+.map .rh{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;border-radius:6px}
+.map .cell{background:var(--card);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:64px}
+.chip{display:flex;align-items:flex-start;gap:6px;background:var(--card2);border-radius:5px;padding:5px 7px;font-size:12.3px;line-height:1.35;cursor:pointer;border:1px solid transparent}
+.chip:hover,.chip:focus-visible{border-color:var(--or);outline:none}
+.chip i{flex:0 0 8px;height:8px;border-radius:50%;margin-top:4px}
+.chip.top{box-shadow:inset 3px 0 0 var(--or)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--sub);align-items:center}
+/* tabs + table */
+.tabs{display:flex;gap:6px}
+.tab{background:var(--card);color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--or);color:#fff;border-color:var(--or)}
+table.it{width:100%;border-collapse:collapse;font-size:13px}
+table.it th{font-size:12px;color:var(--sub);text-align:left;font-weight:600;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.it td{padding:6px 8px;border-bottom:1px solid rgba(39,64,95,.6);vertical-align:top;line-height:1.45}
+table.it tbody tr{cursor:pointer}
+table.it tbody tr:hover td,table.it tbody tr:focus-visible td{background:rgba(255,107,26,.07);outline:none}
+.nm{font-weight:700}
+.nm small{display:block;font-weight:400;color:var(--sub);font-size:12px;margin-top:1px}
+.case{color:var(--sub);font-size:12.5px}
+.case b{color:var(--tx);font-weight:600}
+/* channels */
+.cols3{display:grid;grid-template-columns:1.1fr 1fr 1.05fr;gap:12px;align-items:start}
+.cl h3{font-size:14px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cl ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.cl li{font-size:12.4px;line-height:1.42;padding-bottom:6px;border-bottom:1px solid rgba(39,64,95,.6)}
+.cl li:last-child{border-bottom:0;padding-bottom:0}
+.cl li b{font-size:13px}
+.cl li .u{display:block;color:#8CC4FF;font-size:11.5px;word-break:break-all}
+.cl li .s{color:var(--sub)}
+.ow{display:inline-block;font-size:10.5px;font-weight:700;border-radius:3px;padding:0 5px;line-height:1.6;white-space:nowrap;vertical-align:1px}
+.ow-운용{background:var(--own);color:#0A1A2F}
+.ow-시범{border:1px solid var(--own);color:var(--own)}
+.ow-없음{color:#6C8299;border:1px solid #3a4f68}
+.own-col{border-top:3px solid var(--own)}
+.expo{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.4px;align-items:baseline;padding:2px 2px}
+.expo > b{color:var(--or);font-size:12.6px}
+.expo a{color:var(--tx);font-weight:600;text-decoration:none;border-bottom:1px dotted var(--sub)}
+.inhouse{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.6px;padding:9px 14px;align-items:baseline}
+.inhouse > b{font-size:13px;color:var(--or);margin-right:4px}
+.inhouse span{color:var(--sub)} .inhouse span b{color:var(--tx);font-weight:600}
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan .card h3{font-size:14.5px;margin-bottom:6px}
+.plan ol{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:5px}
+.plan .when{font-size:12px;color:var(--or);font-weight:700}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dec .card{border-top:3px solid var(--or)}
+.dec .q{font-weight:700;font-size:14px;margin-bottom:4px}
+.dec .a{font-size:12.6px;color:var(--sub)}
+.lim{font-size:12px;line-height:1.45;color:var(--sub);display:flex;flex-direction:column;gap:1px;margin:0;padding-left:16px}
+/* modal */
+.mb{position:fixed;inset:0;background:rgba(3,10,20,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mb.on{display:flex}
+.md{background:var(--card);border-radius:10px;max-width:880px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:22px 26px;border-top:3px solid var(--or);position:relative}
+.md h2{font-size:20px;margin:6px 0 4px}
+.md .x{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--sub);font-size:22px;cursor:pointer}
+.md h4{font-size:13px;color:var(--or);margin:16px 0 6px}
+.md p{margin:0 0 6px;font-size:13.5px}
+.md .cs{background:var(--card2);border-radius:6px;padding:9px 12px;margin-bottom:7px;font-size:13px}
+.md .cs .src{display:block;font-size:11.5px;color:#8CC4FF;word-break:break-all;margin-top:3px}
+.md .vd{font-size:13px;margin-bottom:5px}
+.md .vd .u{font-size:11.5px;color:#8CC4FF;word-break:break-all}
+/* nav */
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:20}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--sub);background:transparent;padding:0;cursor:pointer}
+.dots button.on{background:var(--or);border-color:var(--or)}
+.prog{position:fixed;left:0;bottom:0;height:3px;background:var(--or);width:0;z-index:20;transition:width .2s}
+.pgno{position:absolute;right:64px;bottom:8px;font-size:11px;color:var(--sub)}
+.print-only{display:none}
+@media (max-width:900px){
+  html{scroll-snap-type:none}
+  section.pg{padding:24px 16px 40px;min-height:auto}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .cols3,.plan,.dec{grid-template-columns:1fr}
+  .map{grid-template-columns:44px repeat(var(--cols),minmax(120px,1fr));overflow-x:auto}
+  .mapwrap{overflow-x:auto}
+  .dots,.pgno{display:none}
+  table.it .hide-m{display:none}
+}
+@media print{
+  html{scroll-snap-type:none}
+  body{background:#fff;color:#111;font-size:11px}
+  section.pg{min-height:auto;page-break-after:always;padding:12px 6px}
+  .card,.tile,.map .cell,.chip,.md .cs{background:#fff;box-shadow:none;border:1px solid #ccd}
+  .lead,.hint,.meta,.case,.tile .k,.cl li .s,.dec .a,.lim{color:#444}
+  .tile .n,.nm,.ttl{color:#111}
+  .dots,.prog,.mb,.tabs,.pgno{display:none!important}
+  table.it tbody tr{display:table-row!important}
+  .print-only{display:block}
+  a,.u,.src{color:#1a4f8a!important}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<nav class="dots" id="dots" aria-label="장 이동"></nav>
+<main id="app"></main>
+<div class="mb" id="mb" role="dialog" aria-modal="true" aria-labelledby="mdT"><div class="md" id="md"></div></div>
+
+<script>
+/* =====================================================================
+   설정·데이터 블록 — 내용 수정은 여기만. 아래 엔진부는 건드리지 않아도 됨
+   ===================================================================== */
+const META = {
+  title: "조립공장 자동화 아이템 발굴",
+  rev: "REV02",
+  date: "2026-10-02",
+  basis: "웹 공개자료(보도자료·기사·공식 사이트) 기준",
+  scope: "삼성중공업 조립4과 — 블록 조립(소·중·대조립) 공정 + 조립 생산관리 업무"
+};
+const AREAS = ["배재·취부","용접","사상·마킹","정도·검사","공정·물류","안전·작업자","관리·데이터"];
+/* 장 제목·설명 — {N} {DIRECT} {VIA} {PROOF} {TOP} {S} {M} {L} {OWN} {OWN_RUN} {OWN_PILOT} 은 ITEMS에서 자동 집계 */
+const TEXT = {
+  h1: "우선 {TOP}건 — 정반 배치는 직접 짜고, 나머지 넷은 사내에 이미 있는 걸 조립으로 끌어온다",
+  l1: "{N}건 중 <b>{OWN}건은 삼성중공업 안에 이미 있다</b>(운용 {OWN_RUN} · 시범·예정 {OWN_PILOT}). 새로 사는 것보다 사내 시범을 조립4과로 넓히는 쪽이 빠르고 돈이 덜 든다.",
+  h2: "사내 보유 기술은 용접·안전·검사에 몰려 있고, 사상은 여전히 비어 있다",
+  l2: "꼬리표 붙은 칩이 삼성중공업 사내에 이미 있는 것. 배재·취부는 사내 AR 검사를 취부 확인에 쓰는 안으로 한 칸 채웠다.",
+  h3: "소 {S}건은 과에서 시작, 중 {M}건은 사내 부서와 같이, 대 {L}건은 회사 판단",
+  l3: "HD현대·한화오션 자체개발품은 살 수 없어 비교 기준으로만 쓴다. 실제 착수는 소·중 아이템과 사내 실증 참여에서 한다.",
+  h4: "외부 업체보다 사내 창구가 먼저 — 이미 그 업체와 일하는 부서에 붙는다",
+  l4: "리옵스·레인보우·디든·KIRO는 이미 삼성중공업과 시연·공동개발 중이다. 과가 같은 업체에 따로 연락하면 창구가 둘이 된다.",
+  h5: "10월 사내 창구 확인 → 11월 시연·시범 3건 → 12월 실증 참여 의사 전달",
+  l5: "사내 창구가 열리면 연말까지 장비 구매 없이 시범 3건이 가능하다. 지원사업은 거제 사외협력사를 도입 주체로 세워 2027년 공고를 받는다."
+};
+
+/* 아이템 — size: 소/중/대 · contact: 직접/경유/회사 · proof: A/B/C/제안 · own: 운용/시범/없음(삼성중공업 사내) · top: 우선 추진 */
+const ITEMS = [
+  /* ---------------- 소 ---------------- */
+  {
+    id: "S1", size: "소", area: "공정·물류", contact: "직접", proof: "C", own: "없음", top: true,
+    name: "정반 배치·블록 투입순서 최적화 PoC", short: "정반 배치 최적화",
+    one: "블록을 언제·어느 정반·어느 방향으로 앉힐지 솔버로 추천",
+    why: "구매 0원 · 공개 코드 있음 · MES 데이터만으로 시작",
+    firstShort: "정반·블록 데이터 위치 확인",
+    what: "대조립·중조립 정반에 어떤 블록을 언제, 어느 위치·방향으로 앉힐지를 최적화 솔버(CP-SAT·MILP)로 계산해 추천안을 낸다. 현행 배치표와 나란히 놓고 정반 점유율·대기 블록 수를 비교하는 데까지가 PoC 범위.",
+    cases: [
+      { who: "HD현대 (HD현대삼호 공동)", year: "2026 개발 중",
+        what: "대조립·선행도장·PE장 블록 배치를 강화학습 멀티에이전트로 자율 계획 — 선별(투입 블록)·배량(작업장)·배치(정반 내 위치) 에이전트로 분리. 경쟁사가 같은 문제를 풀고 있다는 근거",
+        short: "경쟁사가 대조립 블록 배치 강화학습 개발 중",
+        effect: "수치 미공개", srcName: "더빅데이터 2026-08-06",
+        src: "https://www.thebigdata.co.kr/view.php?ud=202608061409065250570d99e4c8_23" },
+      { who: "LG CNS · 대한산업공학회", year: "2026-09",
+        what: "최적화 그랜드 챌린지 'The Grand Shipyard Puzzle' — 제한된 작업장에 블록 수백 개의 시점·위치·방향을 정하는 문제. 55개국 958팀 참가",
+        effect: "상위 10개 팀 알고리즘 코드 오픈소스 공개", srcName: "ZDNet 2026-09-20",
+        src: "https://zdnet.co.kr/view/?no=20260920072112" }
+    ],
+    apply: "조립4과 정반 1개 동(棟)을 대상으로 최근 2주 블록 투입 실적(블록 치수·중량·착수/완료일·탑재 요구일)을 넣어 재현한다. 결과는 '추천안'으로만 쓰고 확정은 지금처럼 반장·공정 담당이 한다. 결과가 쌓이면 L5(SYARD 연결)로 넘긴다.",
+    vendors: [
+      { name: "OGC 2026 대회 페이지 (상위팀 코드)", url: "https://ogc2026.devpost.com/", ch: "공개 코드" },
+      { name: "2등상 팀 GitHub (예시)", url: "https://github.com/arseniykan/OGC2026_Issyk_Cool", ch: "공개 코드" }
+    ],
+    first: "MES에서 정반 배정·블록 치수·공기 데이터가 어느 테이블에 있는지 확인 → 개인 PC에서 대회 코드 검토 후 사내 반입 승인 요청.",
+    risk: "VDI가 오프라인이라 코드와 솔버 패키지(OR-Tools 등) 휠(win_amd64/py3.12) 반입 승인이 먼저다. 크레인 능력·반출 동선·선행 블록 대기 같은 현장 제약을 빠뜨리면 추천안이 현실과 어긋난다 — 제약 목록을 반장 인터뷰로 먼저 뽑을 것."
+  },
+  {
+    id: "S2", size: "소", area: "안전·작업자", contact: "경유", proof: "B", own: "시범", top: true,
+    ownNote: "삼성중공업 안전교육에서 스콘챗 약 3개월 시범(2026 보도). 조립4과 TBM 적용 여부는 미확인.",
+    name: "TBM·안전교육 다국어 실시간 통역", short: "TBM 다국어 통역",
+    one: "사내 스콘챗 시범을 조립4과 TBM으로 넓힌다",
+    why: "사내 시범 있음 · 앱 설치 없음 · 감시 논란 없음",
+    firstShort: "사내 시범 결과 확인 → 확대 요청",
+    what: "반장이 한국어로 말하면 작업자 휴대폰(QR 접속)이나 화면 자막으로 모국어가 뜬다. 사내 시범 대상 국적에 인도네시아·우즈베키스탄·스리랑카가 들어 있어 조립4과 인력 구성과 맞는다.",
+    cases: [
+      { who: "삼성중공업 '스콘챗' 안전교육 시범", year: "2026 (약 3개월)",
+        what: "QR 접속, 앱 설치 없이 실시간 음성·텍스트 통역. 대상 국적 베트남·인도네시아·러시아·우즈베키스탄·방글라데시·스리랑카·미얀마",
+        short: "사내 안전교육 스콘챗 약 3개월 시범",
+        effect: "수치 미공개", srcName: "한경매거진 2026-02", src: "https://magazine.hankyung.com/money/article/202602119632c" },
+      { who: "한화오션 '오톡' (경쟁사)", year: "2026",
+        what: "조선 은어·사투리 인식, 안전교육 동시통역, 다국어 그룹채팅. 사번 연동 후 협력사 근로자까지 확대",
+        effect: "외국인 근로자 사용률 약 20% → 3개월 만에 약 96% (회사 발표 기준)",
+        srcName: "머니투데이 2026-09-16", src: "https://www.mt.co.kr/stock/2026/09/16/2026091609359684693" },
+      { who: "HD현대중공업 기술교육원 '하이워커' (경쟁사)", year: "2025",
+        what: "강의용 AI 통번역 실증 — 화면 자막 최대 4개 언어, QR 접속 시 40여 개 언어. 대한조선 도입 확정 보도",
+        effect: "수치 미공개", srcName: "아시아투데이 2025-12-03", src: "https://www.asiatoday.co.kr/kn/view.php?key=20251203001023346" }
+    ],
+    apply: "외국인 비율이 높은 용접·사상 조 1개 조 아침 TBM에서 2주 시범. 기존 다국어 TBM 카드와 같이 쓰고, 이해도는 KYT 라운드 질문 응답으로 확인한다. 오톡 사용률 96%는 경쟁사 수치라 비교 기준으로만 쓴다.",
+    vendors: [
+      { name: "사내: 스콘챗 시범 주관 부서 (안전 쪽, 부서명 사내 확인)", url: "", ch: "먼저" },
+      { name: "스콘에이아이 '스콘챗' — 총판 엠앤와이즈", url: "https://mnwise.com/", ch: "판매형 · 총판" },
+      { name: "하이로컬 (하이워커) — 비교용", url: "https://www.hiworker.com/", ch: "판매형" }
+    ],
+    first: "스콘챗 시범을 주관한 사내 부서에 시범 결과와 확대 계획 확인 → 조립4과 TBM 1개 조 추가를 요청. 싱할라어 지원 여부도 같이 확인.",
+    risk: "음성이 외부 클라우드에서 처리되므로 정보보호 검토 대상 — 통역 중 호선·선주명은 말하지 않는 운영 규칙이 필요하다. 시범이 끝나고 채택이 안 됐다면 그 이유부터 들어야 한다."
+  },
+  {
+    id: "S3", size: "소", area: "관리·데이터", contact: "직접", proof: "제안", own: "없음",
+    name: "작업일보·구두 보고 음성 입력", short: "음성 작업일보 (STT)",
+    one: "반장 구두 보고를 SOLA STT로 받아 일보 초안 작성",
+    firstShort: "반장 녹음 10건으로 인식률 확인",
+    what: "반장이 퇴근 전 1~2분 동안 '오늘 착수·완료 블록, 문제점'을 말하면 SOLA STT → 챗 분류로 일보 양식 칸을 채운다. 블록 번호·수량은 MES 실적과 대조해 불일치만 표시한다.",
+    cases: [],
+    noCaseNote: "조선소 STT 작업일보 사례는 검색 한도 소진으로 조사하지 못함(재조사 대상). 참고로 HD한국조선해양은 번역 앱용으로 조선 용어 13,000개·작업지시 문장 4,200개를 구축했다(ZDNet 2024-07-09) — 용어사전 구축 방식은 참고할 만하다.",
+    apply: "공수·실적 입력이 몰리는 퇴근 전 시간을 줄이는 게 목표. 일보 양식은 지금 쓰는 엑셀 그대로 두고 칸만 자동으로 채운다.",
+    vendors: [],
+    first: "SOLA STT 키로 반장 2명에게 녹음 10건을 받아 인식률부터 본다 — 용접 소음과 외국어 섞인 발화가 관건.",
+    risk: "소음 환경 인식률 미검증. LLM은 분류·요약만 하고 수량은 MES 값을 쓴다(LLM에 숫자 계산 맡기지 않음)."
+  },
+  {
+    id: "S4", size: "소", area: "안전·작업자", contact: "직접", proof: "C", own: "시범",
+    ownNote: "삼성중공업 평택 반도체 건설현장 근로자 일부에 갤럭시워치 열스트레스 관리(2026-07 보도). 조선소 적용은 아님.",
+    name: "블록 내부 체감온도(WBGT) 센서 + 휴식 알림", short: "체감온도 IoT 알림",
+    one: "센서값이 단계를 넘으면 반장에게 휴식 알림 자동 발송",
+    firstShort: "2027 여름 전 3곳 시범",
+    what: "블록 내부·공장 동별로 체감온도 센서를 달고, 사내 폭염 기준 단계를 넘으면 기존 메일 발송 파이프라인으로 반장에게 알림. 기록은 폭염 대응 이행 증빙으로 남긴다.",
+    cases: [
+      { who: "삼성중공업 평택 반도체 건설현장 (조선소 아님)", year: "2026-07",
+        what: "현장 근로자 일부에 갤럭시워치로 열스트레스 관리 — 33·35·38도 단계별 자동 알림",
+        short: "사내 타 현장 — 워치 단계별 폭염 알림",
+        effect: "수치 미공개", srcName: "파이낸셜뉴스 2026-07-06", src: "https://www.fnnews.com/news/202607061812153627" },
+      { who: "삼성물산 건설현장 10여 곳 (조선 아님)", year: "2025~2026",
+        what: "IoT 체감온도계·WBGT 측정기 운용. 조선 3사 폭염 대책은 휴식시간 운영 위주로 IoT 계측 사례는 미확인",
+        effect: "수치 미공개", srcName: "블로터", src: "https://www.bloter.net/news/articleView.html?idxno=670416" },
+      { who: "법 근거", year: "2025-07",
+        what: "산업안전보건기준에 관한 규칙 개정으로 폭염 대응이 법적 의무가 됐다는 보도",
+        effect: "", srcName: "안전저널", src: "https://www.anjunj.com/news/articleView.html?idxno=50343" }
+    ],
+    apply: "블록 내부 2곳·공장 1곳에 센서를 두고 기존 Python 메일 발송 루프에 붙인다. 사내 평택 현장의 단계별 알림 방식을 그대로 가져오면 기준 논쟁이 줄어든다.",
+    vendors: [{ name: "케이웨더 (IoT 체감온도계, 온라인몰 단품 구매)", url: "https://www.kweathermall.co.kr/593/?idx=303", ch: "판매형" }],
+    first: "평택 현장 열스트레스 관리 주관 부서에 운영 기준 확인 → 겨울 동안 센서 통신 방식 사내망 승인 받고 2027년 6월 투입.",
+    risk: "센서 통신이 사내망 연결 승인 대상. 블록 내부는 철판 차폐로 무선이 약하다. 조선소 적용 사례 없음."
+  },
+  {
+    id: "S5", size: "소", area: "배재·취부", contact: "직접", proof: "C", own: "없음",
+    name: "상향 취부·용접 무동력 웨어러블 시범", short: "상향작업 웨어러블",
+    one: "어깨 보조 웨어러블 2~3대로 상향 자세 체감 평가",
+    firstShort: "체험 대여 가능 여부 문의",
+    what: "배터리 없는 어깨 보조 장비를 상향 취부·용접이 많은 작업자에게 2주 착용시킨다. 효과 수치를 만들지 말고 '계속 쓰겠다' 비율과 불편 사항만 기록한다.",
+    cases: [
+      { who: "HD현대삼호 × 엔젤로보틱스 (경쟁사)", year: "2024 MOU",
+        what: "조선소 맞춤형 웨어러블 장비 공동개발 — angel GEAR 시리즈를 조선 작업에 맞게 보완",
+        short: "경쟁사 조선 맞춤 웨어러블 공동개발 MOU",
+        effect: "실제 투입 결과 미확인", srcName: "서울신문 2024-06-16",
+        src: "https://www.seoul.co.kr/news/economy/2024/06/16/20240616500017" },
+      { who: "현대차그룹 엑스블 숄더 (제품)", year: "2025 판매 시작",
+        what: "무동력, 1.9kg 이하. 건설·조선·항공 등으로 판매 확대 방침. 1호 고객은 대한항공 — 조선소 도입은 미확인",
+        effect: "어깨 관절 부하 최대 60% 경감 (제조사 발표)", srcName: "현대차그룹 로보틱스랩",
+        src: "https://robotics.hyundai.com/unveiled-robots/wearable/xBleShoulder.do" }
+    ],
+    apply: "대조립 블록 상향 취부·용접 작업자 2~3명. 보호구·안전대와 걸리는지가 첫 확인 포인트.",
+    vendors: [
+      { name: "현대차그룹 로보틱스랩 (엑스블 숄더)", url: "https://robotics.hyundai.com/unveiled-robots/wearable/xBleShoulder.do", ch: "판매형" },
+      { name: "에프알티로보틱스 (조선 적용 미확인)", url: "https://www.frtrobotics.com/home", ch: "판매형" }
+    ],
+    first: "로보틱스랩 공식 사이트로 체험 대여·데모 가능 여부 문의.",
+    risk: "용접 보호구·안전대와 간섭, 여름철 착용 열 부담. 조선소 효과 데이터는 없다."
+  },
+  {
+    id: "S6", size: "소", area: "공정·물류", contact: "직접", proof: "C", own: "없음",
+    name: "선행 지연 → 후행 영향 아침 알림 (Work Front)", short: "공정 지연 영향 알림",
+    one: "지연 블록 때문에 밀리는 후행 블록·정반을 매일 표시",
+    firstShort: "선후행 관계 데이터 유무 확인",
+    what: "MES 공정 실적으로 '선행 완료 → 후행 착수 가능' 관계를 묶어, 지연 블록과 그 때문에 밀리는 후행 블록·정반을 아침 메일로 알린다. 계산은 규칙 기반(공기·선후행 관계)이라 AI가 없어도 된다.",
+    cases: [
+      { who: "HD현대 (경쟁사)", year: "2026 개발 중",
+        what: "공정 지연 발생 시 AI가 공정 간 관계를 분석하고 시뮬레이션으로 영향을 판단해 작업순서 조정 등을 제안",
+        short: "경쟁사 지연 영향 분석 개발 중",
+        effect: "수치 미공개", srcName: "더빅데이터 2026-08-06",
+        src: "https://www.thebigdata.co.kr/view.php?ud=202608061409065250570d99e4c8_23" }
+    ],
+    apply: "기존 PAD → SQL → Python → 메일 파이프라인에 테이블 하나 추가하는 수준. 아침 검사 브리핑과 같은 시간대에 묶어 보낸다.",
+    vendors: [],
+    first: "선후행 관계가 MES에 데이터로 있는지(공정 네트워크 테이블) 확인 — 없으면 블록 계열 규칙으로 대체.",
+    risk: "선후행 관계가 시스템에 없으면 수작업 마스터가 필요하고, 마스터 관리가 끊기면 알림이 조용히 틀린다."
+  },
+  {
+    id: "S7", size: "소", area: "정도·검사", contact: "경유", proof: "A", own: "운용",
+    ownNote: "삼성중공업 스마트야드 페이지에 NDE 디지털화·검사실적 디지털화·스마트 검사 고도화가 올라 있음. 조립 단계 데이터 범위는 미확인.",
+    name: "사내 검사 디지털 데이터 → R 사전경고 연결", short: "검사 디지털 데이터 연결",
+    one: "이미 디지털로 쌓이는 NDE·검사실적을 R 사전경고 모델에 붙임",
+    firstShort: "품질 부서에 데이터 범위·권한 확인",
+    what: "사내에서 디지털화된 NDE·검사실적 데이터를 진행 중인 R 사전경고(품질 AI 비서)에 붙여 '왜 R이 났는지' 결함 유형 정보를 더한다. 새 장비 없이 데이터 권한만 있으면 된다.",
+    cases: [
+      { who: "삼성중공업 스마트야드", year: "운용 (게시 시점 미표기)",
+        what: "NDE 디지털화, 스마트 검사 고도화, 검사실적 디지털화, AR 구조·자재·장비 검사",
+        short: "사내 NDE·검사실적 디지털화",
+        effect: "AR 검사로 검사 수행 시간 단축 (수치 미공개)", srcName: "삼성중공업 스마트야드", src: "https://www.samsungshi.com/Ko/Smartyard_03.aspx" },
+      { who: "중소조선연구원 주관 정부 R&D", year: "보고서 2022",
+        what: "RT 필름 디지털 변환, RT 영상 자동 수집, AI 결함 검출, 검사 기본정보 자동 추출 SW — 상용화 미확인",
+        effect: "수치 미확인", srcName: "KISTI ScienceON", src: "https://scienceon.kisti.re.kr/srch/selectPORSrchReport.do?cn=TRKO202200005836" }
+    ],
+    apply: "R 사전경고 모델의 입력 4개(검사일자·블럭·검사길이·용도결정)에 결함 유형·위치를 더하면, 경고 메일에 '이 블록은 ○○ 결함이 반복' 같은 사유를 붙일 수 있다.",
+    vendors: [{ name: "사내: 품질·검사 부서 (NDE 데이터 보유)", url: "", ch: "데이터 권한 요청" }],
+    first: "품질·검사 부서에 조립 단계 NDE·검사실적 디지털 데이터가 어디 쌓이는지, 조회 권한을 받을 수 있는지 확인.",
+    risk: "데이터 소유 부서가 달라 조회 권한이 관문. 결함 판정 책임은 검사 부서에 있으므로 R 경고 문구에 판정처럼 보이는 표현은 쓰지 않는다."
+  },
+
+  /* ---------------- 중 ---------------- */
+  {
+    id: "M1", size: "중", area: "용접", contact: "경유", proof: "B", own: "운용", top: true,
+    ownNote: "삼성중공업 협동로봇 20여 대(2025-01 보도), 레인보우로보틱스와 AI 용접로봇·블록 내부 이동형 로봇 공동개발(2025-10 보도). 조립4과 배치 여부는 미확인.",
+    name: "포터블 협동로봇 용접 (블록 내부 필릿·수직)", short: "포터블 협동로봇 용접",
+    one: "사내 보유 협동로봇을 조립4과 블록 내부 필릿에 시범 배치",
+    why: "사내 20여 대 vs HD현대 3사 170여 대 — 격차가 명분",
+    firstShort: "사내 자동화 조직에 보유·배치 확인",
+    what: "작업자가 협동로봇을 블록 셀 안에 내려놓고 시작점만 잡아주면 아크·터치센싱으로 용접선을 따라간다. 1명이 여러 대를 돌리는 구조라 KPI는 '1인 운용 대수'와 아크 타임.",
+    cases: [
+      { who: "삼성중공업", year: "2025-01",
+        what: "협동로봇 20여 대 운용",
+        short: "사내 협동로봇 20여 대 + 레인보우 공동개발",
+        effect: "수치 미공개", srcName: "뉴데일리 2025-01-21",
+        src: "https://biz.newdaily.co.kr/site/data/html/2025/01/21/2025012100104.html" },
+      { who: "삼성중공업 × 레인보우로보틱스", year: "2025-10",
+        what: "AI 용접로봇부터 블록 내부 이동형·양팔·4족 로봇까지 공동개발. 자동화 장비·로봇 약 90종 자체 개발·운용",
+        effect: "수치 미공개", srcName: "아시아경제 2025-10-24",
+        src: "https://cm.asiae.co.kr/article/2025102409553057629" },
+      { who: "HD현대삼호 (경쟁사)", year: "2024~2026",
+        what: "AI 용접로봇(협동로봇) 약 100대로 곡블록·수직·수평 용접. 자동화혁신센터가 UR·뉴로메카와 전용 용접 프로그램 개발",
+        effect: "생산 효율 15~20%↑, 블록 1개 6일→5일, 용접 결함 약 90% 감소 (언론 보도, 회사 발표 기준)",
+        srcName: "브릿지경제 2026-09-09", src: "https://www.viva100.com/article/20260909501376" },
+      { who: "HD현대중공업 중형선사업본부 (경쟁사)", year: "2025-12",
+        what: "레인보우로보틱스 RB3-730(11kg) + 제이씨티 포터블 용접 시스템 35세트 발주. HD현대 조선 3사 협동로봇 합계 170여 대",
+        effect: "수치 미공개", srcName: "ZDNet 2025-12-02", src: "https://zdnet.co.kr/view/?no=20251202145315" }
+    ],
+    apply: "중조립 블록 내부 필릿(론지·웹 교차부) 중 반복 길이가 긴 블록 2~3종에 사내 협동로봇 1~2대를 시범 배치. 결과는 지금 쓰는 용접불량률 지표와 같은 잣대로 본다. 같은 레인보우 하드웨어를 HD현대도 쓰고 있어 비교가 쉽다.",
+    vendors: [
+      { name: "사내: 자동화·로봇 개발 조직 (레인보우 공동개발 창구, 부서명 사내 확인)", url: "", ch: "먼저" },
+      { name: "레인보우로보틱스 (RB3-730)", url: "https://rainbow-robotics.com", ch: "사내 공동개발 중 · 삼성전자가 최대주주로 알려짐(재확인 필요)" },
+      { name: "뉴로메카 · 제이씨티 — 비교용", url: "https://www.neuromeka.com", ch: "판매형" }
+    ],
+    first: "사내 자동화 조직에 협동로봇 보유 대수·배치 공정·여유 장비 확인 → 조립4과 중조립 블록 시범 배치 요청. 외부 업체에 따로 연락하지 않는다.",
+    risk: "사내 조직 개발 일정에 종속된다. 협동로봇 위험성평가·블록 내부 전원·흄, 인력 운영 관련 노사 사전 공유가 필요할 수 있다. 대수 비교는 보도 시점이 다르다(당사 2025-01, HD현대 2025-12)."
+  },
+  {
+    id: "M2", size: "중", area: "용접", contact: "경유", proof: "A", own: "없음",
+    name: "판넬 블록 슬릿 용접 협동로봇 (자율주행 + 3D 카메라)", short: "판넬 슬릿 용접 협동로봇",
+    one: "노후 판넬라인 슬릿 용접 로봇을 협동로봇으로 교체",
+    firstShort: "판넬 블록 비중 확인",
+    what: "크레인 호이스트로 블록 셀에 협동로봇을 내려놓으면 자율주행으로 용접 대상까지 접근해 슬릿을 용접한다. 기존 산업용 로봇 라인을 교체하는 성격.",
+    cases: [
+      { who: "HD현대삼호 판넬 블록 조립공장 (경쟁사)", year: "2024",
+        what: "뉴로메카 OPTi 협동로봇 12여 기를 HD현대로보틱스 경유로 공급 — 노후 산업용 로봇 슬릿 용접 시스템 교체. CAD 없이 3D 카메라로 블록 형상을 인식하는 기능은 '도입 예정'",
+        short: "경쟁사 판넬 슬릿 용접 협동로봇 12여 기",
+        effect: "수치 미공개", srcName: "HD현대로보틱스 적용사례",
+        src: "https://www.hd-hyundairobotics.com/application/robot-solution/35" }
+    ],
+    apply: "조립4과에 판넬 라인이나 슬릿 구조 블록이 많을 때만 해당. 없으면 M1으로 흡수한다.",
+    vendors: [
+      { name: "사내: 설비·생산기술 부서", url: "", ch: "라인 교체 주관" },
+      { name: "뉴로메카", url: "https://www.neuromeka.com", ch: "판매형" }
+    ],
+    first: "조립4과 판넬 블록 비중을 먼저 확인하고, 해당되면 설비 부서와 같이 검토.",
+    risk: "기존 라인 설비 교체라 설비·생산기술 주관 사안. 3D 카메라 형상 인식 성과는 공개되지 않았다."
+  },
+  {
+    id: "M3", size: "중", area: "사상·마킹", contact: "직접", proof: "B", own: "없음",
+    name: "협동로봇 주행대차 + 비전 기준점 — 문자·마킹 용접", short: "대차형 마킹 용접",
+    one: "주행대차에 협동로봇을 얹고 비전으로 기준점 잡아 자동 용접",
+    firstShort: "중소조선연구원 과제 결과 문의",
+    what: "주행 대차에 협동로봇을 싣고, 대차의 비전 센서로 기준점을 인식한 뒤 문자를 자동으로 용접한다. 구조(대차+협동로봇+비전)가 단순해 다른 반복 단일작업으로 넓히기 쉽다.",
+    cases: [
+      { who: "케이조선 × 두산로보틱스", year: "2023년도 사업",
+        what: "선체 문자 자동 용접. 중소조선 스마트생산혁신지원사업(중소조선연구원 주관)으로 개발, 국내 첫 적용. 소부재·협소구역 용접으로 응용 계획",
+        short: "선체문자 자동 용접, 지원사업으로 개발",
+        effect: "'작업 시간 획기적 단축' (정량 수치 미공개)", srcName: "이데일리",
+        src: "https://edaily.co.kr/News/Read?mediaCodeNo=257&newsId=01656406635742744" }
+    ],
+    apply: "조립 단계 블록 번호·기준선 표시 용접이나 반복 소부재 용접에 같은 구조를 쓸 수 있는지 검토. 잉크젯 취부선 마킹 로봇은 조선 적용 근거를 못 찾았다.",
+    vendors: [
+      { name: "중소조선연구원 (사업 주관 이력)", url: "https://www.rims.re.kr", ch: "기관 문의" },
+      { name: "두산로보틱스", url: "", ch: "공식 URL 미확인 — 직접 검색 필요" }
+    ],
+    first: "중소조선연구원에 케이조선 과제 결과물 열람·기술 상담 문의. 사내 자동화 조직에 유사 장비 보유 여부도 확인.",
+    risk: "중형 조선소 지원사업 결과라 당사는 지원금 직접 신청 불가 — 거제 사외협력사 경유. 문자 용접 외 용도는 검증 안 됨."
+  },
+  {
+    id: "M4", size: "중", area: "정도·검사", contact: "경유", proof: "C", own: "시범", top: true,
+    ownNote: "리옵스 공식 자료상 삼성중공업 '시연 예정'(2026). 사내 3D 디지털 생산도면(무도면 조선소, 2024~)이 있어 설계 모델 준비가 쉽다.",
+    name: "3D 스캔 기반 블록 진척·정도 판정", short: "3D 스캔 진척·정도",
+    one: "사내 리옵스 시연에 조립4과 블록을 끼워 넣는다",
+    why: "사내 시연 예정 · 3D 도면 이미 있음 · 실적 입력과 정도 둘 다 해당",
+    firstShort: "사내 시연 주관 부서 찾기",
+    what: "공장 안 블록을 LiDAR로 스캔해 설계 3D 모델과 맞춰보고 '어디까지 붙었는지(진척)'와 '얼마나 틀어졌는지(정도)'를 자동 판정한다. 바코드를 붙일 수 없는 블록의 실적 입력을 대신하는 개념.",
+    cases: [
+      { who: "리옵스 '공간 MES' — 삼성중공업 시연 예정", year: "2026",
+        what: "한화오션 파일럿 완료 후 구축 단계, HD현대삼호 PoV 완료, 삼성중공업 시연 예정",
+        short: "사내 시연 예정 · 한화오션 구축 · 삼호 PoV",
+        effect: "적용 현장에서 생산성 28.8% 향상 측정 (회사 발표, 어느 현장인지 미특정)",
+        srcName: "리옵스 공식 뉴스", src: "https://www.liops.io/en/news/spatial-mes" },
+      { who: "삼성중공업 무도면 조선소", year: "2024",
+        what: "3D 디지털 생산도면 전면 적용, 모바일 AR 검사",
+        effect: "연간 종이 생산도면 60만 매, LNG 운반선 의장 설치도 기준 설계 공수 45% 절감 기대 (회사 발표)",
+        srcName: "뉴스핌 2024-09-30", src: "https://www.newspim.com/news/view/20240930000211" },
+      { who: "리옵스 투자·과제", year: "2026-09",
+        what: "시리즈A 1차 40억 원 유치. KEIT 조선해양 과제 2건(HD현대삼호 주관) 공동연구기관 선정",
+        effect: "", srcName: "머니투데이 2026-09-28", src: "https://www.mt.co.kr/amp/future/2026/09/28/2026092813205127550" }
+    ],
+    apply: "대조립 완료 블록 3~5개를 시연 대상으로 넣어 현행 정도 계측 결과와 대조한다. 맞으면 정도불량 사전 검출과 완료 실적 자동 입력 두 군데에 쓸 수 있다.",
+    vendors: [
+      { name: "사내: 리옵스 시연 주관 부서 (스마트야드·DX 쪽 추정, 사내 확인)", url: "", ch: "먼저" },
+      { name: "리옵스 (LiOps)", url: "https://www.liops.io", ch: "스타트업" },
+      { name: "삼인이엔에스 (부산) — 비교용", url: "", ch: "공식 URL 미확인" }
+    ],
+    first: "리옵스 시연을 추진하는 사내 부서를 찾아 조립4과 대조립 블록을 시연 대상에 넣어달라고 요청. 이미 시연했다면 결과부터 받는다.",
+    risk: "설계 3D 데이터 반출은 정보보호 승인 사안 — 온프레미스로 돌릴 수 있는지가 핵심 질문. 2023년 설립 스타트업이라 유지보수 지속성 확인 필요."
+  },
+  {
+    id: "M5", size: "중", area: "용접", contact: "경유", proof: "C", own: "없음",
+    ownNote: "삼성중공업이 부산창경 오픈이노베이션 2026 모집 분야로 'IoT를 활용한 생산 현장 데이터 자동 수집'을 냈음 — 사내 수요는 있음.",
+    name: "용접기 IoT — 아크 타임·전류·전압 수집", short: "용접기 IoT 모니터링",
+    one: "용접기 데이터로 아크 타임·조건 준수·와이어 소모 집계",
+    firstShort: "보유 용접기 브랜드·기종 조사",
+    what: "용접기에서 전류·전압·와이어 속도·아크 시간을 받아 블록·공정 단위로 집계한다. W.L 대비 실제 아크 타임, 용접 조건 이탈과 용접불량 R의 관계를 볼 수 있다.",
+    cases: [
+      { who: "삼성중공업 오픈이노베이션 모집 분야", year: "2026",
+        what: "부산창경 스타트업 오픈이노베이션 챌린지 — 삼성중공업 모집 분야에 안전, 드론, 'IoT를 활용한 생산 현장 데이터 자동 수집' 포함. 기업당 PoC 최대 1천만 원",
+        short: "사내 OI 모집 분야와 일치 (수요 있음)",
+        effect: "", srcName: "스타트업레시피", src: "https://startuprecipe.co.kr/announcement/5816661" },
+      { who: "조선소 대상 정부 R&D (수행기관 미확인)", year: "보고서 2022",
+        what: "스마트 용접 시스템 — 용접기 LAN/LTE 카드, 미들웨어 서버·DB, 용접정보 종합관제",
+        effect: "용접조건 준수 여부·공정별 용접시간·장비 고장이력 추적 가능 (보고서 요약)",
+        srcName: "KISTI ScienceON", src: "https://scienceon.kisti.re.kr/srch/selectPORSrchReport.do?cn=TRKO202200006691" },
+      { who: "Fronius WeldCube (제품)", year: "판매 중",
+        what: "최대 50대 전류·전압·와이어속도·용접시간 수집, WeldCube API 제공 — 조선 적용 사례는 미확인",
+        effect: "", srcName: "Fronius", src: "https://www.fronius.com/en/welding-technology/innovative-solutions/weldcube-api" }
+    ],
+    apply: "API로 받으면 기존 Python 적재 파이프라인에 바로 붙는다. 용접불량 R 발생 블록과 해당 시점 용접 조건을 대조하는 게 첫 분석.",
+    vendors: [
+      { name: "사내: 오픈이노베이션 담당 + 설비 부서", url: "", ch: "먼저" },
+      { name: "Fronius (WeldCube)", url: "https://www.fronius.com/en/welding/products/digital-solutions/weldcube-premium", ch: "판매형 · 국내 대리점 미확인" },
+      { name: "ESAB (WeldCloud) / Lincoln (CheckPoint)", url: "https://esab.com", ch: "판매형" }
+    ],
+    first: "설비 부서에 조립4과 용접기 브랜드·기종·대수 확인 → 오픈이노베이션 담당에 'IoT 현장 데이터 수집' 과제로 조립4과를 실증 현장 후보로 올려달라고 요청.",
+    risk: "국내 조선소 상용 도입 사례 미확인. 보유 용접기가 지원 기종이 아니면 교체 비용이 붙는다. 용접사 개인별 아크 타임은 '감시'로 읽힐 수 있어 블록·공정 단위 집계로 설계하고 노사에 먼저 공유."
+  },
+  {
+    id: "M6", size: "중", area: "안전·작업자", contact: "경유", proof: "B", own: "운용",
+    ownNote: "삼성중공업 통합안전관제 ISMP(2026 구축 완료 보도), 통합관제센터(2025). 조립공장 적용 범위는 미확인.",
+    name: "AI 영상 위험감지 (크레인 하부·지게차 인체감지)", short: "AI 영상 위험감지",
+    one: "사내 ISMP의 지게차 인체감지·크레인 영상을 조립공장까지",
+    firstShort: "ISMP 조립공장 적용 범위 확인",
+    what: "천장크레인 인양 중 하부 진입, 지게차·트랜스포터 주변 사람을 영상으로 감지해 경보를 낸다. 새로 만들기보다 사내 ISMP 범위를 조립공장으로 넓히는 문제.",
+    cases: [
+      { who: "삼성중공업 통합안전관제(ISMP)", year: "2026",
+        what: "고소작업차 실시간 자격인증, AI 지게차 인체감지(전·후진 신호와 연동해 실제 이동 시에만 작동), 크레인 영상 전송, 열화상 CCTV — 포커스에이아이 구축",
+        short: "사내 ISMP — 지게차 인체감지·크레인 영상",
+        effect: "수치 미공개", srcName: "아시아경제 2026-06-09", src: "https://view.asiae.co.kr/article/2026060909301902236" },
+      { who: "삼성중공업 통합관제센터", year: "2025",
+        what: "AI CCTV 발화 감지(도장공장 등), 이동형 CCTV, 드론 순찰, 스마트헬멧",
+        effect: "수치 미공개", srcName: "네이트 2025-05-23", src: "https://news.nate.com/view/20250523n09312" },
+      { who: "HD현대중공업 (경쟁사)", year: "2026-09",
+        what: "비전센서 능동형 안전체계·바디캠 등 안전 추가투자 170억 원 발표 — 노사 협의를 거쳐 설치",
+        effect: "", srcName: "머니투데이 2026-09-28", src: "https://www.mt.co.kr/industry/2026/09/28/2026092813401494087" }
+    ],
+    apply: "조립공장 천장크레인 인양 하부와 지게차·트랜스포터 동선이 ISMP에 들어 있는지부터 본다. 빠졌으면 조립4과 동선 도면을 들고 확대를 요청한다.",
+    vendors: [{ name: "사내: 안전 부서 (ISMP·통합관제센터 운영)", url: "", ch: "먼저" }],
+    first: "안전 부서에 ISMP 적용 구역 목록을 받아 조립공장 포함 여부 확인.",
+    risk: "조선업 노조가 AI CCTV를 감시로 우려한다는 보도가 있다 — ISMP 도입 때 노사 합의 범위를 확인. 오작동 유지보수 부담."
+  },
+  {
+    id: "M7", size: "중", area: "배재·취부", contact: "경유", proof: "A", own: "운용",
+    ownNote: "삼성중공업 3D 디지털 생산도면 전면 적용(2024)·모바일 AR 검사 운용. 취부 단계 적용은 미확인.",
+    name: "3D 디지털 도면 + AR로 취부 위치 확인", short: "AR 취부 확인",
+    one: "사내 AR 검사를 취부 단계 부재 누락·위치 확인에 쓴다",
+    firstShort: "DX 부서에 취부 적용 가능성 문의",
+    what: "취부를 마친 블록에 태블릿을 대면 3D 모델이 실물 위에 겹쳐 보여, 부재 누락·위치 오류를 용접 들어가기 전에 잡는다. 사내 AR 검사 기능을 조립 단계로 당겨 쓰는 안.",
+    cases: [
+      { who: "삼성중공업 스마트야드", year: "운용",
+        what: "AR로 3D 도면과 구조·자재·장비 실물을 맞춰보는 검사",
+        short: "사내 모바일 AR 검사 운용",
+        effect: "검사 수행 시간 단축 (수치 미공개)", srcName: "삼성중공업 스마트야드", src: "https://www.samsungshi.com/Ko/Smartyard_03.aspx" },
+      { who: "삼성중공업 무도면 조선소", year: "2024",
+        what: "3D 디지털 생산도면 전면 적용",
+        effect: "연간 종이 생산도면 60만 매, LNG 운반선 의장 설치도 기준 설계 공수 45% 절감 기대 (회사 발표)",
+        srcName: "뉴스핌 2024-09-30", src: "https://www.newspim.com/news/view/20240930000211" }
+    ],
+    apply: "취부 오류가 정도불량·재작업으로 이어진 블록 유형을 골라, 취부 완료 시점 AR 확인을 1개 조에서 시범. 정도불량률 변화로 본다.",
+    vendors: [{ name: "사내: 스마트야드·DX 부서 (AR 검사 운영)", url: "", ch: "먼저" }],
+    first: "AR 검사 운영 부서에 조립 블록 취부 단계 적용 사례가 있는지, 태블릿·앱 지원이 되는지 문의.",
+    risk: "블록 내부 조명·철판 환경에서 AR 정합 정확도 미검증. 태블릿 지급·파손 관리."
+  },
+
+  /* ---------------- 대 ---------------- */
+  {
+    id: "L1", size: "대", area: "배재·취부", contact: "회사", proof: "B", own: "없음",
+    name: "소부재 배재·취부·용접 갠트리 자동화 라인", short: "소부재 갠트리 자동화",
+    one: "소조립 반복 부재를 갠트리 로봇으로 배재부터 용접까지",
+    firstShort: "경쟁사 비교 기준으로만",
+    what: "소부재 생산의 배재·취부·용접을 갠트리형 로봇 라인으로 묶어 소조립 무인화를 노린다.",
+    cases: [
+      { who: "한화오션 소부재·조립공장 (경쟁사)", year: "2023",
+        what: "자체 개발 갠트리형 용접 로봇 시스템으로 소부재 배재·취부·용접 자동화, 소조립 무인화 목표",
+        short: "경쟁사 자체 개발 — 소부재 배재~용접",
+        effect: "수치 미공개", srcName: "CEO스코어데일리 2023-10-29", src: "https://ceoscoredaily.com/page/view/2023102922554169309" },
+      { who: "HD현대로보틱스 ArcLift GO", year: "2026-05",
+        what: "미국 Chouest 그룹 4개 조선소(북미 3·브라질 1)에 plug-and-play 로봇 용접 시스템 공급 — 경쟁 그룹 계열사라 당사 구매는 현실성 낮음",
+        effect: "수치 미공개", srcName: "Splash247", src: "https://splash247.com/hd-hyundai-robotics-wins-first-us-shipyard-automation-deal/" }
+    ],
+    apply: "취부까지 자동화한 판매형 라인은 이번 조사에서 못 찾았다. 사내 자동화 조직의 소조립 로드맵이 있으면 그쪽에 조립4과 반복 부재 데이터를 제공하는 정도.",
+    vendors: [],
+    noVendorNote: "경쟁사 자체 개발 — 외부 구매 불가. 사내 자동화 조직 로드맵 확인.",
+    first: "사내 자동화 조직에 소조립 자동화 계획 유무만 확인.",
+    risk: "라인 레이아웃 변경·대규모 투자."
+  },
+  {
+    id: "L2", size: "대", area: "용접", contact: "회사", proof: "B", own: "없음",
+    name: "도면 연동 자율이동 레일 + 1인 다대 운용", short: "도면 연동 다대 운용",
+    one: "도면에서 작업 위치를 계산해 로봇이 레일 따라 스스로 이동·용접",
+    firstShort: "M1 KPI 비교 기준으로 사용",
+    what: "설계도면 정보로 작업 위치를 계산하면 협동로봇이 자율이동 전동레일을 타고 스스로 옮겨 다니며 용접한다. 당사는 3D 디지털 도면이 이미 있어 도면-로봇 연동의 데이터 기반은 갖춘 편.",
+    cases: [
+      { who: "HD현대중공업 선각공장 (경쟁사)", year: "2026",
+        what: "협동로봇 + 자율이동 전동레일. 국책과제로 만든 모델을 협력사도 쓸 수 있게 플랫폼화한다는 보도",
+        short: "경쟁사 1인 2대 → 최대 6대 운용",
+        effect: "1인 운용 2대 → 최대 6대(향후 8대), 생산량 153.8% 증가 기대 (회사 기대치)",
+        srcName: "ZDNet 2026-06-15", src: "https://zdnet.co.kr/view/?no=20260615184712" }
+    ],
+    apply: "M1 시범이 자리 잡은 다음 단계. 3D 디지털 도면 → 로봇 경로 연동은 사내 DX·자동화 조직이 같이 가야 한다.",
+    vendors: [],
+    noVendorNote: "경쟁사 자체 개발 — 외부 구매 불가.",
+    first: "M1 시범 KPI를 '1인 운용 대수'로 잡고 이 사례 수치를 비교 기준으로 쓴다.",
+    risk: "도면 데이터 연동이 핵심이라 설계·IT 조직 참여 필수."
+  },
+  {
+    id: "L3", size: "대", area: "용접", contact: "경유", proof: "C", own: "시범",
+    ownNote: "삼성중공업 × 디든로보틱스 DIDEN 30 — 2026년부터 실제 건조 공정 순차 투입 합의(2026-01 보도). 투입 공정은 미확인.",
+    name: "블록 내부 이동형(4족 보행) 용접 로봇", short: "4족 보행 용접 로봇",
+    one: "론지 칸막이를 넘어 다니며 블록 내부를 스스로 용접",
+    firstShort: "투입 대상에 조립4과 블록 포함 확인",
+    what: "자석 발 4족 보행 로봇이 이중저·이중선측 블록 안에서 론지를 넘어 다니며 용접한다.",
+    cases: [
+      { who: "삼성중공업 × 디든로보틱스", year: "2025 시험 · 2026 순차 투입 합의",
+        what: "DIDEN 30이 건조 중 블록에서 론지 극복·승월·용접 성공. HD현대삼호도 디든과 AI 용접로봇 공동개발",
+        short: "사내 DIDEN 30 — 2026 순차 투입 합의",
+        effect: "수치 미공개", srcName: "파이낸셜뉴스 2026-01-19", src: "https://www.fnnews.com/news/202601191341165031" },
+      { who: "삼성중공업 × 레인보우로보틱스", year: "2025",
+        what: "AI 용접로봇부터 블록 내부 이동형·양팔·4족 로봇까지 공동개발",
+        effect: "", srcName: "아시아경제 2025-10-24", src: "https://cm.asiae.co.kr/article/2025102409553057629" }
+    ],
+    apply: "투입 계획 공정에 조립4과 이중저·이중선측 블록이 들어가는지 확인. 빠져 있으면 시험 블록 제공을 제안한다.",
+    vendors: [
+      { name: "사내: 자동화·로봇 개발 조직", url: "", ch: "먼저" },
+      { name: "디든로보틱스", url: "", ch: "공식 URL 미확인" }
+    ],
+    first: "자동화 조직에 DIDEN 30 투입 공정·일정 확인.",
+    risk: "실투입 성과가 아직 공개되지 않았다. 시험 블록을 내주면 해당 블록 공정이 늘어질 수 있다."
+  },
+  {
+    id: "L4", size: "대", area: "용접", contact: "회사", proof: "C", own: "없음",
+    name: "곡블록 3D 비전 자율용접 (티칭리스) — 국책과제", short: "곡블록 자율용접 R&D",
+    one: "용접선을 로봇이 직접 찾고 경로를 생성·보정",
+    firstShort: "수요 조선소 여부 확인",
+    what: "곡면 외판 블록에서 로봇이 용접선을 직접 탐색하고 경로를 생성해 실시간 보정한다. 티칭 없이 도는 게 목표.",
+    cases: [
+      { who: "뉴로메카 주관 과기정통부 LAM 실증", year: "2026.8~2030.12",
+        what: "곡면 외판 구조물 용접 공정 융합데이터 수집·실증. 총 175억 원(정부 105억 원). 수요 조선소 미확인",
+        short: "175억 국책과제 착수 (수요 조선소 미확인)",
+        effect: "", srcName: "뉴시스 2026-09-28", src: "https://www.newsis.com/view/NISX20260928_0003804614" },
+      { who: "한화오션 × NC AI (경쟁사)", year: "2026-06 개발 착수",
+        what: "AI 비전으로 용접 부위를 인식하고 작업 조건을 판단하는 자율용접 기술 개발",
+        effect: "", srcName: "서울신문 2026-06-04", src: "https://www.seoul.co.kr/news/economy/industry/2026/06/04/20260604500095" }
+    ],
+    apply: "당사가 이 과제의 수요 조선소인지 먼저 확인. 아니라면 사내 레인보우 공동개발 쪽이 같은 문제를 다루는지 본다.",
+    vendors: [{ name: "뉴로메카", url: "https://www.neuromeka.com", ch: "과제 주관" }],
+    first: "사내 R&D 쪽에 이 과제 참여 여부 확인.",
+    risk: "결과물은 2030년 이후. 수요기업 참여 조건 미확인."
+  },
+  {
+    id: "L5", size: "대", area: "공정·물류", contact: "경유", proof: "B", own: "운용",
+    ownNote: "삼성중공업 SYARD 전사 통합모니터링(2023~). 크레인 충돌방지 디지털트윈도 스마트야드 페이지에 올라 있음.",
+    name: "SYARD에 조립 정반 데이터 연결 (생산 디지털트윈)", short: "SYARD 정반 연결",
+    one: "S1 정반 PoC 결과를 사내 통합모니터링에 올린다",
+    firstShort: "S1 결과를 DX 조직에 공유",
+    what: "사내 SYARD 통합모니터링 위에 조립 정반 점유·투입 계획을 얹어, 정반 배치·공정 일정을 시뮬레이션하는 방향.",
+    cases: [
+      { who: "삼성중공업 SYARD", year: "2023",
+        what: "IoT·AI 전사 통합모니터링(견적~인도)",
+        short: "사내 SYARD 통합모니터링 운용",
+        effect: "목표: 2023년 총원가 10% 개선 (회사 목표치)", srcName: "한국일보 2023-02-02", src: "https://www.hankookilbo.com/News/Read/A2023020216290002004" },
+      { who: "HD한국조선해양 (경쟁사)", year: "2025-12 계약",
+        what: "지멘스 Teamcenter·Opcenter·Plant Simulation 등 설계-생산 통합 플랫폼 계약, 2028년 HD현대중공업·삼호 순차 적용 계획",
+        effect: "수치 미공개", srcName: "ZDNet 2025-12-24", src: "https://zdnet.co.kr/view/?no=20251224091325" }
+    ],
+    apply: "S1 PoC에서 만든 정반 데이터 구조를 SYARD 쪽에 맞춰두면, 과 단위 성과가 전사 시스템으로 올라가는 경로가 생긴다.",
+    vendors: [{ name: "사내: SYARD·DX 조직", url: "", ch: "먼저" }],
+    first: "S1 1차 결과가 나오면 SYARD 운영 조직에 공유하고 연결 방식을 묻는다.",
+    risk: "수년 단위 과제. 과 성과가 묻히지 않게 S1을 별도로 기록해둘 것."
+  },
+  {
+    id: "L6", size: "대", area: "공정·물류", contact: "회사", proof: "A", own: "없음",
+    ownNote: "사내 드론은 안전 순찰 용도(통합관제센터, 2025). 블록 인식 용도는 미확인. 부산창경 OI 모집 분야에 '드론' 포함.",
+    name: "적치장 블록 드론 인식 + 자동 배치", short: "적치장 드론 자동배치",
+    one: "드론 영상으로 적치 블록을 인식하고 배치를 수리최적화",
+    firstShort: "야드 물류 부서 소관 확인",
+    what: "드론 Vision AI로 적치장 블록을 인식하고, 수리최적화로 적치 위치와 운송 계획을 자동으로 짠다.",
+    cases: [
+      { who: "한화오션 거제 (한화시스템, 경쟁사)", year: "2024",
+        what: "드론 Vision AI 적치장 블록 인식 + 수리최적화 자동 배치",
+        short: "경쟁사 계획 10분 이내, 운송 16.7%↓",
+        effect: "계획 수립 10분 이내, 운송 거리 평균 6km → 5km (최대 16.7%↓) — 공급사 발표",
+        srcName: "한화시스템 고객사례", src: "https://www.hanwhasystems.com/ict/kr/insight/customer_case_view.do?bb_idx=10" }
+    ],
+    apply: "조립 완료 블록 반출·적치 대기 구간과 연결된다. 조립공장 안보다는 야드 물류 부서 소관.",
+    vendors: [],
+    noVendorNote: "경쟁 그룹 계열 솔루션 — 당사 구매 현실성 낮음. 사내 OI(드론 분야)로 유사 스타트업 탐색 가능.",
+    first: "블록 반출 대기가 조립 정반 회전을 막는지 데이터로 먼저 확인 → 야드 물류 부서와 공유.",
+    risk: "야드 전체 투자. 같은 거제 경쟁사 사례라 비교 자료로는 설득력이 크다."
+  },
+  {
+    id: "L7", size: "대", area: "용접", contact: "경유", proof: "C", own: "시범", top: true,
+    ownNote: "KIRO × 삼성중공업 거제조선소 MOU(2026-09-16) — 중조립·블라스팅·곡가공 공장 현장 실증 계획. 2015년부터 폐쇄구조 이동형 용접로봇·자율용접로봇 공동개발.",
+    name: "KIRO 자율작업 로봇 중조립 공장 실증 참여", short: "KIRO 중조립 실증",
+    one: "사내 MOU의 중조립 실증 현장으로 조립4과를 내놓는다",
+    why: "9월 MOU · 실증 현장이 중조립 · 장비·인력 부담 없음",
+    firstShort: "MOU 체결 부서에 실증 현장 지원",
+    what: "한국로봇융합연구원(KIRO)이 삼성중공업과 조선 특화 자율작업 로봇·제조 휴머노이드·AI 로봇 솔루션을 공동 개발하고 거제 중조립 공장에서 현장 실증한다. 조립4과가 실증 현장이 되면 장비를 사지 않고 결과를 먼저 받는다.",
+    cases: [
+      { who: "KIRO × 삼성중공업 거제조선소", year: "2026-09-16 MOU",
+        what: "조선 특화 자율작업 로봇, 제조 휴머노이드, AI 로봇 솔루션 공동 개발. 거제 중조립·블라스팅·곡가공 공장에서 현장 실증 계획. 2015년부터 폐쇄구조 전용 이동형 용접로봇·자율용접로봇 공동개발 이력",
+        short: "9월 MOU — 거제 중조립 공장 현장 실증 계획",
+        effect: "", srcName: "인공지능신문", src: "https://www.aitimes.kr/news/articleView.html?idxno=41956" }
+    ],
+    apply: "조립4과 공정이 중조립에 해당하면 실증 현장 1순위 후보. 실증 블록·작업 공간·안전 동선을 미리 정리해 제안한다.",
+    vendors: [
+      { name: "사내: MOU 체결 부서 (부서명 사내 확인)", url: "", ch: "먼저" },
+      { name: "한국로봇융합연구원 (KIRO)", url: "", ch: "공식 URL 미확인" }
+    ],
+    first: "MOU 체결 부서에 실증 공장·일정 확인 → 조립4과를 실증 현장으로 지원 의사 전달.",
+    risk: "실증 기간 동안 블록 일정·작업 공간을 일부 내줘야 한다. 결과물(휴머노이드 등)은 장기 과제."
+  }
+];
+
+/* 컨택 통로 — desc는 HTML 허용 */
+const CHANNELS = {
+  inhouse: [
+    "<b>정보보호</b> — 설계 3D·MES 데이터를 업체·기관에 어디까지 줄 수 있는지",
+    "<b>노사 공유</b> — 로봇·영상·용접기 데이터는 인력·감시 이슈로 읽힐 수 있음",
+    "<b>창구 일원화</b> — 사내가 이미 협업 중인 업체(레인보우·리옵스·디든·KIRO)에 과가 따로 연락하지 않기"
+  ],
+  internal: [
+    { name: "자동화·로봇 개발 조직", tag: "M1 · L3 · L7", desc: "자동화 장비·로봇 약 90종 자체 개발, 협동로봇 20여 대, 레인보우·디든·KIRO 협업 창구" },
+    { name: "안전 부서", tag: "S2 · M6 · S4", desc: "ISMP·통합관제센터 운영, 스콘챗 안전교육 시범" },
+    { name: "스마트야드·DX 조직", tag: "M4 · M7 · L5", desc: "3D 디지털 도면·AR 검사·SYARD, 리옵스 시연" },
+    { name: "품질·검사 부서", tag: "S7", desc: "NDE·검사실적 디지털 데이터 — R 사전경고 연결" },
+    { name: "오픈이노베이션 담당", tag: "M5 · L6", desc: "부산창경 챌린지 2026 — 안전·드론·IoT 현장 데이터 수집 분야, PoC 최대 1천만 원" }
+  ],
+  vendor: [
+    { name: "레인보우로보틱스", tag: "M1 · L3", desc: "사내 공동개발 중 · 삼성전자 최대주주로 알려짐(재확인 필요)", url: "https://rainbow-robotics.com" },
+    { name: "리옵스 (LiOps)", tag: "M4", desc: "사내 시연 예정 · 한화오션 구축, 삼호 PoV", url: "https://www.liops.io" },
+    { name: "엠앤와이즈 (스콘챗 총판)", tag: "S2", desc: "사내 시범 제품", url: "https://mnwise.com/" },
+    { name: "현대차그룹 로보틱스랩", tag: "S5", desc: "엑스블 숄더 · 2025 판매 시작", url: "https://robotics.hyundai.com/unveiled-robots/wearable/xBleShoulder.do" },
+    { name: "Fronius / ESAB / Lincoln", tag: "M5", desc: "보유 용접기 브랜드부터 확인", url: "https://www.fronius.com/en/welding-technology/innovative-solutions/weldcube-api" },
+    { name: "케이웨더", tag: "S4", desc: "IoT 체감온도계 단품", url: "https://www.kweathermall.co.kr/593/?idx=303" }
+  ],
+  org: [
+    { name: "중소조선 스마트생산혁신 지원 (경남)", tag: "거제 사외협력사 경유", desc: "대기업 제외 · 사외협력사 대상 명시. 정부지원금 최대 1.5억, 기업부담 30% (2026년 3월 공고)", url: "https://kitech.re.kr/pages/19?id=14316&menuMode=READ&q=" },
+    { name: "로봇활용 제조혁신 지원 (KIRIA)", tag: "협력사 경유", desc: "중소·중견 + 로봇 SI 컨소시엄. 총사업비 50%, 최대 2.5억 (2025.12~2026.1 공고, 마감)", url: "https://www.kiria.org" },
+    { name: "대·중소 안전보건 상생협력 (노동부)", tag: "당사 직접 신청", desc: "100인 이상 모기업 + 협력사 컨소시엄. 사외협력사는 정부 70% (2026 마감). 설비 구매 지원 여부 미확인", url: "https://www.moel.go.kr/news/notice/noticeView.do?bbs_seq=20251201295" },
+    { name: "중소조선연구원 (RIMS)", tag: "M3 · S7", desc: "케이조선 마킹 용접·RT AI 판독 과제 주관 이력", url: "https://www.rims.re.kr" }
+  ],
+  expo: [
+    { name: "OFFSHORE KOREA 2026", tag: "10.14~16 · BEXCO", url: "https://okkorea.org/" },
+    { name: "스마트 용접 자동화전", tag: "10.27~30 · KINTEX", url: "https://www.tool-welding.com/en/" },
+    { name: "로보월드 2026", tag: "11.4~7 · KINTEX", url: "https://www.robotworld.or.kr/" },
+    { name: "AW 2027", tag: "2027.3.3~5 · COEX", url: "https://automationworld.co.kr/" },
+    { name: "KORMARINE 2027", tag: "2027.10.19~22 · BEXCO", url: "https://www.kormarine.com/" }
+  ]
+};
+
+const PLAN = [
+  { when: "10월 (~10/31)", title: "사내 창구 확인", steps: [
+    "자동화 조직 — 협동로봇 보유·배치, 디든·KIRO 실증 계획 <span class='hint'>M1·L3·L7</span>",
+    "안전 부서 — 스콘챗 시범 결과, ISMP 조립공장 범위 <span class='hint'>S2·M6</span>",
+    "DX 조직 — 리옵스 시연 일정 <span class='hint'>M4</span>",
+    "정반·블록·공기 데이터의 MES 위치 확인 <span class='hint'>S1</span>"
+  ]},
+  { when: "11월", title: "시연·시범 3건 + PoC 1차", steps: [
+    "리옵스 시연에 조립4과 대조립 블록 포함 <span class='hint'>M4</span>",
+    "사내 협동로봇 1~2대 조립4과 시범 배치 협의 <span class='hint'>M1</span>",
+    "스콘챗 TBM 1개 조 2주 시범 <span class='hint'>S2</span>",
+    "정반 배치 PoC 1차 — 2주 실적으로 현행 vs 추천안 <span class='hint'>S1</span>"
+  ]},
+  { when: "12월", title: "실증 참여 + 내년 공고 대비", steps: [
+    "KIRO 중조립 실증 현장으로 조립4과 지원 의사 전달 <span class='hint'>L7</span>",
+    "협동로봇 시범 KPI 정리 — 1인 운용 대수·아크 타임·용접불량률 <span class='hint'>M1</span>",
+    "거제 사외협력사 1곳과 2027 지원사업 사전 협의 <span class='hint'>2026년엔 12월·3월 공고</span>",
+    "시범·PoC 결과 부 보고"
+  ]}
+];
+
+const DECISIONS = [
+  { q: "사내 협동로봇을 조립4과에 시범 배치 요청할지",
+    a: "당사 20여 대(2025-01 보도) vs HD현대 3사 170여 대(2025-12 보도). 격차가 명분이다. 시범 블록 2종·안전 동석·노사 공유를 같이 정해야 한다." },
+  { q: "리옵스·KIRO 실증에 조립4과를 현장으로 내놓을지",
+    a: "실증 기간에 블록 일정·작업 공간 일부를 내줘야 한다. 대신 장비·인력 부담 없이 결과를 먼저 받는다." },
+  { q: "업체·기관에 도면·MES 데이터를 어디까지 줄지",
+    a: "3D 스캔은 설계 3D 모델, 정반 최적화는 블록 일정이 필요하다. 정보보호 승인 범위가 없으면 시연이 화면 데모에서 멈춘다." }
+];
+
+const LIMITS = [
+  "<b>원문 미열람</b> — 조사 환경에서 기사·공식 사이트 접속이 막혀 검색엔진 요약문으로 확인했다. 숫자를 인용하기 전 출처 원문 대조 필요.",
+  "<b>사내 현황도 공개 보도 기준</b>이다. 시범 종료 여부·보유 대수·배치 공정은 사내 확인이 더 정확하다. 부서명은 추정하지 않고 비워뒀다.",
+  "효과 수치는 전부 회사·언론 발표치. 조립4과 적용 효과 추정·ROI는 넣지 않았다. 가격·도입비도 미조사.",
+  "사상(그라인딩) 로봇·잉크젯 취부선 마킹·스터드 용접·해외 장비사·사무 업무 생성형 AI는 근거를 못 찾았거나 조사하지 못했다.",
+  "진행 중 과제(품질 KPI 대시보드, R 사전경고, MES 질의·검사 브리핑, PAD 스케줄러, 스마트안전고리 발송)는 뺐다. S7만 R 사전경고 확장으로 넣었다."
+];
+
+/* =====================================================================
+   엔진부
+   ===================================================================== */
+const SZ = ["소","중","대"];
+const SZ_DESC = {
+  "소":"과 단위로 시작 · 설비·공정 변경 없음 · 소프트웨어나 소형 장비",
+  "중":"현장 장비 반입·업체 데모 필요 · 생산기술·안전·IT 협의",
+  "대":"라인·설비 투자 또는 R&D · 회사 차원 결정"
+};
+const CT_DESC = {"직접":"과가 직접 실행하거나 업체·기관에 직접 문의","경유":"사내 주관 부서 경유 — 이미 하는 부서에 붙기","회사":"회사 차원 결정, 또는 경쟁사 자체개발이라 구매 불가"};
+const OWN_DESC = {"운용":"삼성중공업 사내 운용 중 (공개 보도 기준)","시범":"사내 시범·시연·투입 예정 (또는 사내 타 현장)","없음":"사내 사례 못 찾음"};
+const ownB = o => o === "없음" ? `<span class="ow ow-없음" title="${OWN_DESC["없음"]}">미확인</span>` : `<span class="ow ow-${o}" title="${OWN_DESC[o]}">사내 ${o}</span>`;
+const PF_DESC = {"A":"현장 운용 확인 — 회사·공급사 공식 자료","B":"현장 운용 확인 — 언론 보도","C":"개발·시범·MOU 단계, 또는 조선 외 업종 적용","제안":"조선소 적용 근거 못 찾음 — 자체 제안"};
+const PF_LABEL = {"A":"운용 A","B":"운용 B","C":"시범 C","제안":"자체 제안"};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const szB = s => `<span class="bd sz-${s}">${s}</span>`;
+const ctB = c => `<span class="ct ct-${c}"><i></i>${c === "회사" ? "회사 차원" : c === "경유" ? "사내 경유" : "직접"}</span>`;
+const pfB = p => `<span class="pf pf-${p}" title="${esc(PF_DESC[p])}">${PF_LABEL[p]}</span>`;
+function tpl(s){
+  const cnt = {
+    N: ITEMS.length,
+    DIRECT: ITEMS.filter(i => i.contact === "직접").length,
+    VIA: ITEMS.filter(i => i.contact === "경유").length,
+    OWN: ITEMS.filter(i => i.own === "운용" || i.own === "시범").length,
+    OWN_RUN: ITEMS.filter(i => i.own === "운용").length,
+    OWN_PILOT: ITEMS.filter(i => i.own === "시범").length,
+    PROOF: ITEMS.filter(i => i.proof === "A" || i.proof === "B").length,
+    TOP: ITEMS.filter(i => i.top).length,
+    S: ITEMS.filter(i => i.size === "소").length,
+    M: ITEMS.filter(i => i.size === "중").length,
+    L: ITEMS.filter(i => i.size === "대").length
+  };
+  return String(s || "").replace(/\{(\w+)\}/g, (m, k) => k in cnt ? cnt[k] : m);
+}
+const ctColor = {"직접":"var(--good)","경유":"var(--warn)","회사":"var(--bad)"};
+const link = u => u ? `<a class="u" href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>` : "";
+
+function caseLine(it){
+  const c = it.cases && it.cases[0];
+  if(!c) return `<span class="case">조선소 적용 사례 미확인 · 자체 제안</span>`;
+  const more = it.cases.length > 1 ? ` 외 ${it.cases.length - 1}건` : "";
+  return `<span class="case"><b>${esc(c.who)}</b> ${esc(c.year)} · ${esc(c.short || c.what)}${more}</span>`;
+}
+
+function render(){
+  const app = document.getElementById("app");
+  const n = ITEMS.length;
+  const nProof = ITEMS.filter(i => i.proof === "A" || i.proof === "B").length;
+  const nOwn = ITEMS.filter(i => i.own === "운용" || i.own === "시범").length;
+  const nTop = ITEMS.filter(i => i.top).length;
+  const tops = ITEMS.filter(i => i.top);
+
+  const s1 = `
+  <section class="pg" id="s1" data-t="결론">
+    <div class="meta"><span><b>${esc(META.title)}</b> ${esc(META.rev)}</span><span>작성 ${esc(META.date)}</span><span>근거 ${esc(META.basis)}</span><span>범위 ${esc(META.scope)}</span></div>
+    <div class="eyebrow">01 · 결론</div>
+    <h1 class="ttl">${tpl(TEXT.h1)}</h1>
+    <p class="lead">${tpl(TEXT.l1)}</p>
+    <div class="tiles">
+      <div class="tile" style="border-top-color:var(--or)"><div class="n">${n}<small>건</small></div><div class="k">발굴 아이템 (소 ${ITEMS.filter(i=>i.size==="소").length} · 중 ${ITEMS.filter(i=>i.size==="중").length} · 대 ${ITEMS.filter(i=>i.size==="대").length})</div></div>
+      <div class="tile" style="border-top-color:var(--own)"><div class="n">${nOwn}<small>건</small></div><div class="k">삼성중공업 사내에 이미 있음 (운용·시범)</div></div>
+      <div class="tile" style="border-top-color:var(--good)"><div class="n">${nProof}<small>건</small></div><div class="k">조선소 현장 운용 확인 (운용 A·B)</div></div>
+      <div class="tile" style="border-top-color:var(--or)"><div class="n">${nTop}<small>건</small></div><div class="k">우선 추진 추천 (★)</div></div>
+    </div>
+    <div class="row" style="flex-wrap:wrap">
+      <div class="card lb" style="flex:1.5;min-width:300px">
+        <h3 style="font-size:14.5px;margin-bottom:8px">우선 추진 ★ — 클릭하면 상세</h3>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${tops.map(i => `<div class="chip top" tabindex="0" data-id="${i.id}"><i style="background:${ctColor[i.contact]}"></i><div><b>${esc(i.name)}</b> ${szB(i.size)} ${i.own !== "없음" ? ownB(i.own) : ""} <span class="hint">· ${esc(i.why || "")}</span><div class="hint" style="margin-top:2px">첫 액션 → <span style="color:var(--tx)">${esc(i.firstShort || "")}</span></div></div></div>`).join("")}
+        </div>
+      </div>
+      <div class="card" style="flex:1;min-width:260px">
+        <h3 style="font-size:14.5px;margin-bottom:6px">판정 기준</h3>
+        <div style="font-size:12.3px;line-height:1.45;display:flex;flex-direction:column;gap:2px">
+          ${SZ.map(s => `<div>${szB(s)} <span class="hint">${SZ_DESC[s]}</span></div>`).join("")}
+          <div style="margin-top:4px">${Object.keys(CT_DESC).map(c => `${ctB(c)} <span class="hint">${CT_DESC[c]}</span>`).join("<br>")}</div>
+          <div style="margin-top:3px">${Object.keys(PF_DESC).map(p => `${pfB(p)} <span class="hint">${PF_DESC[p]}</span>`).join("<br>")}</div>
+          <div style="margin-top:3px">${Object.keys(OWN_DESC).map(o => `${ownB(o)} <span class="hint">${OWN_DESC[o]}</span>`).join("<br>")}</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:10px 14px">
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:4px">이 보고서가 못 하는 것</div>
+      <ul class="lim">${LIMITS.map(l => `<li>${l}</li>`).join("")}</ul>
+    </div>
+    <div class="pgno">1 / 5 · PageDown으로 다음 장</div>
+  </section>`;
+
+  const s2 = `
+  <section class="pg" id="s2" data-t="아이템 지도">
+    <div class="eyebrow">02 · 아이템 지도</div>
+    <h2 class="ttl">${tpl(TEXT.h2)}</h2>
+    <p class="lead">${tpl(TEXT.l2)}</p>
+    <div class="legend">
+      <span>칩 색 = 컨택 경로</span>${Object.keys(CT_DESC).map(c => ctB(c)).join("")}
+      <span>${ownB("운용")} ${ownB("시범")} = 삼성중공업 사내에 이미 있음</span>
+      <span><span class="star">▌</span> 왼쪽 오렌지 띠 = 우선 추진 ★</span>
+      <span class="hint">칩 클릭 → 사례·출처·연락처</span>
+    </div>
+    <div class="mapwrap"><div class="map" style="--cols:${AREAS.length}">
+      <div></div>${AREAS.map(a => `<div class="hd">${esc(a)}</div>`).join("")}
+      ${SZ.map(s => `
+        <div class="rh" style="background:${s==="소"?"rgba(255,160,92,.15)":s==="중"?"rgba(76,134,198,.18)":"rgba(143,163,184,.15)"};color:${s==="소"?"var(--sz-s)":s==="중"?"#7FB0E6":"#C3D0DC"}">${s}</div>
+        ${AREAS.map(a => `<div class="cell">${ITEMS.filter(i => i.size === s && i.area === a).map(i =>
+          `<div class="chip${i.top ? " top" : ""}" tabindex="0" data-id="${i.id}"><i style="background:${ctColor[i.contact]}"></i><span>${esc(i.short || i.name)}${i.own !== "없음" ? " " + ownB(i.own) : ""}</span></div>`).join("")}</div>`).join("")}
+      `).join("")}
+    </div></div>
+    <div class="pgno">2 / 5</div>
+  </section>`;
+
+  const rowsFor = s => ITEMS.filter(i => i.size === s).map(i => `
+    <tr tabindex="0" data-id="${i.id}" data-sz="${s}">
+      <td style="width:27%"><div class="nm">${i.top ? '<span class="star">★ </span>' : ""}${esc(i.name)}<small>${esc(i.area)} · ${esc(i.one)}</small></div></td>
+      <td style="width:8%">${pfB(i.proof)}</td>
+      <td style="width:9%">${ownB(i.own)}</td>
+      <td class="hide-m" style="width:30%">${caseLine(i)}</td>
+      <td style="width:10%">${ctB(i.contact)}</td>
+      <td class="hide-m" style="width:16%;font-size:12.5px;color:var(--sub)">${esc(i.firstShort || "")}</td>
+    </tr>`).join("");
+
+  const s3 = `
+  <section class="pg" id="s3" data-t="아이템 목록">
+    <div class="eyebrow">03 · 아이템 목록 (소 → 중 → 대)</div>
+    <h2 class="ttl">${tpl(TEXT.h3)}</h2>
+    <p class="lead">${tpl(TEXT.l3)}</p>
+    <div class="tabs" role="tablist">${SZ.map((s, k) => `<button class="tab" role="tab" aria-selected="${k===0}" data-sz="${s}">${s} 아이템 ${ITEMS.filter(i=>i.size===s).length}건</button>`).join("")}<span class="hint" style="align-self:center;margin-left:8px">${SZ_DESC["소"]}</span></div>
+    <div class="card" style="padding:4px 10px">
+      <table class="it"><thead><tr><th>아이템</th><th>조선 사례</th><th>당사</th><th class="hide-m">대표 적용사례</th><th>컨택</th><th class="hide-m">첫 액션</th></tr></thead>
+      <tbody>${SZ.map(rowsFor).join("")}</tbody></table>
+    </div>
+    <div class="hint">행 클릭 → 사례 원문 출처·공급사 연락 채널·선행 조건</div>
+    <div class="pgno">3 / 5</div>
+  </section>`;
+
+  const dom = u => u.replace(/^https?:\/\//, "").split("/")[0];
+  const chList = arr => (arr || []).map(c => `<li><b>${esc(c.name)}</b>${c.tag ? ` <span class="hint">· ${esc(c.tag)}</span>` : ""}<div class="s">${c.desc || ""}${c.url ? ` · <a href="${esc(c.url)}" target="_blank" rel="noopener" title="${esc(c.url)}">${esc(dom(c.url))}</a>` : ""}</div></li>`).join("");
+  const s4 = `
+  <section class="pg" id="s4" data-t="컨택 통로">
+    <div class="eyebrow">04 · 직접 연락해서 진행할 수 있는가</div>
+    <h2 class="ttl">${tpl(TEXT.h4)}</h2>
+    <p class="lead">${tpl(TEXT.l4)}</p>
+    <div class="card lb inhouse"><b>연락 전에 걸러야 할 3가지</b>${CHANNELS.inhouse.map((t, k) => `<span>${k+1}. ${t}</span>`).join("")}</div>
+    <div class="cols3">
+      <div class="card cl own-col"><h3>① 사내 창구 — 먼저 <span class="hint">부서명은 사내 확인</span></h3><ul>${chList(CHANNELS.internal)}</ul></div>
+      <div class="card cl"><h3>② 외부 공급사 <span class="hint">공식 사이트 · 전화·메일 미확인</span></h3><ul>${chList(CHANNELS.vendor)}</ul></div>
+      <div class="card cl"><h3>③ 기관·지원사업</h3><ul>${chList(CHANNELS.org)}</ul></div>
+    </div>
+    <div class="expo"><b>전시회</b>${CHANNELS.expo.map(e => `<span><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.name)}</a> <span class="hint">${esc(e.tag)}</span></span>`).join("")}<span class="hint">BEXCO는 거제에서 가깝고, KINTEX는 출장 필요</span></div>
+    <div class="pgno">4 / 5</div>
+  </section>`;
+
+  const s5 = `
+  <section class="pg" id="s5" data-t="실행 순서">
+    <div class="eyebrow">05 · 실행 순서와 결정 필요 사항</div>
+    <h2 class="ttl">${tpl(TEXT.h5)}</h2>
+    <p class="lead">${tpl(TEXT.l5)}</p>
+    <div class="plan">${PLAN.map(p => `<div class="card lb"><div class="when">${esc(p.when)}</div><h3>${esc(p.title)}</h3><ol>${p.steps.map(s => `<li>${s}</li>`).join("")}</ol></div>`).join("")}</div>
+    <div class="eyebrow" style="margin-top:4px">결정 필요 3건</div>
+    <div class="dec">${DECISIONS.map((d, k) => `<div class="card"><div class="q">${k+1}. ${esc(d.q)}</div><div class="a">${d.a}</div></div>`).join("")}</div>
+    <div class="pgno">5 / 5</div>
+  </section>`;
+
+  const appendix = `<div class="print-only"><h2>부록 · 아이템 상세와 출처</h2>${ITEMS.map(detailHTML).join("<hr>")}</div>`;
+  app.innerHTML = s1 + s2 + s3 + s4 + s5 + appendix;
+}
+
+function detailHTML(it){
+  const cases = (it.cases || []).map(c => `<div class="cs"><b>${esc(c.who)}</b> · ${esc(c.year)}<br>${esc(c.what)}${c.effect ? `<br><span class="hint">공개 효과: ${esc(c.effect)}</span>` : ""}<span class="src">${c.srcName ? esc(c.srcName) + " — " : ""}${link(c.src)}</span></div>`).join("")
+    || `<div class="cs">국내 조선 적용사례 미확인. ${esc(it.noCaseNote || "")}</div>`;
+  const vend = (it.vendors || []).map(v => `<div class="vd"><b>${esc(v.name)}</b> <span class="hint">${esc(v.ch || "")}</span>${v.url ? "<br>" + link(v.url) : ""}</div>`).join("")
+    || `<div class="vd hint">${esc(it.noVendorNote || "외부 공급사 불필요 — 사내 데이터·SOLA API로 자체 개발")}</div>`;
+  return `
+    <div class="eyebrow">${esc(it.area)} · ${esc(it.id)}</div>
+    <h2 id="mdT">${it.top ? '<span class="star">★ </span>' : ""}${esc(it.name)}</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${szB(it.size)} ${ctB(it.contact)} ${pfB(it.proof)} ${ownB(it.own)}</div>
+    <h4>무엇을</h4><p>${it.what || esc(it.one)}</p>
+    <h4>삼성중공업 사내 현황</h4><p>${it.ownNote ? esc(it.ownNote) : "공개 보도에서 사내 사례를 찾지 못했다. 사내 확인 필요."}</p>
+    <h4>실제 적용사례</h4>${cases}
+    <h4>조립공장 적용 시나리오</h4><p>${it.apply || ""}</p>
+    <h4>누구에게 · 어떻게 연락하나 (사내 → 외부 순)</h4>${vend}<p style="margin-top:6px"><b>첫 액션</b> — ${it.first || ""}</p>
+    <h4>선행 조건 · 걸리는 것</h4><p>${it.risk || ""}</p>
+    <p class="hint" style="margin-top:14px;border-top:1px solid var(--line);padding-top:8px">수치는 출처 표기 그대로(회사·언론 발표). 원문 미열람 — 인용 전 링크 원문 대조.</p>`;
+}
+
+/* modal */
+const mb = document.getElementById("mb"), md = document.getElementById("md");
+let lastFocus = null;
+function openItem(id){
+  const it = ITEMS.find(i => i.id === id); if(!it) return;
+  lastFocus = document.activeElement;
+  md.innerHTML = `<button class="x" aria-label="닫기">×</button>` + detailHTML(it);
+  mb.classList.add("on"); md.scrollTop = 0; md.querySelector(".x").focus();
+}
+function closeModal(){ mb.classList.remove("on"); if(lastFocus) lastFocus.focus(); }
+mb.addEventListener("click", e => { if(e.target === mb || e.target.classList.contains("x")) closeModal(); });
+
+/* tabs */
+function setTab(s){
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.dataset.sz === s));
+  document.querySelectorAll("table.it tbody tr").forEach(r => r.style.display = r.dataset.sz === s ? "" : "none");
+  const h = document.querySelector(".tabs .hint"); if(h) h.textContent = SZ_DESC[s];
+}
+
+/* nav */
+function secs(){ return [...document.querySelectorAll("section.pg")]; }
+function curIdx(){
+  const y = window.scrollY + window.innerHeight * 0.4; let k = 0;
+  secs().forEach((s, i) => { if(s.offsetTop <= y) k = i; }); return k;
+}
+function go(i){ const s = secs(); i = Math.max(0, Math.min(s.length - 1, i)); s[i].scrollIntoView({behavior:"smooth"}); }
+function syncNav(){
+  const k = curIdx(), s = secs();
+  document.querySelectorAll("#dots button").forEach((b, i) => b.classList.toggle("on", i === k));
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById("prog").style.width = (max > 0 ? window.scrollY / max * 100 : 0) + "%";
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-id]"); if(t && !mb.classList.contains("on")) { openItem(t.dataset.id); return; }
+  const tb = e.target.closest(".tab"); if(tb) setTab(tb.dataset.sz);
+});
+document.addEventListener("keydown", e => {
+  if(mb.classList.contains("on")){ if(e.key === "Escape") closeModal(); return; }
+  const tag = (e.target.tagName || "").toLowerCase();
+  if(tag === "input" || tag === "textarea" || e.target.isContentEditable) return;
+  if(e.key === "Enter" && e.target.dataset && e.target.dataset.id){ openItem(e.target.dataset.id); return; }
+  if(window.matchMedia("(max-width:900px)").matches) return;
+  if(e.key === "PageDown" || (e.key === " " && !e.shiftKey)){ e.preventDefault(); go(curIdx() + 1); }
+  else if(e.key === "PageUp" || (e.key === " " && e.shiftKey)){ e.preventDefault(); go(curIdx() - 1); }
+  else if(e.key === "Home"){ e.preventDefault(); go(0); }
+  else if(e.key === "End"){ e.preventDefault(); go(secs().length - 1); }
+});
+window.addEventListener("scroll", syncNav, {passive:true});
+window.addEventListener("beforeprint", () => document.querySelectorAll("table.it tbody tr").forEach(r => r.style.display = ""));
+window.addEventListener("afterprint", () => setTab(document.querySelector('.tab[aria-selected="true"]')?.dataset.sz || "소"));
+
+render();
+document.getElementById("dots").innerHTML = secs().map((s, i) => `<button aria-label="${i+1}장 ${esc(s.dataset.t)}" title="${esc(s.dataset.t)}"></button>`).join("");
+document.querySelectorAll("#dots button").forEach((b, i) => b.addEventListener("click", () => go(i)));
+setTab("소"); syncNav();
+</script>
+</body>
+</html>
