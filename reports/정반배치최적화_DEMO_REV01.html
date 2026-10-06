@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>정반 배치 최적화 DEMO</title>
+<style>
+/* ===== 디자인 토큰 (조립과 공통 디자인 언어) ===== */
+:root{
+  --bg:#0A1A2F; --card:#16263D; --card2:#1d3150; --line:#27405f;
+  --tx:#FFFFFF; --sub:#AAB7C4; --mut:#7f93a8; --or:#FF6B1A;
+  --ok:#4C86C6;   /* 요구일 안에 끝난 블록 */
+  --late:#E0604A; /* 요구일을 넘긴 블록 (어두운 배경 대비 3:1 이상 검증) */
+  --good:#2c8a5f; --bad:#b3402a; --ink:#0A1A2F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx)}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;line-height:1.45;word-break:keep-all;overflow-wrap:break-word;padding:12px 16px 10px;min-height:100vh}
+button,select{font:inherit}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.demo{display:inline-block;background:var(--or);color:var(--ink);font-weight:800;font-size:11px;padding:1px 8px;border-radius:4px;margin-bottom:4px;letter-spacing:.3px}
+h1{font-size:19px;font-weight:800;text-wrap:balance}
+.lead{color:var(--sub);font-size:12.5px;margin-top:2px}
+.ctrl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ctrl label{color:var(--sub);font-size:12px}
+.ctrl select{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:5px 6px}
+.btn{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--sub)}
+.btn.pri{background:var(--or);border-color:var(--or);color:var(--ink);font-weight:800}
+.btn:disabled{opacity:.5;cursor:default}
+.seed{color:var(--mut);font-size:11.5px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+.kpi{background:var(--card);border-radius:8px;padding:7px 11px;border-top:3px solid var(--line)}
+.kpi .k{color:var(--sub);font-size:11.5px}
+.kpi .v{font-size:19px;font-weight:800;margin-top:1px;white-space:nowrap}
+.kpi .v .a{color:var(--sub);font-weight:600;font-size:15px}
+.kpi .v .arr{color:var(--mut);font-weight:400;margin:0 4px;font-size:14px}
+.kpi .v .u{color:var(--sub);font-size:11.5px;font-weight:400;margin-left:2px}
+.kpi .d{font-size:11.5px;color:var(--sub);margin-top:1px;display:flex;align-items:center;gap:5px;min-height:17px}
+.kpi .d i{display:inline-block;width:9px;height:9px;border-radius:2px}
+.kpi.up{border-top-color:var(--good)} .kpi.dn{border-top-color:var(--bad)}
+.panel{background:var(--card);border-radius:8px;padding:7px 10px 4px;margin-bottom:8px;position:relative}
+.ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.ph b{font-size:13.5px}
+.ph .hint{color:var(--sub);font-size:11.5px}
+.ph .tag{margin-left:auto;color:var(--sub);font-size:11.5px}
+.prog{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:2px 0 3px}
+.prog i{display:block;height:100%;width:0;background:var(--or);transition:width .1s}
+svg.ch{display:block;width:100%;overflow:visible}
+.blk{cursor:pointer}
+svg.dim .blk{opacity:.28}
+svg.dim .blk.on{opacity:1}
+.empty{position:absolute;left:0;right:0;top:36px;bottom:0;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:13px;pointer-events:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;color:var(--sub);font-size:11.5px;margin:0 2px 6px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{display:inline-block;width:14px;height:10px;border-radius:2px}
+.tbl{background:var(--card);border-radius:8px;padding:6px 10px;max-height:230px;overflow:auto;margin-bottom:8px}
+.tbl table{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{position:sticky;top:0;background:var(--card);color:var(--sub);font-weight:600;text-align:right;padding:4px 6px;border-bottom:1px solid var(--line)}
+.tbl td{text-align:right;padding:3px 6px;border-bottom:1px solid rgba(39,64,95,.55);font-variant-numeric:tabular-nums}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td.lt{color:#ffb3a5;font-weight:700}
+.side{display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border-radius:8px;padding:9px 12px;border-left:3px solid var(--or)}
+.card h3{font-size:13px;margin-bottom:4px}
+.card p,.card li{color:var(--sub);font-size:12px}
+.card ol,.card ul{padding-left:16px;display:flex;flex-direction:column;gap:2px}
+.card b{color:var(--tx);font-weight:600}
+.card.plain{border-left-color:var(--line)}
+.foot{color:var(--mut);font-size:11px;margin-top:4px}
+.tip{position:fixed;pointer-events:none;background:#0f1f36;border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:12px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.35);display:none;z-index:10;min-width:170px}
+.tip .t{font-weight:800;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--sub)}
+.tip .r b{color:var(--tx);font-weight:600}
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media print{
+  html,body{background:#fff;color:#111}
+  .card,.panel,.kpi,.tbl{background:#fff;border:1px solid #ccd}
+  .ctrl,.tip{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <span class="demo">DEMO · 예시 데이터</span>
+    <h1>정반 배치 최적화 — 투입 순서만 바꿔도 지연이 줄어드는가</h1>
+    <p class="lead">가짜 블록으로 만든 체감용 화면이다. 위가 지금 방식, 아래가 최적화이고 배치 규칙은 같고 블록 투입 순서만 다르다.</p>
+  </div>
+  <div class="ctrl">
+    <label for="nSel">블록 수</label>
+    <select id="nSel"><option>24</option><option selected>30</option><option>36</option></select>
+    <button class="btn" id="btnNew">데이터 새로 만들기</button>
+    <button class="btn pri" id="btnRun">▶ 최적화 실행</button>
+    <button class="btn" id="btnTbl" aria-pressed="false">표로 보기</button>
+    <span class="seed" id="seedLbl"></span>
+  </div>
+</header>
+
+<main class="grid">
+  <section>
+    <div class="kpis" id="kpis"></div>
+    <div class="panel">
+      <div class="ph"><b>지금 방식</b><span class="hint">착수 가능한 순서대로, 가장 먼저 비는 자리에 놓는다</span></div>
+      <svg class="ch" id="svgA" role="img" aria-label="지금 방식 정반 배치도"></svg>
+    </div>
+    <div class="panel">
+      <div class="ph"><b>최적화</b><span class="hint">같은 규칙으로 놓되, 지연이 가장 적어지는 투입 순서를 찾는다</span><span class="tag" id="itLbl"></span></div>
+      <div class="prog"><i id="bar"></i></div>
+      <svg class="ch" id="svgB" role="img" aria-label="최적화 정반 배치도"></svg>
+      <div class="empty" id="emptyB">▶ 최적화 실행을 누르면 여기에 배치가 그려진다</div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--ok)"></i>요구일 안에 완료</span>
+      <span><i class="sw" style="background:var(--late)"></i>요구일 넘김 (빗금 = 넘긴 기간)</span>
+      <span>가로 = 날짜(D+일) · 세로 = 정반 길이 방향 위치(m) · 블록에 마우스를 올리면 양쪽에서 같은 블록이 표시된다</span>
+    </div>
+    <div class="tbl" id="tbl" hidden></div>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h3>이 화면이 보여주는 것</h3>
+      <p>같은 블록·같은 정반·같은 배치 규칙에서 <b>투입 순서만</b> 바꿨다. 지연이 줄어든 만큼이 순서를 사람이 정할 때 놓치는 몫이다.</p>
+    </div>
+    <div class="card">
+      <h3>실데이터로 가는 순서</h3>
+      <ol>
+        <li>MES에서 블록 길이·작업일수·착수 가능일·요구일, 정반 크기를 뽑는다</li>
+        <li>지난 3~6개월 실적으로 <b>실제 배치 vs 최적 배치</b>를 다시 계산한다</li>
+        <li>차이(지연 블록·정반 점유율)를 대시보드에 띄운다</li>
+        <li>주간 추천 배치안을 반장이 확인하고 쓴다</li>
+      </ol>
+    </div>
+    <div class="card plain">
+      <h3>데모에 빠진 것</h3>
+      <ul>
+        <li>크레인 동선·반전 공간·통로 제약</li>
+        <li>블록 폭(실제는 정반 위 2차원 배치)</li>
+        <li>작업반 인원·자재 지연·설계 변경</li>
+        <li>실제 엔진은 Python OR-Tools CP-SAT(무료). 데모는 브라우저용 간이 탐색이다</li>
+      </ul>
+    </div>
+    <div class="card plain">
+      <h3>먼저 확인할 것</h3>
+      <ul>
+        <li>에스야드 블록 스케줄링이 조립 정반 단위까지 하는지</li>
+        <li>실제 정반 위치가 MES에 남는지 (없으면 수기 수집부터)</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+<footer class="foot">예시 데이터로 만든 체감용 화면이다. 화면의 숫자는 실제 효과가 아니다. 실데이터 연결 지점은 소스의 genData()이다.</footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+/* ==========================================================================
+   설정 블록 — 정반·데이터 조건은 여기만 바꾼다
+   실데이터 전환 시: genData() 대신 MES에서 뽑은 블록 목록을 같은 형식으로 넣는다
+   형식: {id, len(m), dur(일), rel(착수 가능일), due(요구일)}
+   ========================================================================== */
+const CFG = {
+  bays: [{ name: "정반 1", L: 48 }, { name: "정반 2", L: 48 }, { name: "정반 3", L: 40 }, { name: "정반 4", L: 40 }],
+  lens: [8, 10, 12, 12, 14, 16, 16, 18, 20, 24],  // 블록 점유 길이 후보(m)
+  durMin: 4, durMax: 12,                         // 작업일수 범위
+  relSpan: 30,                                   // 착수 가능일이 몰리는 기간(일)
+  slackMax: 7,                                   // 요구일 여유 최대(일)
+  iters: 3000, chunk: 60,                        // 탐색 반복 수 / 한 프레임 반복 수
+  minLateForDemo: 3                              // 새 데이터는 지금 방식 지연이 이 이상인 것만
+};
+
+/* ===== 엔진 ===== */
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+function genData(seed, n) { // 실데이터 연결 지점: 이 함수의 반환값만 MES 데이터로 바꾸면 된다
+  const r = rng(seed), B = [];
+  for (let i = 0; i < n; i++) {
+    const len = CFG.lens[Math.floor(r() * CFG.lens.length)];
+    const dur = CFG.durMin + Math.floor(r() * (CFG.durMax - CFG.durMin + 1));
+    const rel = Math.floor(r() * r() * CFG.relSpan);
+    const slack = 1 + Math.floor(r() * CFG.slackMax);
+    B.push({ len, dur, rel, due: rel + dur + slack });
+  }
+  B.sort((a, b) => a.rel - b.rel || a.due - b.due);
+  B.forEach((b, i) => b.id = "B" + String(i + 1).padStart(2, "0"));
+  return B;
+}
+
+// 같은 규칙: 순서대로 하나씩, 가장 일찍 시작할 수 있는 정반·자리(먼저 비는 곳, 정반 번호 순)
+function decode(order, B) {
+  const P = CFG.bays.map(() => []), out = new Array(B.length);
+  for (const k of order) {
+    const b = B[k]; let best = null;
+    CFG.bays.forEach((bay, bi) => {
+      if (bay.L < b.len) return;
+      const ps = P[bi];
+      const T = [b.rel, ...ps.map(p => p.t1).filter(t => t > b.rel)].sort((x, y) => x - y);
+      for (const t of T) {
+        if (best && t >= best.t) break;
+        const X = [0, ...ps.map(p => p.x1)].filter(x => x + b.len <= bay.L).sort((x, y) => x - y);
+        let fx = null;
+        for (const x of X) {
+          let ok = true;
+          for (const p of ps) { if (p.t0 < t + b.dur && t < p.t1 && p.x0 < x + b.len && x < p.x1) { ok = false; break; } }
+          if (ok) { fx = x; break; }
+        }
+        if (fx !== null) { if (!best || t < best.t) best = { bi, t, x: fx }; break; }
+      }
+    });
+    const p = { k, bi: best.bi, t0: best.t, t1: best.t + b.dur, x0: best.x, x1: best.x + b.len };
+    P[best.bi].push(p); out[k] = p;
+  }
+  return out;
+}
+
+function metrics(pl, B) {
+  let late = 0, tard = 0, mk = 0, wait = 0, area = 0;
+  B.forEach((b, k) => { const p = pl[k], d = Math.max(0, p.t1 - b.due); if (d > 0) late++; tard += d; mk = Math.max(mk, p.t1); wait += p.t0 - b.rel; area += b.len * b.dur; });
+  const cap = CFG.bays.reduce((s, x) => s + x.L, 0) * mk;
+  return { late, tard, mk, wait: wait / B.length, occ: area / cap };
+}
+const score = m => m.tard * 10 + m.late * 30 + m.mk;
+
+/* ===== 상태 ===== */
+let S = { seed: 0, B: [], base: null, baseM: null, opt: null, optM: null, running: false, it: 0 };
+const $ = id => document.getElementById(id);
+
+function newData(seed) {
+  const n = +$("nSel").value;
+  let s = seed, tries = 0, B, base, bm;
+  do { // 지금 방식에서도 지연이 생기는 데이터만 쓴다 (지연이 없으면 비교할 게 없음)
+    B = genData(s, n); base = decode(B.map((_, i) => i), B); bm = metrics(base, B);
+    if (bm.late >= CFG.minLateForDemo) break;
+    s = (s * 48271) % 2147483647; tries++;
+  } while (tries < 40);
+  S = { seed: s, B, base, baseM: bm, opt: null, optM: null, running: false, it: 0 };
+  $("seedLbl").textContent = "데이터 #" + s;
+  $("bar").style.width = "0"; $("itLbl").textContent = ""; $("emptyB").style.display = "flex";
+  $("btnRun").disabled = false;
+  render();
+}
+
+function runOpt() {
+  if (S.running) return;
+  S.running = true; $("btnRun").disabled = true; $("btnNew").disabled = true; $("emptyB").style.display = "none";
+  const B = S.B, r = rng(S.seed + 7), n = B.length, T0 = 200;
+  let cur = B.map((_, i) => i), cp = S.base, cm = S.baseM, cs = score(cm);
+  let best = cp, bm = cm, bs = cs, it = 0;
+  S.opt = best; S.optM = bm; render();
+  const step = () => {
+    const end = Math.min(CFG.iters, it + CFG.chunk);
+    for (; it < end; it++) {
+      const T = T0 * Math.pow(0.002, it / CFG.iters);
+      const nx = cur.slice(), i = Math.floor(r() * n), j = Math.floor(r() * n);
+      if (r() < 0.5) { [nx[i], nx[j]] = [nx[j], nx[i]]; } else { const [v] = nx.splice(i, 1); nx.splice(j, 0, v); }
+      const pl = decode(nx, B), m = metrics(pl, B), s = score(m);
+      if (s < cs || r() < Math.exp((cs - s) / T)) { cur = nx; cs = s; cm = m; if (s < bs) { bs = s; best = pl; bm = m; } }
+    }
+    S.opt = best; S.optM = bm; S.it = it;
+    $("bar").style.width = (100 * it / CFG.iters) + "%";
+    $("itLbl").textContent = "순서 " + it.toLocaleString() + " / " + CFG.iters.toLocaleString() + "가지 시도";
+    render();
+    if (it < CFG.iters) requestAnimationFrame(step);
+    else { S.running = false; $("btnNew").disabled = false; $("itLbl").textContent = "순서 " + CFG.iters.toLocaleString() + "가지 시도 · 완료"; }
+  };
+  requestAnimationFrame(step);
+}
+
+/* ===== 그리기 ===== */
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+function horizon() {
+  let mk = S.baseM ? S.baseM.mk : 30;
+  if (S.optM) mk = Math.max(mk, S.optM.mk);
+  S.B.forEach(b => { mk = Math.max(mk, b.due); });
+  return Math.max(30, Math.ceil((mk + 1) / 5) * 5);
+}
+
+function drawChart(svg, pl, key) {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  const W = svg.clientWidth || svg.parentNode.clientWidth - 20;
+  const LBL = 64, AX = 18, GAP = 6, K = 0.9; // K: px per m
+  const H = horizon(), ppd = (W - LBL - 6) / H;
+  let y = 2; const lanes = CFG.bays.map(b => { const h = b.L * K, o = { top: y, h }; y += h + GAP; return o; });
+  const plotH = y - GAP, totalH = plotH + AX;
+  svg.setAttribute("viewBox", `0 0 ${W} ${totalH}`); svg.setAttribute("height", totalH);
+  const defs = el("defs", {}, svg);
+  const pat = el("pattern", { id: "hatch" + key, width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+  el("rect", { width: 6, height: 6, fill: "transparent" }, pat);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "#0A1A2F", "stroke-width": 2.2, "stroke-opacity": .55 }, pat);
+  // 정반 바탕 + 라벨
+  CFG.bays.forEach((b, i) => {
+    const ln = lanes[i];
+    el("rect", { x: LBL, y: ln.top, width: W - LBL - 6, height: ln.h, fill: "#1d3150", rx: 3 }, svg);
+    const t1 = el("text", { x: 0, y: ln.top + ln.h / 2 - 2, fill: "#FFFFFF", "font-size": 12, "font-weight": 600 }, svg); t1.textContent = b.name;
+    const t2 = el("text", { x: 0, y: ln.top + ln.h / 2 + 12, fill: "#AAB7C4", "font-size": 10.5 }, svg); t2.textContent = b.L + "m";
+  });
+  // 날짜 눈금
+  const step = H > 60 ? 10 : 5;
+  for (let d = 0; d <= H; d += step) {
+    const x = LBL + d * ppd;
+    el("line", { x1: x, y1: 0, x2: x, y2: plotH, stroke: "#27405f", "stroke-width": 1 }, svg);
+    const t = el("text", { x, y: plotH + 13, fill: "#AAB7C4", "font-size": 10.5, "text-anchor": d === 0 ? "start" : (d >= H ? "end" : "middle") }, svg);
+    t.textContent = "D+" + d;
+  }
+  if (!pl) return;
+  // 블록
+  S.B.forEach((b, k) => {
+    const p = pl[k], ln = lanes[p.bi];
+    const x = LBL + p.t0 * ppd + 1, w = Math.max(2, b.dur * ppd - 2);
+    const yy = ln.top + p.x0 * K + 1, h = Math.max(2, b.len * K - 2);
+    const isLate = p.t1 > b.due;
+    const g = el("g", { class: "blk", "data-id": b.id, "data-k": k }, svg);
+    el("rect", { x, y: yy, width: w, height: h, rx: 2, fill: isLate ? "#E0604A" : "#4C86C6" }, g);
+    if (isLate) {
+      const dx = LBL + b.due * ppd;
+      el("rect", { x: Math.max(x, dx), y: yy, width: Math.max(0, x + w - Math.max(x, dx)), height: h, fill: `url(#hatch${key})` }, g);
+    }
+    if (w >= 28 && h >= 12) {
+      const t = el("text", { x: x + w / 2, y: yy + h / 2 + 3.5, fill: "#0A1A2F", "font-size": 10, "font-weight": 700, "text-anchor": "middle", "pointer-events": "none" }, g);
+      t.textContent = b.id;
+    }
+  });
+}
+
+function fmtDelta(a, b, unit, betterLow, digits) {
+  if (b === null || b === undefined) return { cls: "", html: "<span>최적화 실행 전</span>" };
+  const d = +(b - a).toFixed(digits || 0);
+  if (d === 0) return { cls: "", html: "<span>변화 없음</span>" };
+  const improved = betterLow ? d < 0 : d > 0;
+  const word = improved ? (betterLow ? "줄어듦" : "늘어남") : (betterLow ? "늘어남" : "줄어듦");
+  return { cls: improved ? "up" : "dn", html: `<i style="background:${improved ? "var(--good)" : "var(--bad)"}"></i><span>${improved ? "개선" : "악화"} · ${Math.abs(d)}${unit} ${word}</span>` };
+}
+
+function renderKpis() {
+  const a = S.baseM, b = S.optM;
+  const rows = [
+    { k: "요구일 넘긴 블록", av: a.late, bv: b ? b.late : null, u: "개", low: true },
+    { k: "넘긴 날짜 합계", av: a.tard, bv: b ? b.tard : null, u: "일", low: true },
+    { k: "착수 가능일부터 평균 대기", av: a.wait.toFixed(1), bv: b ? b.wait.toFixed(1) : null, u: "일", low: true, dg: 1 },
+    { k: "정반 점유율", av: Math.round(a.occ * 100), bv: b ? Math.round(b.occ * 100) : null, u: "%", low: false }
+  ];
+  $("kpis").innerHTML = rows.map(r => {
+    const dl = fmtDelta(r.av, r.bv, r.u === "%" ? "%p" : r.u, r.low, r.dg);
+    const bvTxt = r.bv === null ? "—" : r.bv;
+    return `<div class="kpi ${dl.cls}"><div class="k">${r.k}</div>
+      <div class="v"><span class="a">${r.av}</span><span class="arr">→</span>${bvTxt}<span class="u">${r.u}</span></div>
+      <div class="d">${dl.html}</div></div>`;
+  }).join("");
+}
+
+function renderTable() {
+  const box = $("tbl"); if (box.hidden) return;
+  const head = "<tr><th>블록</th><th>길이(m)</th><th>일수</th><th>착수 가능</th><th>요구일</th><th>지금 방식 정반·시작</th><th>지금 방식 넘김</th><th>최적화 정반·시작</th><th>최적화 넘김</th></tr>";
+  const rows = S.B.map((b, k) => {
+    const p = S.base[k], q = S.opt ? S.opt[k] : null;
+    const la = Math.max(0, p.t1 - b.due), lb = q ? Math.max(0, q.t1 - b.due) : null;
+    return `<tr><td>${b.id}</td><td>${b.len}</td><td>${b.dur}</td><td>D+${b.rel}</td><td>D+${b.due}</td>
+      <td>${p.bi + 1} · D+${p.t0}</td><td class="${la ? "lt" : ""}">${la ? la + "일" : "—"}</td>
+      <td>${q ? (q.bi + 1) + " · D+" + q.t0 : "실행 전"}</td><td class="${lb ? "lt" : ""}">${lb === null ? "—" : (lb ? lb + "일" : "—")}</td></tr>`;
+  }).join("");
+  box.innerHTML = `<table><caption style="text-align:left;color:var(--sub);font-size:11.5px;padding-bottom:4px">블록별 배치·넘긴 날짜 (예시 데이터)</caption><thead>${head}</thead><tbody>${rows}</tbody></table>`;
+}
+
+function render() {
+  drawChart($("svgA"), S.base, "A");
+  drawChart($("svgB"), S.opt, "B");
+  renderKpis(); renderTable();
+}
+
+/* ===== 호버: 양쪽 같은 블록 강조 + 툴팁 ===== */
+function bindHover(svg, which) {
+  svg.addEventListener("mousemove", e => {
+    const g = e.target.closest(".blk"); const tip = $("tip");
+    if (!g) { clearHl(); tip.style.display = "none"; return; }
+    const k = +g.dataset.k, b = S.B[k];
+    ["svgA", "svgB"].forEach(id => { const s = $(id); s.classList.add("dim"); s.querySelectorAll(".blk").forEach(x => x.classList.toggle("on", +x.dataset.k === k)); });
+    const pa = S.base[k], pb = S.opt ? S.opt[k] : null;
+    const row = (lbl, p) => p ? `<div class="r"><span>${lbl}</span><b>정반 ${p.bi + 1} · D+${p.t0}~D+${p.t1}${p.t1 > b.due ? " · " + (p.t1 - b.due) + "일 넘김" : ""}</b></div>` : `<div class="r"><span>${lbl}</span><b>실행 전</b></div>`;
+    tip.innerHTML = `<div class="t">${b.id}</div>
+      <div class="r"><span>길이 · 작업일수</span><b>${b.len}m · ${b.dur}일</b></div>
+      <div class="r"><span>착수 가능 → 요구일</span><b>D+${b.rel} → D+${b.due}</b></div>
+      ${row("지금 방식", pa)}${row("최적화", pb)}`;
+    tip.style.display = "block";
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + tw > innerWidth - 8) x = e.clientX - tw - 14;
+    if (y + th > innerHeight - 8) y = e.clientY - th - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  });
+  svg.addEventListener("mouseleave", () => { clearHl(); $("tip").style.display = "none"; });
+}
+function clearHl() { ["svgA", "svgB"].forEach(id => { const s = $(id); s.classList.remove("dim"); s.querySelectorAll(".blk.on").forEach(x => x.classList.remove("on")); }); }
+
+/* ===== 시작 ===== */
+$("btnNew").addEventListener("click", () => newData(Math.floor(Math.random() * 90000) + 1000));
+$("nSel").addEventListener("change", () => newData(S.seed || 47));
+$("btnRun").addEventListener("click", runOpt);
+$("btnTbl").addEventListener("click", () => { const t = $("tbl"); t.hidden = !t.hidden; $("btnTbl").setAttribute("aria-pressed", String(!t.hidden)); $("btnTbl").textContent = t.hidden ? "표로 보기" : "표 닫기"; renderTable(); });
+bindHover($("svgA"), "A"); bindHover($("svgB"), "B");
+let rT; addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(render, 120); });
+newData(47);
+</script>
+</body>
+</html>
