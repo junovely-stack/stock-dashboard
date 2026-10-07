@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>엔젤X soft 쇼릴</title>
+<!--
+  엔젤X soft 2주 시범 제안 — 40초 쇼릴 REV01 (자동재생, 외부 의존 0)
+  실행: 파일 더블클릭 → 바로 재생. Space 일시정지/재생 · R 처음부터 · F 전체화면
+  정상동작 확인: 40초 동안 9컷이 끊김 없이 넘어가고 마지막 "입어보고 결정합니다"에서 멈추면 정상
+  수치 출처는 각 컷 하단 회색 캡션(웹 검색 요약 기준 — 발표 전 원문 대조)
+-->
+<style>
+:root{
+  --bg1:#0A1A2F; --bg2:#0D2138; --card:#16263D;
+  --accent:#FF6B1A; --accent2:#4C86C6; --muted:#6F8BAA;
+  --txt:#B8C4D0; --txt-strong:#FFFFFF; --txt-dim:#8E9BAD;
+  --glow:rgba(255,107,26,.45);
+}
+*{box-sizing:border-box;word-break:keep-all;overflow-wrap:break-word}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:#06101E;
+  font-family:'Pretendard Variable',Pretendard,'Malgun Gothic','맑은 고딕',sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden;
+  background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(900px 600px at 18% 12%, rgba(255,107,26,.07), transparent 60%),
+             radial-gradient(900px 600px at 86% 84%, rgba(76,134,198,.10), transparent 60%)}
+#stage::after{content:"";position:absolute;inset:0;opacity:.35;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:80px 80px}
+.cut{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;z-index:1}
+.inner{position:relative;width:100%;max-width:1500px;padding:100px 80px}
+.center{text-align:center}
+.row{display:flex;align-items:center;gap:80px}
+.kicker{font-size:22px;letter-spacing:.26em;font-weight:700;color:var(--accent)}
+.big{font-size:132px;font-weight:900;line-height:1.15;color:var(--txt-strong);letter-spacing:-.02em;text-wrap:balance}
+.mid{font-size:96px;font-weight:900;line-height:1.2;color:var(--txt-strong);text-wrap:balance}
+.sub{font-size:38px;color:var(--txt);margin-top:30px;line-height:1.5}
+.sub b{color:var(--txt-strong)}
+.src{font-size:22px;color:var(--txt-dim);margin-top:34px}
+.hl{color:var(--accent);text-shadow:0 0 30px var(--glow)}
+.num{font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:36px;justify-content:center;margin-top:56px}
+.chipc{min-width:360px;padding:40px 36px;border-radius:22px;background:rgba(22,38,61,.85);border:1px solid rgba(255,255,255,.09);text-align:center}
+.chipc .t{font-size:64px;font-weight:900;color:var(--txt-strong)}
+.chipc .d{font-size:28px;color:var(--txt);margin-top:10px}
+.chipc.on{box-shadow:0 0 60px rgba(255,107,26,.15);border-color:rgba(255,107,26,.35)}
+.chipc.on .t{color:var(--accent);text-shadow:0 0 30px var(--glow)}
+.evals{display:flex;gap:28px;justify-content:center;margin-top:52px}
+.ev{padding:22px 34px;border-radius:999px;background:rgba(22,38,61,.9);border:1px solid rgba(255,255,255,.1);font-size:34px;color:var(--txt-strong);font-weight:700}
+.fig-body{fill:none;stroke:#8FA3B8;stroke-width:20;stroke-linecap:round;stroke-linejoin:round}
+.fig-back{opacity:.5}
+.fig-head{fill:#8FA3B8}
+.band{fill:none;stroke:var(--accent);stroke-width:13;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 10px rgba(255,107,26,.6))}
+.hull{fill:none;stroke:#4C6A8A;stroke-width:6;stroke-linejoin:round}
+.hull-thin{fill:none;stroke:#4C6A8A;stroke-width:4}
+.lbl{fill:var(--txt-strong);font-size:40px;font-weight:800}
+.lbl-s{fill:var(--txt);font-size:28px}
+#prog{position:absolute;left:0;bottom:0;height:5px;width:0;z-index:6;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#brand{position:absolute;left:56px;top:44px;z-index:5;font-size:20px;color:var(--txt-dim);letter-spacing:.14em}
+#hint{position:absolute;right:56px;bottom:40px;z-index:5;font-size:16px;color:var(--txt-dim);letter-spacing:.1em}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- R1 0–4.5s : 숙이고, 쪼그리고 -->
+  <section class="cut" data-t0="0" data-t1="4.5">
+    <div class="inner"><div class="row">
+      <div style="flex:1">
+        <div class="kicker" data-in=".2" data-fx="up">조립 작업의 기본 자세</div>
+        <div class="big" data-in=".4" data-fx="up" style="margin-top:22px">숙이고,<br><span class="hl">쪼그리고</span></div>
+        <div class="sub" data-in="1.4" data-fx="up">취부 · 하향 용접 · 사상 · 바닥 마킹</div>
+      </div>
+      <svg viewBox="0 0 560 560" width="560" height="560" data-in=".2" data-fx="fade"><g id="fig1" transform="translate(220 300)"></g>
+        <line x1="40" y1="492" x2="520" y2="492" stroke="rgba(255,255,255,.14)" stroke-width="3"/></svg>
+    </div></div>
+  </section>
+
+  <!-- R2 4.5–9s : 하루 합산 2시간 -->
+  <section class="cut" data-t0="4.5" data-t1="9">
+    <div class="inner center">
+      <div class="kicker" data-in=".2" data-fx="up">고용노동부 고시 · 근골격계부담작업</div>
+      <div class="big" data-in=".4" data-fx="scale" style="margin-top:26px">하루 합산 <span class="hl num" data-count="2" data-cin=".6" data-cd="1">0</span><span class="hl">시간</span></div>
+      <div class="sub" data-in="1.5" data-fx="up">허리 굽힘·비틀기(제4호) · 쪼그림(제5호) — <b>끊어서 일한 시간도 모두 더한다</b></div>
+    </div>
+  </section>
+
+  <!-- R3 9–13.5s : 64.5% -->
+  <section class="cut" data-t0="9" data-t1="13.5">
+    <div class="inner"><div class="row" style="justify-content:center">
+      <svg viewBox="0 0 240 240" width="420" height="420" data-in=".1" data-fx="fade">
+        <circle cx="120" cy="120" r="100" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18"/>
+        <circle id="ring" cx="120" cy="120" r="100" fill="none" stroke="var(--accent)" stroke-width="18" stroke-linecap="round"
+          transform="rotate(-90 120 120)" stroke-dasharray="628.3" stroke-dashoffset="628.3"/>
+      </svg>
+      <div>
+        <div class="kicker" data-in=".2" data-fx="up">2025년 업무상 질병 재해자 중</div>
+        <div class="big hl num" data-in=".3" data-fx="up" style="font-size:170px;margin-top:10px"><span data-count="64.5" data-dec="1" data-cin=".3" data-cd="1.6">0</span>%</div>
+        <div class="sub" data-in="1.6" data-fx="up" style="margin-top:10px">신체부담작업·요통 — <b>질병 산재 3명 중 2명</b></div>
+        <div class="src" data-in="1.8" data-fx="fade">고용노동부 2025년 산업재해 현황(2026.3 공표)</div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- R4 13.5–18s : 자동화가 못 들어가는 자리 -->
+  <section class="cut" data-t0="13.5" data-t1="18">
+    <div class="inner"><div class="row">
+      <svg viewBox="0 0 640 520" width="640" height="520" data-in=".1" data-fx="fade" aria-label="이중선체 블록 단면과 내부 작업자">
+        <path class="hull" d="M40 44 H600 V480 H40 Z"/>
+        <path class="hull-thin" d="M320 40 V190 M320 330 V480"/>
+        <ellipse class="hull-thin" cx="320" cy="260" rx="44" ry="70"/>
+        <path class="hull-thin" d="M40 150 H90 M40 260 H90 M40 370 H90 M600 150 H550 M600 260 H550 M600 370 H550"/>
+        <g id="fig4" transform="translate(150 360) scale(.62)"></g>
+        <text class="lbl-s" x="320" y="24" text-anchor="middle">블록 내부 · 맨홀 · 론지</text>
+      </svg>
+      <div style="flex:1">
+        <div class="mid" data-in=".4" data-fx="up">자동화가<br><span class="hl">못 들어가는 자리</span></div>
+        <div class="sub" data-in="1.6" data-fx="up">그 자리를 지금 <b>사람이 메우고 있다</b></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- R5 18–22.5s : 0.6kg · 배터리 없음 · 프레임 없음 -->
+  <section class="cut" data-t0="18" data-t1="22.5">
+    <div class="inner center">
+      <div class="kicker" data-in=".2" data-fx="up">엔젤X soft · 무동력 허리 보조 슈트</div>
+      <div class="mid" data-in=".3" data-fx="up" style="margin-top:18px">입는 줄 모르게 <span class="hl">가볍게</span></div>
+      <div class="chips">
+        <div class="chipc on" data-in=".9" data-fx="scale"><div class="t num">0.6kg</div><div class="d">프레임형 3kg의 5분의 1</div></div>
+        <div class="chipc" data-in="1.4" data-fx="scale"><div class="t">배터리 없음</div><div class="d">탄성 모듈로만 작동</div></div>
+        <div class="chipc" data-in="1.9" data-fx="scale"><div class="t">프레임 없음</div><div class="d">전부 연한 소재</div></div>
+      </div>
+      <div class="src" data-in="2.2" data-fx="fade">angel GEAR soft B10 제조사 사양</div>
+    </div>
+  </section>
+
+  <!-- R6 22.5–27.5s : 숙이면 늘어나고, 펴면 당겨준다 -->
+  <section class="cut" data-t0="22.5" data-t1="27.5">
+    <div class="inner"><div class="row">
+      <svg viewBox="0 0 560 560" width="560" height="560" data-in="0" data-fx="fade">
+        <g id="fig6" transform="translate(220 300)"></g>
+        <g id="pullArrow" opacity="0"><path d="M90 400 V190" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="14 10"/>
+          <path d="M72 214 L90 186 L108 214" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <line x1="40" y1="492" x2="520" y2="492" stroke="rgba(255,255,255,.14)" stroke-width="3"/>
+      </svg>
+      <div style="flex:1">
+        <div class="mid" data-in=".2" data-fx="up" style="font-size:80px">숙이면 <span class="hl">늘어나고</span>,<br>펴면 <span class="hl">당겨준다</span></div>
+        <div class="sub" data-in="1.2" data-fx="up">등 뒤 라텍스 탄성 모듈 — Mild 17.9kgf · Strong 26.7kgf 교체</div>
+        <div class="src" data-in="1.4" data-fx="fade">그림은 원리 설명용(실제 제품 형상 아님) · 제조사 사양</div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- R7 27.5–32s : 10~40% -->
+  <section class="cut" data-t0="27.5" data-t1="32">
+    <div class="inner center">
+      <div class="kicker" data-in=".2" data-fx="up">허리 근활성 감소 · 독립 연구 리뷰</div>
+      <div class="big num" data-in=".4" data-fx="scale" style="font-size:170px;margin-top:16px"><span class="hl"><span data-count="10" data-cin=".4" data-cd="1">0</span>~<span data-count="40" data-cin=".4" data-cd="1.3">0</span>%</span>↓</div>
+      <div class="sub" data-in="1.5" data-fx="up">논문 40편 리뷰(de Looze 외 2016) · 엔젤X 자체 시험 <b>최대 30%</b>(제조사)</div>
+      <div class="src" data-in="1.8" data-fx="fade">실험실 연구 위주 — 우리 현장 효과는 시범으로 잰다</div>
+    </div>
+  </section>
+
+  <!-- R8 32–36s : 11월 · 2주 · 3명 -->
+  <section class="cut" data-t0="32" data-t1="36">
+    <div class="inner center">
+      <div class="kicker" data-in=".2" data-fx="up">시범 계획 · 취부·사상</div>
+      <div class="big" data-in=".3" data-fx="scale" style="margin-top:18px"><span class="hl">11월</span> · 2주 · 3명</div>
+      <div class="evals">
+        <div class="ev" data-in="1.1" data-fx="up">계속 입는가</div>
+        <div class="ev" data-in="1.4" data-fx="up">왜 벗었나</div>
+        <div class="ev" data-in="1.7" data-fx="up">무엇과 부딪혔나</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- R9 36–40s : 클로징 -->
+  <section class="cut" data-t0="36" data-t1="40" data-last="1">
+    <div class="inner center">
+      <div class="big" data-in=".3" data-fx="up">입어보고 <span class="hl">결정합니다</span></div>
+      <div class="sub" data-in="1.2" data-fx="up">엔젤X soft 2주 시범 · 조립4과</div>
+    </div>
+  </section>
+
+  <div id="brand">엔젤X soft · 조립4과 제안</div>
+  <div id="hint">Space 일시정지 · R 처음부터 · F 전체화면</div>
+  <div id="prog"></div>
+</div>
+
+<script>
+(function () {
+  var TOTAL = 40;
+  var stage = document.getElementById('stage');
+  var cuts = Array.prototype.slice.call(document.querySelectorAll('.cut'));
+  var prog = document.getElementById('prog');
+
+  function fitStage() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fitStage); fitStage();
+
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var ease = function (p) { return 1 - Math.pow(1 - p, 3); };
+  var easeIO = function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+
+  /* ── 작업자 그림: a = 상체 숙임 각(0 = 선 자세, 70 = 숙임). 엉덩이 = (0,0), 얼굴은 오른쪽 ── */
+  function makeFig(g, withBand) {
+    g.innerHTML = '<path class="fig-body fig-back"/><path class="fig-body"/><path class="fig-body"/><path class="fig-body"/><circle class="fig-head"/>' + (withBand ? '<path class="band"/>' : '');
+    var c = g.children;
+    return { back: c[0], leg: c[1], torso: c[2], arm: c[3], head: c[4], band: withBand ? c[5] : null };
+  }
+  function pose(f, a) {
+    var r = a * Math.PI / 180, L = 165, ux = Math.sin(r), uy = -Math.cos(r), nx = -Math.cos(r), ny = -Math.sin(r);
+    var k = a / 70;                                   // 숙일수록 무릎이 조금 굽는다
+    var sx = ux * L, sy = uy * L;
+    f.torso.setAttribute('d', 'M0 0 L' + sx.toFixed(1) + ' ' + sy.toFixed(1));
+    f.leg.setAttribute('d', 'M0 0 L' + (12 + 14 * k).toFixed(1) + ' 98 L4 190 L46 190');
+    f.back.setAttribute('d', 'M0 0 L' + (-8 + 6 * k).toFixed(1) + ' 100 L-16 190 L26 190');
+    f.arm.setAttribute('d', 'M' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' L' + (sx + 12).toFixed(1) + ' ' + (sy + 80).toFixed(1) + ' L' + (sx + 18).toFixed(1) + ' ' + (sy + 148).toFixed(1));
+    f.head.setAttribute('cx', (sx + ux * 46 + 6 * k).toFixed(1));
+    f.head.setAttribute('cy', (sy + uy * 46 + 10 * k).toFixed(1));
+    f.head.setAttribute('r', 30);
+    if (f.band) {
+      var o = 16;
+      var b1x = ux * L * .86 + nx * o, b1y = uy * L * .86 + ny * o;
+      var b2x = nx * o, b2y = ny * o;
+      f.band.setAttribute('d', 'M' + b1x.toFixed(1) + ' ' + b1y.toFixed(1) + ' L' + b2x.toFixed(1) + ' ' + b2y.toFixed(1) +
+        ' Q' + (-22).toFixed(1) + ' ' + (14).toFixed(1) + ' ' + (-14 + 8 * k).toFixed(1) + ' 44 L' + (-4 + 10 * k).toFixed(1) + ' 96');
+    }
+  }
+  var fig1 = makeFig(document.getElementById('fig1'), false);
+  var fig4 = makeFig(document.getElementById('fig4'), false);
+  var fig6 = makeFig(document.getElementById('fig6'), true);
+  var arrow6 = document.getElementById('pullArrow');
+  var ring = document.getElementById('ring');
+
+  /* ── 컷별 그림 애니메이션 (lt = 컷 안 경과초) ── */
+  var EXTRA = {
+    0: function (lt) { pose(fig1, 70 * easeIO(clamp((lt - .5) / 1.3, 0, 1))); },
+    2: function (lt) { ring.setAttribute('stroke-dashoffset', (628.3 * (1 - .645 * ease(clamp((lt - .3) / 1.6, 0, 1)))).toFixed(1)); },
+    3: function (lt) { pose(fig4, 66); },
+    5: function (lt) {
+      var a;
+      if (lt < .3) a = 0;
+      else if (lt < 1.5) a = 70 * easeIO((lt - .3) / 1.2);
+      else if (lt < 2.3) a = 70;
+      else if (lt < 3.5) a = 70 * (1 - easeIO((lt - 2.3) / 1.2));
+      else a = 0;
+      pose(fig6, a);
+      arrow6.setAttribute('opacity', (lt > 2.2 && lt < 4.4) ? clamp((lt - 2.2) / .3, 0, 1) * clamp((4.4 - lt) / .3, 0, 1) : 0);
+    }
+  };
+
+  /* ── 한 프레임 그리기 (t = 전체 경과초) — 실시간·캡처 공용 ── */
+  function draw(t) {
+    t = clamp(t, 0, TOTAL);
+    cuts.forEach(function (c, i) {
+      var t0 = parseFloat(c.dataset.t0), t1 = parseFloat(c.dataset.t1), last = c.dataset.last === '1';
+      var on = t >= t0 && (t < t1 || (last && t <= TOTAL));
+      if (!on) { c.style.opacity = 0; c.style.visibility = 'hidden'; return; }
+      var lt = t - t0, dur = t1 - t0;
+      var fi = i === 0 ? clamp(lt / .25, 0, 1) : clamp(lt / .35, 0, 1);
+      var fo = last ? 1 : clamp((dur - lt) / .35, 0, 1);
+      c.style.visibility = 'visible'; c.style.opacity = Math.min(fi, fo);
+      Array.prototype.forEach.call(c.querySelectorAll('[data-in]'), function (el) {
+        var p = ease(clamp((lt - parseFloat(el.dataset.in)) / parseFloat(el.dataset.d || .7), 0, 1));
+        var fx = el.dataset.fx || 'up';
+        el.style.opacity = p;
+        if (fx === 'up') el.style.transform = 'translateY(' + ((1 - p) * 34).toFixed(1) + 'px)';
+        else if (fx === 'scale') el.style.transform = 'scale(' + (.92 + .08 * p).toFixed(3) + ')';
+      });
+      Array.prototype.forEach.call(c.querySelectorAll('[data-count]'), function (el) {
+        var p = ease(clamp((lt - parseFloat(el.dataset.cin || 0)) / parseFloat(el.dataset.cd || 1.2), 0, 1));
+        var v = parseFloat(el.dataset.count) * p, dec = parseInt(el.dataset.dec || '0', 10);
+        el.textContent = dec ? v.toFixed(dec) : Math.round(v);
+      });
+      if (EXTRA[i]) EXTRA[i](lt);
+    });
+    prog.style.width = (t / TOTAL * 100) + '%';
+  }
+
+  /* ── 재생 제어 ── */
+  var capture = /[?&]capture=1/.test(location.search);
+  var start = null, pausedAt = null, raf = null;
+  function loop(ts) {
+    if (start === null) start = ts;
+    var t = (ts - start) / 1000;
+    draw(t);
+    if (t < TOTAL) raf = requestAnimationFrame(loop); else raf = null;
+  }
+  function play() { if (raf) return; if (pausedAt !== null) { start = performance.now() - pausedAt * 1000; pausedAt = null; } else start = null; raf = requestAnimationFrame(loop); }
+  function pause() { if (!raf) return; cancelAnimationFrame(raf); raf = null; pausedAt = (performance.now() - start) / 1000; }
+  function restart() { if (raf) cancelAnimationFrame(raf); raf = null; pausedAt = null; start = null; play(); }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === ' ') { e.preventDefault(); raf ? pause() : (pausedAt === null && start !== null ? restart() : play()); }
+    else if (e.key === 'r' || e.key === 'R') restart();
+    else if (e.key === 'f' || e.key === 'F') { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); }
+  });
+  window.__seek = function (t) { draw(t); };
+  window.__TOTAL = TOTAL;
+  if (capture) { document.getElementById('hint').style.display = 'none'; draw(0); } else play();
+})();
+</script>
+</body>
+</html>
