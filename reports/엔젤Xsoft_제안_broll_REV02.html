@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>엔젤X soft 도입 검토</title>
+<!--
+  엔젤X soft(허리 보조 슈트) 도입 검토 · 11~12월 시연 계획 — 조립4과 발표용 B-roll REV02
+  실행: 파일 더블클릭(외부 의존 0) → → / Space 다음, ← 이전, F 전체화면, A 자동재생, B 암전
+  정상동작 확인: 1366×768에서 첫 화면이 잘리지 않고, → 39번에 마지막 씬(사람의 허리부터)까지 도달
+  REV02: 시범 제안 → 도입 검토·시연 계획, 40~60대·효과·어깨 로드맵 씬 추가, 결정 씬 삭제, 출처 한 줄로
+  수치 출처는 화면 하단 한 줄. 웹 검색 요약 기준 — 발표 전 원문 대조
+-->
+<style>
+:root{
+  --bg1:#0A1A2F; --bg2:#0D2138; --card:#16263D;
+  --accent:#FF6B1A; --accent2:#4C86C6; --warn:#E0604A; --muted:#6F8BAA;
+  --txt:#B8C4D0; --txt-strong:#FFFFFF; --txt-dim:#8E9BAD;
+  --glow:rgba(255,107,26,.45);
+}
+*{box-sizing:border-box;word-break:keep-all;overflow-wrap:break-word}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:#06101E;
+  font-family:'Pretendard Variable',Pretendard,'Malgun Gothic','맑은 고딕',sans-serif;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3,.key-msg,.scene-title,.title-xl,.quote{text-wrap:balance}
+
+/* ── 스테이지 1920x1080 + 자동 스케일 ── */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;
+  transform-origin:center center;overflow:hidden;background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(900px 600px at 18% 12%, rgba(255,107,26,.06), transparent 60%),
+             radial-gradient(900px 600px at 86% 84%, rgba(76,134,198,.09), transparent 60%)}
+#stage::after{content:"";position:absolute;inset:0;opacity:.35;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:80px 80px}
+
+/* ── 씬 ── */
+.scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .55s ease;z-index:1}
+.scene.active{opacity:1;visibility:visible}
+.scene-inner{position:relative;width:100%;max-width:1400px;padding:100px 80px}
+.center{text-align:center}
+
+/* ── 타이포 ── */
+.kicker{font-size:20px;letter-spacing:.28em;font-weight:700;color:var(--accent);opacity:.92}
+.title-xl{font-size:92px;line-height:1.24;font-weight:800;color:var(--txt-strong);margin:24px 0 0}
+.scene-title{font-size:68px;line-height:1.28;font-weight:800;color:var(--txt-strong);margin:20px 0 0}
+.key-msg{font-size:120px;font-weight:900;letter-spacing:-.02em;color:var(--txt-strong);line-height:1.2}
+.desc{font-size:34px;color:var(--txt);margin-top:36px;line-height:1.55}
+.desc b{color:var(--txt-strong)}
+.dim{color:var(--txt-dim);font-weight:400}
+.hl{color:var(--accent);text-shadow:0 0 24px var(--glow)}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{text-shadow:0 0 20px rgba(255,107,26,.35)}50%{text-shadow:0 0 44px rgba(255,107,26,.75)}}
+.sub-tag{margin-top:48px;display:inline-block;padding:18px 32px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:28px;color:var(--txt)}
+.src{margin-top:40px;font-size:22px;color:var(--txt-dim);line-height:1.5}
+.center .src{text-align:center}
+
+/* ── 카드 ── */
+.cards{display:flex;gap:48px;justify-content:center;margin-top:56px}
+.card{flex:1;min-width:320px;padding:44px 40px;border-radius:20px;background:rgba(22,38,61,.82);
+  border:1px solid rgba(255,255,255,.08);text-align:center}
+.glow-card{box-shadow:0 0 60px rgba(255,107,26,.13)}
+.card-kick{font-size:24px;color:var(--txt-dim);font-weight:700;letter-spacing:.06em}
+.card-title{font-size:46px;font-weight:800;color:var(--txt-strong);margin-top:12px}
+.card-desc{margin-top:16px;font-size:28px;color:var(--txt);line-height:1.5}
+.card-big{font-size:110px;font-weight:900;line-height:1;color:var(--txt-strong);font-variant-numeric:tabular-nums}
+
+/* ── 순차 리스트 ── */
+.seq{list-style:none;padding:0;margin:52px 0 0}
+.seq li{display:flex;align-items:center;gap:28px;font-size:40px;color:var(--txt-strong);font-weight:700;
+  padding:26px 36px;margin-bottom:20px;border-radius:16px;background:rgba(22,38,61,.75);border-left:4px solid var(--accent)}
+.seq li small{display:block;font-size:28px;color:var(--txt);font-weight:400;margin-top:6px}
+.num{font-size:28px;color:var(--accent);font-weight:800;letter-spacing:.1em;flex:none}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:56px}
+.tile{padding:36px 30px;border-radius:18px;background:rgba(22,38,61,.82);border:1px solid rgba(255,255,255,.08);border-top:4px solid var(--accent)}
+.tile .t{font-size:42px;font-weight:800;color:var(--txt-strong)}
+.tile .d{font-size:28px;color:var(--txt);margin-top:12px;line-height:1.45}
+
+/* ── 카운터 / 게이지 ── */
+.counter{font-variant-numeric:tabular-nums}
+.gauge{position:relative;display:inline-block;margin-top:24px}
+.gauge-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:96px;font-weight:900}
+.ring{transition:stroke-dashoffset 1.3s cubic-bezier(.22,1,.36,1)}
+
+/* ── 세로 막대 (SVG) ── */
+.bar{transform-box:fill-box;transform-origin:center bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.22,1,.36,1)}
+[data-step].on .bar{transform:scaleY(1)}
+[data-step].on .bar.d2{transition-delay:.18s}
+.bar-val{fill:var(--txt-strong);font-size:44px;font-weight:800}
+.bar-cap{fill:var(--txt);font-size:28px}
+
+/* ── 범위 막대 (HTML) ── */
+.rng{margin-top:44px}
+.rrow{display:grid;grid-template-columns:400px 800px;align-items:center;gap:0 30px;margin-bottom:26px}
+.rlab{font-size:32px;color:var(--txt-strong);font-weight:700;line-height:1.3}
+.rlab small{display:block;font-size:24px;color:var(--txt);font-weight:400;margin-top:4px}
+.track{position:relative;height:58px}
+.track::before{content:"";position:absolute;left:0;width:640px;top:50%;height:2px;background:rgba(255,255,255,.08)}
+.hbar{position:absolute;top:6px;height:46px;border-radius:4px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left center;transition:transform .9s cubic-bezier(.22,1,.36,1)}
+[data-step].on .hbar{transform:scaleX(1)}
+.hbar.mfr{background:repeating-linear-gradient(135deg,rgba(111,139,170,.42) 0 8px,rgba(111,139,170,.12) 8px 16px);
+  border:2px dashed #9FB3C9}
+.hval{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;font-weight:800;color:var(--txt-strong);white-space:nowrap}
+.hval small{font-size:24px;font-weight:600;color:var(--txt)}
+.axis{display:grid;grid-template-columns:400px 800px;gap:0 30px;margin-top:6px}
+.ticks{position:relative;height:40px;border-top:1px solid rgba(255,255,255,.18);width:640px}
+.ticks span{position:absolute;top:8px;transform:translateX(-50%);font-size:22px;color:var(--txt-dim)}
+.axcap{font-size:22px;color:var(--txt-dim);text-align:right;padding-right:6px}
+
+/* ── 타임라인 (HTML) ── */
+.tl{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:64px}
+.tl::before{content:"";position:absolute;left:12%;right:12%;top:15px;height:3px;background:rgba(255,255,255,.12)}
+.tln{position:relative;text-align:center}
+.tln .dot{width:32px;height:32px;border-radius:50%;margin:0 auto;background:var(--muted);border:4px solid #0D2138}
+.tln.hot .dot{background:var(--accent);box-shadow:0 0 28px var(--glow)}
+.tln.ask .dot{background:transparent;border:3px dashed var(--accent)}
+.tln .w{font-size:28px;color:var(--txt-dim);font-weight:700;margin-top:22px;letter-spacing:.04em}
+.tln .t{font-size:38px;color:var(--txt-strong);font-weight:800;margin-top:8px;line-height:1.3}
+.tln .d{font-size:27px;color:var(--txt);margin-top:10px;line-height:1.45}
+.tln.hot .t{color:var(--accent);text-shadow:0 0 24px var(--glow)}
+.tl3{grid-template-columns:repeat(3,1fr)}
+.tl3::before{left:17%;right:17%}
+.eff{white-space:nowrap;font-size:68px;font-weight:900;line-height:1;margin-bottom:16px;font-variant-numeric:tabular-nums}
+
+/* ── 인용 ── */
+.quote{font-size:76px;line-height:1.35;font-weight:800;color:var(--txt-strong)}
+.qby{font-size:28px;color:var(--txt);margin-top:28px}
+
+/* ── VS ── */
+.vs-wrap{display:grid;grid-template-columns:1fr 90px 1fr;align-items:stretch;gap:0;margin-top:52px}
+.vs-label{display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:var(--txt-dim)}
+.vcard{padding:40px 44px;border-radius:20px;background:rgba(22,38,61,.82);border:1px solid rgba(255,255,255,.08)}
+.vcard h3{margin:0;font-size:46px;font-weight:800;color:var(--txt-strong)}
+.vcard h3 small{font-size:26px;font-weight:500;color:var(--txt);margin-left:10px}
+.vcard ul{list-style:none;padding:0;margin:26px 0 0}
+.vcard li{font-size:30px;color:var(--txt);padding:16px 0;border-top:1px solid rgba(255,255,255,.07);line-height:1.4}
+.vcard li b{display:block;font-size:24px;color:var(--txt-dim);font-weight:700;letter-spacing:.04em;margin-bottom:4px}
+.vcard.good{box-shadow:0 0 60px rgba(255,107,26,.13);border-color:rgba(255,107,26,.35)}
+.vcard.good h3{color:var(--accent);text-shadow:0 0 24px var(--glow)}
+.vcard.good li{color:var(--txt-strong)}
+
+/* ── 대조 숫자 ── */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:52px}
+.pcard{padding:44px 44px;border-radius:20px;background:rgba(22,38,61,.82);border:1px solid rgba(255,255,255,.08);text-align:center}
+.pbig{font-size:120px;font-weight:900;line-height:1;color:var(--txt-strong);font-variant-numeric:tabular-nums}
+.pbig .of{font-size:64px;color:var(--txt-dim);font-weight:700}
+.pcap{font-size:30px;color:var(--txt);margin-top:20px;line-height:1.45}
+.psrc{font-size:22px;color:var(--txt-dim);margin-top:14px}
+.concl{margin-top:48px;font-size:52px;font-weight:800;color:var(--txt-strong);text-align:center}
+
+/* ── 스텝 등장 ── */
+[data-step]{opacity:0;transform:translateY(24px);
+  transition:opacity .6s ease-out, transform .6s cubic-bezier(.22,1,.36,1)}
+[data-step].on{opacity:1;transform:none}
+svg [data-step]{transform:none}
+
+/* ── SVG 그림 ── */
+.fig-body{fill:none;stroke:#8FA3B8;stroke-width:20;stroke-linecap:round;stroke-linejoin:round}
+.fig-head{fill:#8FA3B8}
+.band{fill:none;stroke:var(--accent);stroke-width:13;stroke-linecap:round;filter:drop-shadow(0 0 10px rgba(255,107,26,.55))}
+.fig-cap{fill:var(--txt-strong);font-size:36px;font-weight:800}
+.fig-sub{fill:var(--txt);font-size:26px}
+.arrow{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:12 10}
+.chips{display:flex;gap:24px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.chip{padding:16px 28px;border-radius:999px;background:rgba(22,38,61,.9);border:1px solid rgba(255,255,255,.1);font-size:30px;color:var(--txt-strong);font-weight:700}
+.chip i{font-style:normal;color:var(--txt);font-weight:500;margin-left:8px}
+
+/* ── HUD ── */
+.hud{position:absolute;z-index:5;font-size:18px;color:var(--txt-dim);letter-spacing:.16em}
+#partBadge{left:56px;top:44px;display:flex;align-items:center;gap:12px;padding:10px 20px;border-radius:999px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--txt);letter-spacing:.08em}
+#partBadge i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+#sceneNo{right:56px;top:48px}
+#stepNo{right:56px;bottom:48px;letter-spacing:.06em}
+#bar{position:absolute;left:0;bottom:0;height:4px;width:0;z-index:6;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease}
+#blackout{position:fixed;inset:0;background:#000;z-index:99;opacity:0;visibility:hidden;transition:opacity .25s}
+#blackout.on{opacity:1;visibility:visible}
+#help{position:absolute;left:56px;bottom:44px;font-size:16px;color:var(--txt-dim);letter-spacing:.1em;z-index:5}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+  <!-- S01 타이틀 · 대사 1 -->
+  <section class="scene" data-part="PART A · 현장">
+    <div class="scene-inner center">
+      <div class="kicker" data-step="1">조립부 · 근골격계 부담 작업 · 도입 검토</div>
+      <h1 class="title-xl" data-step="1">근골격계 부담,<br><span class="hl">입는 장비</span>로 줄인다</h1>
+      <div class="sub-tag" data-step="2">엔젤X soft 도입 검토 · 11~12월 시연 예정 · 조립4과</div>
+    </div>
+  </section>
+
+  <!-- S02 공종 카드 · 대사 2 -->
+  <section class="scene" data-part="PART A · 현장">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">조립 작업의 기본 자세</div>
+      <h2 class="scene-title" data-step="1">조립 작업은 <span class="hl">숙이고, 쪼그리고</span></h2>
+      <div class="grid4" data-step="2">
+        <div class="tile"><div class="t">취부</div><div class="d">부재를 맞추며 허리를 숙인다</div></div>
+        <div class="tile"><div class="t">하향 용접</div><div class="d">바닥 이음을 쪼그려 앉아 잇는다</div></div>
+        <div class="tile"><div class="t">사상</div><div class="d">비드를 갈며 상체를 굽힌다</div></div>
+        <div class="tile"><div class="t">바닥 마킹</div><div class="d">허리를 굽혀 선을 긋는다</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S03 고시 카드 · 대사 3 -->
+  <section class="scene" data-part="PART A · 현장">
+    <div class="scene-inner center">
+      <h2 class="scene-title" data-step="1">하루 합산 <span class="hl">2시간</span>이면<br>근골격계부담작업</h2>
+      <div class="cards" data-step="1">
+        <div class="card"><div class="card-kick">고시 제4호</div><div class="card-title">허리 굽힘·비틀기</div><div class="card-desc">하루 총 2시간 이상</div></div>
+        <div class="card"><div class="card-kick">고시 제5호</div><div class="card-title">쪼그림·무릎 굽힘</div><div class="card-desc">하루 총 2시간 이상</div></div>
+      </div>
+      <p class="desc" data-step="2">끊어서 일한 시간도 <b class="hl">모두 더한다</b></p>
+      <div class="src" data-step="2">출처: 근골격계부담작업 고시(고용노동부)</div>
+    </div>
+  </section>
+
+  <!-- S04 원형 게이지 · 대사 4 -->
+  <section class="scene" data-part="PART A · 현장">
+    <div class="scene-inner center">
+      <div class="kicker" data-step="1">2025년 업무상 질병 재해자 중</div>
+      <div class="gauge" data-step="1">
+        <svg viewBox="0 0 240 240" width="400" height="400" aria-label="64.5%">
+          <circle cx="120" cy="120" r="100" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18"/>
+          <circle class="ring" cx="120" cy="120" r="100" fill="none" stroke="var(--accent)" stroke-width="18"
+                  stroke-linecap="round" transform="rotate(-90 120 120)"
+                  stroke-dasharray="628.3" stroke-dashoffset="628.3" data-ratio="0.645"/>
+        </svg>
+        <div class="gauge-val counter hl" data-count="64.5" data-dec="1" data-suffix="%">0%</div>
+      </div>
+      <p class="desc" data-step="2">질병 산재 <b>3명 중 2명</b>이 신체부담작업·요통</p>
+      <div class="src" data-step="2">출처: 고용노동부 산업재해 현황(2026.3)</div>
+    </div>
+  </section>
+
+  <!-- S05 연령·인력 · 대사 5–6 -->
+  <section class="scene" data-part="PART A · 현장">
+    <div class="scene-inner">
+      <h2 class="scene-title center" data-step="1"><span class="hl">40~60대</span>가 주력, 부담은 더 빨리 쌓인다</h2>
+      <div class="pair">
+        <div class="pcard" data-step="1">
+          <div class="pbig" style="font-size:104px">40~60대</div>
+          <div class="pcap">조립부 주력 연령<br>현업 기준</div>
+        </div>
+        <div class="pcard" data-step="2">
+          <div class="pbig"><span class="counter" data-count="14.7" data-dec="1" data-suffix="%">0%</span></div>
+          <div class="pcap">조선업 미충원율<br>전 산업 8.3%의 2배</div>
+        </div>
+      </div>
+      <div class="concl" data-step="3">숙련공의 허리를 지키는 게 곧 <span class="hl">인력 대책</span></div>
+      <div class="src center" data-step="3">출처: 조립부 현업 · 조선해양 ISC 인용 보도(2025)</div>
+    </div>
+  </section>
+
+  <!-- S06 타임라인 · 대사 7 -->
+  <section class="scene" data-part="PART B · 왜 지금">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">경쟁사는 이미 움직였다</div>
+      <h2 class="scene-title" data-step="1">조선소 맞춤형 웨어러블, <span class="hl">HD현대삼호가 먼저</span></h2>
+      <div class="tl">
+        <div class="tln" data-step="1"><div class="dot"></div><div class="w">2022.8</div><div class="t">엔젤X 출시</div><div class="d">미국 FDA Class I 등록</div></div>
+        <div class="tln" data-step="1"><div class="dot"></div><div class="w">2024.3</div><div class="t">코스닥 상장</div><div class="d">LG전자 2대 주주</div></div>
+        <div class="tln hot" data-step="2"><div class="dot"></div><div class="w">2024.6</div><div class="t">HD현대삼호 MOU</div><div class="d">조선소 맞춤형 웨어러블 공동 개발</div></div>
+        <div class="tln ask" data-step="2"><div class="dot"></div><div class="w">2026.11~12</div><div class="t">조립4과 시연</div><div class="d">도입 검토</div></div>
+      </div>
+      <div class="src" data-step="2">출처: 서울신문(2024.6) 외</div>
+    </div>
+  </section>
+
+  <!-- S07 인용 · 대사 8 -->
+  <section class="scene" data-part="PART B · 왜 지금">
+    <div class="scene-inner center">
+      <div class="quote" data-step="1">“조선산업 특성상<br><span class="hl">자동화를 적용할 수 없는</span><br><span class="hl">개소</span>가 많다”</div>
+      <div class="qby" data-step="1">— HD현대삼호 사장, 2024.6 엔젤로보틱스 MOU 당시</div>
+      <p class="desc" data-step="2" style="font-size:44px;margin-top:64px">그 자리를 지금 <b class="hl pulse">사람이 메우고 있다</b></p>
+    </div>
+  </section>
+
+  <!-- S08 강조 카드 3 · 대사 9 -->
+  <section class="scene" data-part="PART C · 제품">
+    <div class="scene-inner center">
+      <div class="kicker" data-step="1">엔젤X soft (angel GEAR soft B10)</div>
+      <h2 class="scene-title" data-step="1">입는 줄 모르게 <span class="hl">가볍다</span></h2>
+      <div class="cards">
+        <div class="card glow-card" data-step="1"><div class="card-big hl">0.6<span style="font-size:56px">kg</span></div><div class="card-desc">프레임형 엔젤X 3kg의<br>5분의 1</div></div>
+        <div class="card" data-step="2"><div class="card-title" style="margin-top:22px">배터리 없음</div><div class="card-desc">탄성 모듈로만 작동<br>충전이 필요 없다</div></div>
+        <div class="card" data-step="3"><div class="card-title" style="margin-top:22px">프레임 없음</div><div class="card-desc">전부 연한 소재<br>단단한 뼈대가 없다</div></div>
+      </div>
+      <div class="src" data-step="3">출처: 제조사 사양</div>
+    </div>
+  </section>
+
+  <!-- S09 SVG 그림 · 대사 10 -->
+  <section class="scene" data-part="PART C · 제품">
+    <div class="scene-inner center" style="padding-top:80px;padding-bottom:80px">
+      <h2 class="scene-title" data-step="1" style="font-size:62px;margin-top:0">숙이면 <span class="hl">늘어나고</span>, 펴면 당겨준다</h2>
+      <svg viewBox="0 0 1200 560" width="1200" height="560" aria-label="허리 숙임과 펼 때 탄성 밴드 동작">
+        <!-- 왼쪽: 숙인 자세 -->
+        <g data-step="1">
+          <circle class="fig-head" cx="548" cy="296" r="30"/>
+          <path class="fig-body" d="M332 330 L494 270"/>
+          <path class="fig-body" d="M332 330 L350 428 L338 516 L382 516"/>
+          <path class="fig-body" d="M332 330 L322 430 L300 516 L346 516" style="opacity:.55"/>
+          <path class="fig-body" d="M494 270 L512 360 L520 420"/>
+          <path class="band" d="M472 258 L326 312 Q306 322 310 348 L318 428"/>
+          <text class="fig-cap" x="420" y="120" text-anchor="middle">숙일 때</text>
+          <text class="fig-sub" x="420" y="162" text-anchor="middle">등 뒤 탄성 밴드가 늘어난다</text>
+        </g>
+        <!-- 오른쪽: 편 자세 -->
+        <g data-step="2">
+          <circle class="fig-head" cx="860" cy="128" r="30"/>
+          <path class="fig-body" d="M860 330 L860 172"/>
+          <path class="fig-body" d="M860 330 L866 428 L860 516 L904 516"/>
+          <path class="fig-body" d="M860 330 L848 430 L842 516 L886 516" style="opacity:.55"/>
+          <path class="fig-body" d="M860 176 L878 270 L882 330"/>
+          <path class="band" d="M842 186 L842 334 L840 428"/>
+          <path class="arrow" d="M786 430 L786 214"/>
+          <path d="M770 236 L786 210 L802 236" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <text class="fig-cap" x="1000" y="250" text-anchor="start">펼 때</text>
+          <text class="fig-sub" x="1000" y="292" text-anchor="start">줄어들며</text>
+          <text class="fig-sub" x="1000" y="328" text-anchor="start">상체를 당긴다</text>
+        </g>
+        <line x1="120" y1="530" x2="1080" y2="530" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+      </svg>
+      <div class="chips" data-step="3">
+        <div class="chip">Mild 17.9kgf<i>가벼운 작업</i></div>
+        <div class="chip">Strong 26.7kgf<i>무거운 작업</i></div>
+        <div class="chip">좁은 곳·앉은 자세 착용<i>제조사 설명</i></div>
+      </div>
+      <div class="src" data-step="3" style="margin-top:22px">출처: 제조사 사양 · 그림은 원리 설명용</div>
+    </div>
+  </section>
+
+  <!-- S10 범위 막대 · 대사 11 -->
+  <section class="scene" data-part="PART D · 효과">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">허리 근활성 감소율</div>
+      <h2 class="scene-title" data-step="1" style="font-size:62px">허리 근활성 <span class="hl">10~40%</span> 감소, 독립 연구로 확인</h2>
+      <div class="rng">
+        <div class="rrow" data-step="2">
+          <div class="rlab">독립 연구 리뷰<small>논문 40편 · 2016</small></div>
+          <div class="track"><div class="hbar" style="left:128px;width:384px"></div><div class="hval" style="left:528px">10~40%</div></div>
+        </div>
+        <div class="rrow" data-step="3">
+          <div class="rlab">탄성 소재 슈트 · 숙이기<small>밴더빌트대 실험 · 2018</small></div>
+          <div class="track"><div class="hbar" style="left:294px;width:256px"></div><div class="hval" style="left:566px">23~43%</div></div>
+        </div>
+        <div class="rrow" data-step="4">
+          <div class="rlab">엔젤X 자체 시험<small>프레임형 · 제조사 발표</small></div>
+          <div class="track"><div class="hbar mfr" style="left:0;width:384px"></div><div class="hval" style="left:400px">최대 30% <small>제조사</small></div></div>
+        </div>
+        <div class="axis" data-step="1">
+          <div class="axcap">감소율 → 오른쪽일수록 많이 줄어듦</div>
+          <div class="ticks"><span style="left:0">0</span><span style="left:128px">10</span><span style="left:256px">20</span><span style="left:384px">30</span><span style="left:512px">40</span><span style="left:640px">50%</span></div>
+        </div>
+      </div>
+      <div class="src" data-step="4" style="margin-top:22px">출처: de Looze 외(2016) · Lamers 외(2018) · 엔젤로보틱스 — 실험실 연구 기준</div>
+    </div>
+  </section>
+
+  <!-- S11 효과 카드 3 · 대사 12–13 -->
+  <section class="scene" data-part="PART D · 효과">
+    <div class="scene-inner center">
+      <div class="kicker" data-step="1">왜 써야 하나</div>
+      <h2 class="scene-title" data-step="1">쓰면 <span class="hl">달라지는 것</span> 3가지</h2>
+      <div class="cards">
+        <div class="card" data-step="1"><div class="eff hl">10~40%↓</div><div class="card-title" style="font-size:40px">허리 근활성</div><div class="card-desc">숙이고 드는 동작에서<br>허리 근육을 덜 쓴다</div></div>
+        <div class="card" data-step="2"><div class="eff hl">29~47%↓</div><div class="card-title" style="font-size:40px">허리 피로 속도</div><div class="card-desc">45° 숙인 자세에서<br>피로가 늦게 온다</div></div>
+        <div class="card" data-step="3"><div class="eff hl">0.6kg</div><div class="card-title" style="font-size:40px">근무 내내 착용</div><div class="card-desc">배터리·프레임이 없어<br>오래 입기 쉽다</div></div>
+      </div>
+      <div class="concl" data-step="4" style="margin-top:44px">같은 일을 해도 <span class="hl">허리에 덜 쌓인다</span></div>
+      <div class="src" data-step="4" style="margin-top:20px">출처: de Looze 외(2016) · Lamers·Zelik(2020) · 제조사 사양</div>
+    </div>
+  </section>
+
+  <!-- S12 VS · 대사 14 -->
+  <section class="scene" data-part="PART E · 조립부 적합성">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">블록 안 — 맨홀·론지·안전대</div>
+      <h2 class="scene-title" data-step="1" style="font-size:62px">프레임이 없어 <span class="hl">블록 안에 맞는다</span></h2>
+      <div class="vs-wrap" data-step="2">
+        <div class="vcard">
+          <h3>프레임형<small>엔젤X · 3kg</small></h3>
+          <ul>
+            <li><b>맨홀·론지 통과</b>단단한 프레임이 걸릴 수 있다</li>
+            <li><b>안전대</b>허리벨트가 안전대와 겹칠 수 있다</li>
+            <li><b>쪼그린·앉은 자세</b>프레임이 다리를 누를 수 있다</li>
+          </ul>
+        </div>
+        <div class="vs-label">VS</div>
+        <div class="vcard good">
+          <h3>soft<small>0.6kg · 프레임 없음</small></h3>
+          <ul>
+            <li><b>맨홀·론지 통과</b>입은 채로 지나갈 가능성이 크다</li>
+            <li><b>안전대</b>겹침이 적을 것으로 보인다</li>
+            <li><b>쪼그린·앉은 자세</b>앉은 자세 착용을 전제로 만들었다(제조사)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="src center" data-step="2">간섭 여부는 11~12월 시연에서 확인</div>
+    </div>
+  </section>
+
+  <!-- S13 로드맵 · 대사 15 -->
+  <section class="scene" data-part="PART F · 로드맵">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">로드맵</div>
+      <h2 class="scene-title" data-step="1">허리는 지금, 어깨는 <span class="hl">2027년 초</span></h2>
+      <div class="tl tl3">
+        <div class="tln hot" data-step="1"><div class="dot"></div><div class="w">2026.11~12</div><div class="t">엔젤X soft 시연</div><div class="d">허리 보조<br>숙임·쪼그림 작업</div></div>
+        <div class="tln ask" data-step="2"><div class="dot"></div><div class="w">2027년 초</div><div class="t">어깨 보조 장비</div><div class="d">오버헤드 작업용<br>개발 완료 예정(업체 설명)</div></div>
+        <div class="tln" data-step="3"><div class="dot"></div><div class="w">이후</div><div class="t">상향 취부·용접까지</div><div class="d">허리와 어깨를<br>함께 보조</div></div>
+      </div>
+      <div class="src" data-step="3">출처: 엔젤로보틱스 상담 내용(2026.10)</div>
+    </div>
+  </section>
+
+  <!-- S14 시연 계획 · 대사 16–17 -->
+  <section class="scene" data-part="PART G · 시연">
+    <div class="scene-inner">
+      <div class="kicker" data-step="1">시연 계획</div>
+      <h2 class="scene-title" data-step="1"><span class="hl">11~12월 시연</span>, 우리 현장에서 먼저 확인</h2>
+      <div class="tl">
+        <div class="tln hot" data-step="1"><div class="dot"></div><div class="w">일정</div><div class="t">11~12월</div><div class="d">엔젤로보틱스 시연</div></div>
+        <div class="tln" data-step="1"><div class="dot"></div><div class="w">대상</div><div class="t">취부·사상 2~3명</div><div class="d">블록 안<br>숙임·쪼그림 작업</div></div>
+        <div class="tln" data-step="2"><div class="dot"></div><div class="w">확인 ①</div><div class="t">계속 입는가</div><div class="d">착용 시간<br>불편한 점</div></div>
+        <div class="tln" data-step="2"><div class="dot"></div><div class="w">확인 ②</div><div class="t">간섭·방염</div><div class="d">맨홀·안전대<br>용접 불티</div></div>
+      </div>
+      <div class="concl" data-step="3" style="font-size:40px;margin-top:52px">착용감이 관건 — 현장 연구에선 <span class="hl">24명 중 11명</span>만 계속 착용</div>
+      <div class="src center" data-step="3">출처: 버지니아공대 18개월 현장 연구(2025)</div>
+    </div>
+  </section>
+
+  <!-- S15 클로징 · 대사 18 -->
+  <section class="scene" data-part="PART G · 시연">
+    <div class="scene-inner center">
+      <h2 class="title-xl" data-step="1" style="font-size:88px">자동화가 못 들어가는 자리,<br><span class="hl pulse">사람의 허리부터</span></h2>
+      <div class="sub-tag" data-step="2">엔젤X soft 시연 11~12월 · 조립4과</div>
+    </div>
+  </section>
+
+  <div class="hud" id="partBadge"><i></i><span>PART</span></div>
+  <div class="hud" id="sceneNo">01 / 15</div>
+  <div class="hud" id="stepNo">→ 스텝 1/2</div>
+  <div id="help">→ 다음 · ← 이전 · F 전체화면 · A 자동재생 · B 암전</div>
+  <div id="bar"></div>
+</div>
+<div id="blackout"></div>
+
+<script>
+(function () {
+  var stage   = document.getElementById('stage');
+  var scenes  = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var partEl  = document.querySelector('#partBadge span');
+  var sceneNo = document.getElementById('sceneNo');
+  var stepNo  = document.getElementById('stepNo');
+  var barEl   = document.getElementById('bar');
+  var black   = document.getElementById('blackout');
+
+  var si = 0, sj = 0, auto = null;
+  var AUTO_MS = 3200;            // 자동재생 간격(영상 녹화용)
+
+  function fitStage() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  function stepsOf(scene) {
+    var nums = [];
+    Array.prototype.forEach.call(scene.querySelectorAll('[data-step]'), function (el) {
+      var n = parseInt(el.getAttribute('data-step'), 10);
+      if (!isNaN(n) && nums.indexOf(n) === -1) nums.push(n);
+    });
+    nums.sort(function (a, b) { return a - b; });
+    return nums;
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  /* 카운트업 — 스텝이 켜질 때 실행 */
+  function runCounter(el) {
+    var target = parseFloat(el.getAttribute('data-count') || '0');
+    var dec    = parseInt(el.getAttribute('data-dec') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var t0 = null, dur = 1200;
+    function tick(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      var v = target * (1 - Math.pow(1 - p, 3));
+      el.textContent = (dec ? v.toFixed(dec) : Math.round(v).toLocaleString('ko-KR')) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    el.textContent = (dec ? (0).toFixed(dec) : '0') + suffix;
+    requestAnimationFrame(tick);
+  }
+  /* 링 draw */
+  function runRing(el) {
+    var total = parseFloat(el.getAttribute('stroke-dasharray')) || 0;
+    var ratio = parseFloat(el.getAttribute('data-ratio') || '0');
+    el.style.transition = 'none';
+    el.style.strokeDashoffset = total;
+    el.getBoundingClientRect();
+    el.style.transition = '';
+    requestAnimationFrame(function () { el.style.strokeDashoffset = total * (1 - ratio); });
+  }
+  /* 방금 켜진 스텝 요소 안에서, 그 스텝 소속인 카운터·링만 실행 */
+  function fire(stepEl) {
+    var pick = function (sel) {
+      var list = Array.prototype.slice.call(stepEl.querySelectorAll(sel));
+      if (stepEl.matches(sel)) list.unshift(stepEl);
+      return list.filter(function (x) { return x.closest('[data-step]') === stepEl || x === stepEl; });
+    };
+    pick('.counter').forEach(runCounter);
+    pick('.ring').forEach(runRing);
+  }
+
+  function render() {
+    var scene = scenes[si];
+    scenes.forEach(function (s, i) {
+      s.classList.toggle('active', i === si);
+      if (i !== si) Array.prototype.forEach.call(s.querySelectorAll('[data-step]'), function (el) { el.classList.remove('on'); });
+    });
+    var steps = stepsOf(scene);
+    Array.prototype.forEach.call(scene.querySelectorAll('[data-step]'), function (el) {
+      var n = parseInt(el.getAttribute('data-step'), 10);
+      var should = steps.indexOf(n) <= sj, was = el.classList.contains('on');
+      el.classList.toggle('on', should);
+      if (should && !was) fire(el);
+    });
+    partEl.textContent = scene.getAttribute('data-part') || '';
+    sceneNo.textContent = pad(si + 1) + ' / ' + pad(scenes.length);
+    stepNo.textContent = '→ 스텝 ' + (sj + 1) + '/' + Math.max(steps.length, 1);
+    barEl.style.width = ((si + (sj + 1) / Math.max(steps.length, 1)) / scenes.length * 100) + '%';
+  }
+
+  function next() {
+    var steps = stepsOf(scenes[si]);
+    if (sj < steps.length - 1) { sj++; render(); }
+    else if (si < scenes.length - 1) { si++; sj = 0; render(); }
+    else if (auto) { stopAuto(); }
+  }
+  function prev() {
+    if (sj > 0) { sj--; render(); }
+    else if (si > 0) { si--; sj = Math.max(stepsOf(scenes[si]).length - 1, 0); render(); }
+  }
+  function startAuto() { if (!auto) auto = setInterval(next, AUTO_MS); }
+  function stopAuto() { clearInterval(auto); auto = null; }
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === ' ' || k === 'PageDown') { e.preventDefault(); stopAuto(); next(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); stopAuto(); prev(); }
+    else if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    }
+    else if (k === 'a' || k === 'A') { auto ? stopAuto() : startAuto(); }
+    else if (k === 'b' || k === 'B') { black.classList.toggle('on'); }
+    else if (k === 'Home') { si = 0; sj = 0; render(); }
+  });
+  stage.addEventListener('click', function () { stopAuto(); next(); });
+
+  window.__deck = { next: next, prev: prev, state: function () { return { si: si, sj: sj, n: scenes.length }; } };
+  render();
+})();
+</script>
+</body>
+</html>
