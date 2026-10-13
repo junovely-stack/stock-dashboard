@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-12 07:16:01",
+  "updated_at": "2026-10-13 07:38:05",
   "stocks": {
     "005930": {
       "name": "삼성전자",
       "code": "005930",
       "returns": {
-        "current": 250500,
-        "weekly": -9.24,
-        "monthly": -7.05,
-        "three_month": -1.57
+        "current": 232000,
+        "weekly": -15.94,
+        "monthly": -13.91,
+        "three_month": -8.84
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 250500,
-          "open": 260000,
-          "high": 262500,
-          "low": 249500,
-          "volume": 18793622
+          "date": "2026.10.13",
+          "close": 232000,
+          "open": 241500,
+          "high": 244000,
+          "low": 228000,
+          "volume": 26253608
         },
         {
           "date": "2026.10.08",
@@ -537,19 +537,19 @@
       "name": "SK하이닉스",
       "code": "000660",
       "returns": {
-        "current": 1605000,
-        "weekly": -12.82,
-        "monthly": -13.52,
-        "three_month": -12.99
+        "current": 1443000,
+        "weekly": -21.62,
+        "monthly": -22.25,
+        "three_month": -21.77
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 1605000,
-          "open": 1640000,
-          "high": 1653000,
-          "low": 1605000,
-          "volume": 3254433
+          "date": "2026.10.13",
+          "close": 1443000,
+          "open": 1538000,
+          "high": 1554000,
+          "low": 1425000,
+          "volume": 5615151
         },
         {
           "date": "2026.10.08",
@@ -1069,19 +1069,19 @@
       "name": "LG에너지솔루션",
       "code": "373220",
       "returns": {
-        "current": 398000,
-        "weekly": 7.28,
-        "monthly": 7.28,
-        "three_month": 21.16
+        "current": 410000,
+        "weekly": 10.51,
+        "monthly": 10.51,
+        "three_month": 24.81
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 398000,
-          "open": 410000,
-          "high": 423000,
-          "low": 395500,
-          "volume": 549854
+          "date": "2026.10.13",
+          "close": 410000,
+          "open": 392000,
+          "high": 413000,
+          "low": 377000,
+          "volume": 634541
         },
         {
           "date": "2026.10.08",
@@ -1601,19 +1601,19 @@
       "name": "NAVER",
       "code": "035420",
       "returns": {
-        "current": 180500,
-        "weekly": -6.09,
-        "monthly": -14.05,
-        "three_month": -3.99
+        "current": 178000,
+        "weekly": -7.39,
+        "monthly": -15.24,
+        "three_month": -5.32
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 180500,
-          "open": 182400,
-          "high": 185150,
-          "low": 179500,
-          "volume": 563151
+          "date": "2026.10.13",
+          "close": 178000,
+          "open": 176100,
+          "high": 178300,
+          "low": 173200,
+          "volume": 791907
         },
         {
           "date": "2026.10.08",
@@ -2133,19 +2133,19 @@
       "name": "현대차",
       "code": "005380",
       "returns": {
-        "current": 320000,
-        "weekly": -7.65,
-        "monthly": -17.53,
-        "three_month": -27.47
+        "current": 315000,
+        "weekly": -9.09,
+        "monthly": -18.81,
+        "three_month": -28.61
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 320000,
-          "open": 320000,
-          "high": 334000,
-          "low": 318500,
-          "volume": 725787
+          "date": "2026.10.13",
+          "close": 315000,
+          "open": 307500,
+          "high": 315500,
+          "low": 299000,
+          "volume": 905014
         },
         {
           "date": "2026.10.08",
@@ -2665,19 +2665,19 @@
       "name": "카카오",
       "code": "035720",
       "returns": {
-        "current": 32000,
-        "weekly": -4.33,
-        "monthly": -8.7,
-        "three_month": -7.91
+        "current": 31300,
+        "weekly": -6.43,
+        "monthly": -10.7,
+        "three_month": -9.93
       },
       "prices": [
         {
-          "date": "2026.10.12",
-          "close": 32000,
-          "open": 32300,
-          "high": 32600,
-          "low": 31650,
-          "volume": 1716617
+          "date": "2026.10.13",
+          "close": 31300,
+          "open": 31050,
+          "high": 31500,
+          "low": 30250,
+          "volume": 2125238
         },
         {
           "date": "2026.10.08",
