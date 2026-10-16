@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D7에서 멈춘 지식베이스</title>
+<style>
+:root{
+  --ground:#0A1A2F; --ground-2:#0D2138; --card:#16263D; --line:#22374F;
+  --ink:#FFFFFF; --sub:#AAB7C4; --dim:#7C8C9C;
+  --accent:#FF6B1A;
+  --g-G:#B8862F; --g-E:#3D7AB8; --g-C:#2F9268; --g-Q:#D9531F;
+  --good:#2c8a5f; --warn:#c89010; --bad:#b3402a;
+  --f-sans:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic","맑은 고딕",sans-serif;
+  --f-mono:ui-monospace,"Consolas","D2Coding",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground); color:var(--ink); font-family:var(--f-sans);
+  word-break:keep-all; overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+.deck{height:100svh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+.panel{
+  min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-block:48px;padding-left:clamp(20px,5vw,72px);padding-right:clamp(20px,5vw,72px);
+  position:relative;
+}
+.wrap{width:100%;max-width:1120px;margin:0 auto}
+
+/* ── 타이포 ─────────────────────────── */
+.eyebrow{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);margin:0 0 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap
+}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1{font-size:clamp(34px,6.4vw,76px);line-height:1.08;letter-spacing:-.03em;font-weight:800;
+   margin:0 0 22px;text-wrap:balance}
+h2{font-size:clamp(26px,3.6vw,44px);line-height:1.18;letter-spacing:-.025em;font-weight:800;
+   margin:0 0 12px;text-wrap:balance}
+.lead{font-size:clamp(14px,1.35vw,17px);line-height:1.65;color:var(--sub);max-width:60ch;margin:0}
+.lead strong{color:var(--ink);font-weight:600}
+.note{font-size:13px;line-height:1.6;color:var(--dim);max-width:58ch;margin:14px 0 0}
+.mono{font-family:var(--f-mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── 키네틱 타이포 ───────────────────── */
+.kin{display:inline-block}
+.kin span{display:inline-block;transform:translateY(0);opacity:1;filter:blur(0)}
+.replay .kin span{animation:rise .62s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d)}
+@keyframes rise{from{transform:translateY(.5em) rotateX(-55deg);opacity:0;filter:blur(6px)}
+                to{transform:none;opacity:1;filter:blur(0)}}
+.hot{color:var(--accent);position:relative;white-space:nowrap}
+.hot::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.09em;background:var(--accent);
+  transform-origin:left;transform:scaleX(1)}
+.replay .hot::after{animation:swipe .5s .55s cubic-bezier(.16,1,.3,1) both}
+@keyframes swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pulse{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+/* ── 타일 ────────────────────────────── */
+.tiles{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.tile{
+  background:var(--card);border-top:3px solid var(--line);border-radius:3px;
+  padding:16px 20px 14px;min-width:132px;flex:1 1 132px
+}
+.tile.t-acc{border-top-color:var(--accent)}
+.tile.t-e{border-top-color:var(--g-E)}
+.tile.t-g{border-top-color:var(--g-G)}
+.tile.t-c{border-top-color:var(--g-C)}
+.tile.t-q{border-top-color:var(--g-Q)}
+.tile .v{font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.tile .u{font-size:12px;color:var(--dim);margin-left:3px;font-weight:600}
+.tile .k{font-size:12px;color:var(--sub);margin-top:8px;letter-spacing:.02em}
+
+/* ── 스택 바 ─────────────────────────── */
+.stack{display:flex;gap:2px;height:46px;margin:26px 0 14px;border-radius:2px;overflow:hidden}
+.seg{position:relative;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#06131F;transform-origin:left;font-variant-numeric:tabular-nums}
+.replay .seg{animation:grow .7s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d)}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--sub)}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:7px;
+  vertical-align:-1px}
+.legend b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ── 와플 ────────────────────────────── */
+.waffle{display:flex;gap:32px;flex-wrap:wrap;margin:30px 0 8px}
+.wgroup{display:flex;flex-direction:column;gap:9px}
+.wgrid{display:grid;grid-template-columns:repeat(4,26px);gap:7px}
+.cell{width:26px;height:26px;border-radius:3px;background:#1E3350;border:1px solid #2A425E}
+.cell.done{background:var(--g-C);border-color:var(--g-C);box-shadow:0 0 0 3px rgba(47,146,104,.22)}
+.replay .cell{animation:pop .34s ease-out both;animation-delay:var(--d)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.wlabel{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;color:var(--dim)}
+.wlabel u{text-decoration:none;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.wlabel b{color:var(--sub)}
+
+/* ── 차트 ────────────────────────────── */
+.chartbox{margin-top:22px;background:var(--card);border-radius:3px;padding:16px 10px 8px;
+  border-left:3px solid var(--accent);overflow-x:auto}
+svg{display:block;max-width:100%;height:auto}
+.ax{stroke:#2A425E;stroke-width:1}
+.grid{stroke:#1F334C;stroke-width:1}
+.tick{fill:var(--dim);font-size:11px;font-family:var(--f-mono)}
+.axname{fill:var(--sub);font-size:11.5px}
+.curve{fill:none;stroke:var(--g-E);stroke-width:2;stroke-linecap:round}
+.thr{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:5 4}
+.dot{fill:var(--accent);stroke:var(--card);stroke-width:2}
+.clab{fill:var(--ink);font-size:12.5px;font-weight:700}
+.clab-s{fill:var(--sub);font-size:11px}
+
+/* ── 2열 ─────────────────────────────── */
+.cols{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:start;margin-top:8px}
+@media (max-width:860px){.cols{grid-template-columns:1fr;gap:22px}}
+
+/* ── 흐름 ────────────────────────────── */
+.flow{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.frow{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap}
+.fbox{background:var(--card);border-radius:3px;padding:13px 16px;flex:1 1 190px;
+  border-left:3px solid var(--line)}
+.fbox.acc{border-left-color:var(--accent)}
+.fbox.ok{border-left-color:var(--good)}
+.fbox.no{border-left-color:var(--g-Q)}
+.fbox .ft{font-size:13px;font-weight:700;margin-bottom:5px}
+.fbox .fd{font-size:12px;color:var(--sub);line-height:1.55}
+.farrow{align-self:center;color:var(--dim);font-family:var(--f-mono);font-size:16px}
+.cta{margin-top:22px;background:#071524;border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:3px;padding:14px 18px;font-family:var(--f-mono);font-size:13.5px;color:var(--ink);
+  overflow-x:auto;white-space:nowrap}
+.cta span{color:var(--dim)}
+
+/* ── 네비 ────────────────────────────── */
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;
+  gap:11px;z-index:9}
+.dots button{width:9px;height:9px;border-radius:50%;border:1px solid #3A5570;background:transparent;
+  padding:0;cursor:pointer;transition:background .2s,transform .2s}
+.dots button[aria-current="true"]{background:var(--accent);border-color:var(--accent);transform:scale(1.35)}
+.dots button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.bar{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);width:0;z-index:9;
+  transition:width .25s ease}
+.pgnum{position:fixed;left:clamp(20px,5vw,72px);bottom:16px;font-family:var(--f-mono);font-size:11px;
+  color:var(--dim);letter-spacing:.1em;z-index:9}
+.hint{margin:42px 0 0;font-family:var(--f-mono);font-size:11.5px;color:var(--dim);letter-spacing:.1em}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .deck{scroll-behavior:auto}
+}
+@media print{
+  .deck{height:auto;overflow:visible}
+  .panel{min-height:auto;page-break-after:always}
+  .dots,.bar,.pgnum,.hint{display:none}
+  .seg-G{fill:#B8862F}.seg-E{fill:#3D7AB8}.seg-C{fill:#2F9268}.seg-Q{fill:#D9531F}
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1 ─────────────────────────────────────────── -->
+<section class="panel" data-t="현재 위치">
+ <div class="wrap">
+  <p class="eyebrow">조선소 조립공정 지식베이스 · <b>진행보고 REV01</b> · 데이터 기준 2026-09-13</p>
+  <h1><span class="kin" data-kin>지금 </span><span class="hot mono pulse">D7</span><span class="kin" data-kin>에서 멈춰 있다</span></h1>
+  <p class="lead">사내 확인이 필요한 <strong>36개 질문 중 1개</strong>가 풀렸다. 그 1개가 당일검사완료율의 해석을 바꿨고, 나머지 35개는 답을 기다린다.</p>
+  <div class="tiles">
+    <div class="tile t-acc"><div class="v num" data-count="4">4</div><div class="k">산출물 (문서 3 + 도구 1)</div></div>
+    <div class="tile t-e"><div class="v num" data-count="135">135</div><div class="k">용어사전 항목</div></div>
+    <div class="tile t-c"><div class="v num" data-count="1">1</div><div class="k">확정된 질문 (D1)</div></div>
+    <div class="tile t-q"><div class="v num" data-count="35">35</div><div class="k">대기 중인 질문</div></div>
+  </div>
+  <p class="hint">PAGE DOWN ↓</p>
+ </div>
+</section>
+
+<!-- 2 ─────────────────────────────────────────── -->
+<section class="panel" data-t="쌓은 것">
+ <div class="wrap">
+  <p class="eyebrow">STEP 1 · 습득</p>
+  <h2>없는 숫자는 한 줄도 넣지 않았다</h2>
+  <p class="lead">본문 599줄·용어 135항목을 쌓으면서 모든 주장에 <strong>근거 등급</strong>을 붙였다. 야드마다 다른 값은 채우지 않고 본문 33개소에 <span class="mono">[?]</span>로 비워 뒀다.</p>
+
+  <div class="stack" id="stack" role="img"
+       aria-label="용어사전 135항목의 근거 등급 구성: 업계통용 45, 외부검증 88, 사내확정 1, 미확정 1"></div>
+  <div class="legend" id="legend"></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="v num" data-count="599">599</div><div class="k">지식 본문 (줄)</div></div>
+    <div class="tile"><div class="v num" data-count="141">141</div><div class="k">검증로그 (줄)</div></div>
+    <div class="tile"><div class="v num" data-count="409">409</div><div class="k">진단 스크립트 (줄)</div></div>
+    <div class="tile"><div class="v num" data-count="16">16</div><div class="k">교차검증 외부 출처</div></div>
+  </div>
+  <p class="note">외부 출처는 특허(오토캐리지·핀지그)·용접학회 논문(선상가열)·한국선급 규칙·EPA 산업노트북 등. 나무위키·기업 블로그 2건은 사내 프록시에서 차단돼 <span class="mono">[G]</span> 이하로 내렸다.</p>
+ </div>
+</section>
+
+<!-- 3 ─────────────────────────────────────────── -->
+<section class="panel" data-t="검증 진척">
+ <div class="wrap">
+  <p class="eyebrow">STEP 2 · 검증</p>
+  <h2>36칸 중 초록은 아직 한 칸</h2>
+  <p class="lead">외부 자료로는 끝까지 알 수 없는 것 — 완료 판정 시점, 정반 구성, 데이터 스키마 — 을 36개 질문으로 뽑았다. <strong>D1 하나만 확정</strong>됐고 D7·D8은 그 답에서 새로 생겼다.</p>
+  <div class="waffle" id="waffle"></div>
+  <p class="note">칸 하나가 질문 하나. 초록 = 확정, 빈칸 = 대기. 그룹은 질문 영역이고, 칸에 마우스를 올리면 질문 번호가 보인다.</p>
+ </div>
+</section>
+
+<!-- 4 ─────────────────────────────────────────── -->
+<section class="panel" data-t="확정이 바꾼 것">
+ <div class="wrap">
+  <p class="eyebrow">STEP 3 · 해석</p>
+  <h2>재검이 새 행이면, 98%는 사실 2%다</h2>
+  <div class="cols">
+   <div>
+    <div class="chartbox">
+     <svg id="chart" viewBox="0 0 660 318" role="img"
+          aria-label="1차 검사 불합격률에 따른 당일검사완료율. 불합격률 2.04%에서 목표 98%와 만난다."></svg>
+    </div>
+   </div>
+   <div>
+    <p class="lead">재검이 원 검사와 <strong>별도 행</strong>으로 쌓이므로 분모는 검사 부위 수가 아니라 <strong>검사 시행 횟수</strong>다. 1회 재검으로 통과한다고 두면 목표 98%는 <strong>1차 R률 2.04% 이하</strong>와 같다.</p>
+    <p class="note">현장에는 “98%”보다 <strong style="color:var(--ink)">“100건 중 1차에서 2건까지만 R”</strong>이 빨리 꽂힌다.</p>
+    <p class="note">그리고 1차 R과 재검 A는 <strong style="color:var(--ink)">다른 날</strong>에 잡힌다. 손실과 회복이 갈려서 일별 변동이 실제 품질보다 부풀어 보인다 — 일별 신호등은 경보용, 판단은 월 누계로.</p>
+    <p class="note" style="color:var(--g-Q)">단, 이 2.04%는 아직 검증 전이다. 행이 1차인지 재검인지 구분되지 않으면 1차 R률 자체를 셀 수 없다. 그래서 보고서에 단독으로 쓰지 말라고 문서에 박아 뒀다.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 5 ─────────────────────────────────────────── -->
+<section class="panel" data-t="다음 한 수">
+ <div class="wrap">
+  <p class="eyebrow">STEP 4 · 다음</p>
+  <h2>스크립트 한 번이면 네 건이 풀린다</h2>
+  <p class="lead">D7은 DRM 걸린 엑셀을 열어 컬럼을 눈으로 뒤져야 답할 수 있다. 그 손품을 대신하는 <strong>진단 스크립트</strong>를 만들어 뒀다.</p>
+
+  <div class="flow">
+   <div class="frow">
+    <div class="fbox"><div class="ft">검사 데이터 투입</div><div class="fd">DRM 파일은 숨긴 Excel 인스턴스에서 read-only로 읽고 종료. 실패하면 pandas로 폴백.</div></div>
+    <div class="farrow">→</div>
+    <div class="fbox"><div class="ft">컬럼 역할 자동 추정</div><div class="fd">차수·원번호·판정·사유 컬럼을 이름과 값 패턴으로 탐색. 실명·사번 의심 컬럼은 샘플값 마스킹.</div></div>
+    <div class="farrow">→</div>
+    <div class="fbox acc"><div class="ft">D7 판정</div><div class="fd">재검 행을 원 행에 이을 키가 있는가.</div></div>
+   </div>
+   <div class="frow">
+    <div class="fbox ok"><div class="ft">키가 있다 → 해결</div><div class="fd">1차 R률을 직접 셀 수 있다. 2.04% 해석을 확정 표기로 올리고, R 사전경고 모델의 라벨도 깨끗해진다.</div></div>
+    <div class="fbox no"><div class="ft">키가 없다 → 근사로</div><div class="fd">같은 부위 중복 그룹으로 1차 R률 상한만 추정. 2.04%는 근사치로 남기고 MES에 차수 컬럼 추가를 요청한다.</div></div>
+   </div>
+  </div>
+
+  <div class="cta"><span>사내 PC에서 &gt;</span> py 검사데이터_구조진단_REV01.py --selftest <span>&nbsp;&nbsp;# 먼저 더미로 동작 확인</span></div>
+  <p class="note">돌리면 <span class="mono">[7] 검증로그 자동 회신안</span> 블록이 나온다. 그걸 그대로 붙여 주면 D1·D2·D7·D8 네 건이 한 번에 정리된다.</p>
+ </div>
+</section>
+
+</div>
+
+<nav class="dots" id="dots" aria-label="장 이동"></nav>
+<div class="bar" id="bar"></div>
+<p class="pgnum" id="pgnum">01 / 05</p>
+
+<script>
+(function(){
+  "use strict";
+  var deck = document.getElementById('deck');
+  var panels = Array.prototype.slice.call(deck.querySelectorAll('.panel'));
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── 키네틱 타이포: 글자 분해 ── */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-kin]'), function(el){
+    var txt = el.textContent, out = '';
+    for (var i=0;i<txt.length;i++){
+      var ch = txt[i] === ' ' ? '&nbsp;' : txt[i];
+      out += '<span style="--d:' + (i*38) + 'ms">' + ch + '</span>';
+    }
+    el.innerHTML = out;
+  });
+
+  /* ── 등급 스택 바 ── */
+  var GRADES = [
+    {k:'G', n:45, c:'var(--g-G)', label:'업계통용', desc:'통용되나 출처 단일'},
+    {k:'E', n:88, c:'var(--g-E)', label:'외부검증', desc:'공개자료 2건 이상 교차'},
+    {k:'C', n:1,  c:'var(--g-C)', label:'사내확정', desc:'담당자 확인 · 날짜 기록'},
+    {k:'Q', n:1,  c:'var(--g-Q)', label:'미확정',   desc:'값을 채우지 않음'}
+  ];
+  var total = GRADES.reduce(function(s,g){return s+g.n;},0);
+  var stack = document.getElementById('stack'), legend = document.getElementById('legend');
+  GRADES.forEach(function(g,i){
+    var d = document.createElement('div');
+    d.className = 'seg';
+    d.style.cssText = 'flex:' + g.n + ' 0 0;background:' + g.c + ';--d:' + (160+i*110) + 'ms';
+    if (g.n/total > 0.15) d.textContent = g.n;
+    d.title = g.label + ' ' + g.n + '항목';
+    stack.appendChild(d);
+    var li = document.createElement('span');
+    li.innerHTML = '<i style="background:' + g.c + '"></i>' + g.label +
+                   ' <b>' + g.n + '</b> <span style="color:var(--dim)">· ' + g.desc + '</span>';
+    legend.appendChild(li);
+  });
+
+  /* ── 와플: 36개 질문 ── */
+  var AREAS = [
+    {k:'A', n:6, t:'완료·기성 정의'},
+    {k:'B', n:8, t:'입·반출 / 정반'},
+    {k:'C', n:8, t:'공종·작업 구분'},
+    {k:'D', n:8, t:'검사 데이터'},
+    {k:'E', n:3, t:'기준값 재확인'},
+    {k:'F', n:3, t:'용어 확정'}
+  ];
+  var DONE = {'D1':true};
+  var waffle = document.getElementById('waffle'), seq = 0;
+  AREAS.forEach(function(a){
+    var g = document.createElement('div'); g.className = 'wgroup';
+    var grid = document.createElement('div'); grid.className = 'wgrid';
+    for (var i=1;i<=a.n;i++){
+      var id = a.k + i;
+      var c = document.createElement('div');
+      c.className = 'cell' + (DONE[id] ? ' done' : '');
+      c.style.setProperty('--d', (seq++*22) + 'ms');
+      c.title = id + (DONE[id] ? ' · 확정' : ' · 대기');
+      grid.appendChild(c);
+    }
+    var lb = document.createElement('div');
+    lb.className = 'wlabel';
+    lb.innerHTML = a.k + ' <b>' + a.t + '</b> <u>' + a.n + '</u>';
+    g.appendChild(lb); g.appendChild(grid);
+    waffle.appendChild(g);
+  });
+
+  /* ── 차트: 1차 R률 → 당일검사완료율 ── */
+  (function(){
+    var W=660,H=318,L=54,R=118,T=30,B=46;
+    var x0=L, x1=W-R, y0=T, y1=H-B;
+    var xMax=6, yMin=94, yMax=100;
+    var X=function(r){return x0+(r/xMax)*(x1-x0);};
+    var Y=function(v){return y1-((v-yMin)/(yMax-yMin))*(y1-y0);};
+    var s='';
+    // grid + y축
+    for(var v=yMin; v<=yMax; v+=1){
+      s+='<line class="grid" x1="'+x0+'" y1="'+Y(v).toFixed(1)+'" x2="'+x1+'" y2="'+Y(v).toFixed(1)+'"/>';
+      s+='<text class="tick" x="'+(x0-9)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end">'+v+'%</text>';
+    }
+    // x축 눈금
+    for(var r=0;r<=xMax;r+=1){
+      s+='<text class="tick" x="'+X(r).toFixed(1)+'" y="'+(y1+20)+'" text-anchor="middle">'+r+'%</text>';
+    }
+    s+='<line class="ax" x1="'+x0+'" y1="'+y1+'" x2="'+x1+'" y2="'+y1+'"/>';
+    // 곡선  지표 = 1/(1+r)
+    var pts=[];
+    for(var i=0;i<=120;i++){
+      var rr=(i/120)*xMax, vv=100/(1+rr/100);
+      pts.push(X(rr).toFixed(1)+','+Y(vv).toFixed(1));
+    }
+    s+='<polyline class="curve" points="'+pts.join(' ')+'"/>';
+    // 목표선 98%
+    s+='<line class="thr" x1="'+x0+'" y1="'+Y(98).toFixed(1)+'" x2="'+x1+'" y2="'+Y(98).toFixed(1)+'"/>';
+    s+='<text class="clab" x="'+(x1+8)+'" y="'+(Y(98)-6).toFixed(1)+'">목표 98%</text>';
+    // 교차점 r = 2.0408%
+    var rc=100*(100/98-1);
+    s+='<line class="thr" x1="'+X(rc).toFixed(1)+'" y1="'+Y(98).toFixed(1)+'" x2="'+X(rc).toFixed(1)+'" y2="'+y1+'"/>';
+    s+='<circle class="dot" cx="'+X(rc).toFixed(1)+'" cy="'+Y(98).toFixed(1)+'" r="6"/>';
+    s+='<text class="clab" x="'+(x1+8)+'" y="'+(Y(98)+14).toFixed(1)+'">1차 R률 2.04%</text>';
+    s+='<text class="clab-s" x="'+(x1+8)+'" y="'+(Y(98)+31).toFixed(1)+'">여기까지가 달성</text>';
+    // 축 이름 (방향 포함)
+    s+='<text class="axname" x="'+x0+'" y="'+(H-8)+'">1차 검사 불합격률 / 오른쪽으로 갈수록 R이 많다</text>';
+    s+='<text class="axname" x="'+x0+'" y="12">당일검사완료율 / 위로 갈수록 높다</text>';
+    document.getElementById('chart').innerHTML=s;
+  })();
+
+  /* ── 숫자 카운트업 ── */
+  function countUp(el){
+    var to = parseInt(el.getAttribute('data-count'),10);
+    if (reduce || to <= 4){ el.textContent = to; return; }
+    var st = null, dur = 900;
+    function step(ts){
+      if(!st) st = ts;
+      var p = Math.min((ts-st)/dur, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1-p,3)));
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── 도트 네비 ── */
+  var dots = document.getElementById('dots'), bar = document.getElementById('bar'),
+      pgnum = document.getElementById('pgnum');
+  panels.forEach(function(p,i){
+    var b = document.createElement('button');
+    b.type='button';
+    b.setAttribute('aria-label', (i+1)+'장 ' + (p.getAttribute('data-t')||''));
+    b.addEventListener('click', function(){ go(i); });
+    dots.appendChild(b);
+  });
+  var dotBtns = Array.prototype.slice.call(dots.children);
+  var cur = -1;
+
+  function setCurrent(i){
+    if (i === cur) return;
+    cur = i;
+    dotBtns.forEach(function(b,j){ b.setAttribute('aria-current', j===i ? 'true':'false'); });
+    bar.style.width = ((i+1)/panels.length*100) + '%';
+    pgnum.textContent = String(i+1).padStart(2,'0') + ' / ' + String(panels.length).padStart(2,'0');
+    if (!reduce){
+      var p = panels[i];
+      p.classList.remove('replay');
+      void p.offsetWidth;
+      p.classList.add('replay');
+    }
+    Array.prototype.forEach.call(panels[i].querySelectorAll('[data-count]'), countUp);
+  }
+  function go(i){
+    panels[Math.max(0,Math.min(panels.length-1,i))].scrollIntoView({behavior: reduce?'auto':'smooth'});
+  }
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting && e.intersectionRatio > 0.55) setCurrent(panels.indexOf(e.target));
+      });
+    }, {root: deck, threshold:[0.55]});
+    panels.forEach(function(p){ io.observe(p); });
+  }
+  setCurrent(0);
+
+  /* ── 키보드: 편집 중·모달 열림에는 무시 ── */
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    var k = e.key;
+    if (k==='PageDown' || k==='ArrowDown' || k===' '){ e.preventDefault(); go(cur+1); }
+    else if (k==='PageUp' || k==='ArrowUp'){ e.preventDefault(); go(cur-1); }
+    else if (k==='Home'){ e.preventDefault(); go(0); }
+    else if (k==='End'){ e.preventDefault(); go(panels.length-1); }
+  });
+})();
+</script>
+</body>
+</html>
