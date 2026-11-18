@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}관리자{% endblock %} — Shopping Content Factory</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="{{ url_for('admin.dashboard') }}">SCF<span>.</span> 관리자</a>
+  {% if session.admin %}
+  <nav aria-label="관리자 메뉴">
+    {% set ep = request.endpoint %}
+    <a href="{{ url_for('admin.dashboard') }}" class="{{ 'on' if ep=='admin.dashboard' }}">대시보드</a>
+    <a href="{{ url_for('admin.candidates') }}" class="{{ 'on' if ep=='admin.candidates' }}">후보·선정</a>
+    <a href="{{ url_for('admin.contents') }}" class="{{ 'on' if ep in ('admin.contents','admin.content_detail') }}">콘텐츠 검수</a>
+    <a href="{{ url_for('admin.publications') }}" class="{{ 'on' if ep=='admin.publications' }}">게시 이력</a>
+    <a href="{{ url_for('admin.analytics') }}" class="{{ 'on' if ep=='admin.analytics' }}">성과</a>
+    <a href="{{ url_for('admin.finance') }}" class="{{ 'on' if ep=='admin.finance' }}">수익성</a>
+    <a href="{{ url_for('admin.logs') }}" class="{{ 'on' if ep=='admin.logs' }}">로그·비용</a>
+    <a href="{{ url_for('public.index') }}">공개 사이트</a>
+  </nav>
+  <form method="post" action="{{ url_for('admin.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="ghost">로그아웃</button></form>
+  {% endif %}
+</div>
+<div class="wrap">
+  {% with msgs = get_flashed_messages() %}{% for m in msgs %}<div class="flash" role="status">{{ m }}</div>{% endfor %}{% endwith %}
+  {% block main %}{% endblock %}
+</div>
+</body>
+</html>

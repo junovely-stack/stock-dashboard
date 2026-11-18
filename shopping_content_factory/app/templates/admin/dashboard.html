@@ -1,0 +1,68 @@
+{% extends "admin/base.html" %}
+{% block title %}대시보드{% endblock %}
+{% block main %}
+<div class="fresh">기준일 {{ today }} (Asia/Seoul) · 스케줄러 마지막 동작: {{ heartbeat or '기록 없음 (scheduler 미실행)' }} · AUTO_PUBLISH={{ 'true' if settings.auto_publish else 'false' }} · LLM={{ settings.llm_provider }}</div>
+
+<div class="grid">
+  <div class="card {{ 'accent' if final_p else 'warn' }}">
+    <h3>오늘의 선정 상품</h3>
+    {% if final_p %}
+      <div class="kpi">{{ final.total|num(1) }}점</div>
+      <p><a href="{{ url_for('admin.product_edit', pid=final_p.id) }}">{{ final_p.name }}</a> {% if final_p.is_demo %}<span class="badge demo">DEMO</span>{% endif %}</p>
+      <p class="muted small">{{ final.selection_reason }}</p>
+    {% else %}<p class="muted">아직 선정 없음 — 파이프라인 실행 필요</p>{% endif %}
+  </div>
+  <div class="card {{ 'warn' if pending else 'good' }}">
+    <h3>승인 대기</h3>
+    <div class="kpi">{{ pending|length }}</div>
+    {% for c in pending %}<p><a href="{{ url_for('admin.content_detail', cid=c.id) }}">{{ c.id }}</a> <span class="muted small">{{ c.title }}</span></p>{% endfor %}
+  </div>
+  <div class="card {{ 'bad' if today_cost > settings.cost_cap_daily_krw * 0.8 else 'good' }}">
+    <h3>API 비용 (상한 대비)</h3>
+    <div class="kpi">{{ today_cost|krw }}</div>
+    <p class="muted small">오늘 / 상한 {{ settings.cost_cap_daily_krw|krw }} · 이번 달 {{ month_cost|krw }} / {{ settings.cost_cap_monthly_krw|krw }}</p>
+  </div>
+  <div class="card {{ 'bad' if blocked else 'good' }}">
+    <h3>차단된 콘텐츠 (최근)</h3>
+    {% for c in blocked %}<p><a href="{{ url_for('admin.content_detail', cid=c.id) }}">{{ c.id }}</a><br><span class="muted small">{{ (c.block_reasons or [])[:2]|join(' / ') }}</span></p>{% else %}<p class="muted">없음</p>{% endfor %}
+  </div>
+</div>
+
+<h2 class="row">오늘 파이프라인
+  <form method="post" action="{{ url_for('admin.run') }}" class="inline">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="stage" value="__all__">
+    <button title="게시 단계 제외 전체 실행">전체 실행 (게시 제외)</button>
+  </form>
+</h2>
+<div class="pipeline">
+{% for st in stages %}{% set j = jobs.get(st.name) %}
+  <div class="step {{ j.status if j else '' }}">
+    <b>{{ st.at }}</b> {{ st.label }}<br>
+    <span class="badge {{ j.status if j else '' }}">{{ j.status if j else '대기' }}</span>
+    {% if j and j.message and j.status != 'succeeded' %}<div class="muted small">{{ j.message[:90] }}</div>{% endif %}
+    <form method="post" action="{{ url_for('admin.run') }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="stage" value="{{ st.name }}">
+      {% if j and j.status in ('succeeded','blocked') %}<input type="hidden" name="force" value="1"><button class="ghost">다시</button>{% else %}<button class="ghost">실행</button>{% endif %}
+    </form>
+  </div>
+{% endfor %}
+</div>
+
+<div class="grid wide">
+  <div class="card">
+    <h2>데이터 연결 상태</h2>
+    <table>
+      <tr><th>소스</th><th>상태</th><th>메모</th><th>마지막 성공</th></tr>
+      {% for d in sources %}<tr><td>{{ d.name }}</td><td><span class="badge {{ d.state }}">{{ d.state }}</span></td><td class="muted small">{{ d.note or '' }}{% if d.last_error %}<br>오류: {{ d.last_error[:80] }}{% endif %}</td><td class="small">{{ d.last_success_at|dt }}</td></tr>
+      {% else %}<tr><td colspan="4" class="muted">수집 전</td></tr>{% endfor %}
+    </table>
+    <p class="muted small">mock = 모의 데이터(실데이터 아님) · manual = CSV 수동 입력 · not_configured = 자격증명 없음(연동 대기)</p>
+  </div>
+  <div class="card">
+    <h2>선정 과정 기록</h2>
+    {% for l in logs %}<p><span class="badge">{{ l.step }}</span> {{ l.message }}</p>{% else %}<p class="muted">기록 없음</p>{% endfor %}
+    <h2>최근 API 오류</h2>
+    {% for e in errors %}<p class="small">{{ e.ts|dt }} <b>{{ e.provider }}</b> {{ e.operation }} {{ e.status_code or '' }} <span class="muted">{{ (e.error or '')[:100] }}</span></p>{% else %}<p class="muted">없음</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

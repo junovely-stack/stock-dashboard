@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+{% block title %}성과{% endblock %}
+{% block main %}
+<h1>성과 — 실측과 추정 분리</h1>
+<div class="fresh">조회수는 매출이 아닙니다. '연동 대기'는 값이 없다는 뜻이며 0 이 아닙니다. 수수료는 sub_id 로 콘텐츠에 연결된 것만 실측 귀속, 나머지는 미귀속으로 따로 둡니다.</div>
+<div class="card table-scroll">
+<table>
+  <tr><th>콘텐츠</th><th>상태·게시</th><th class="num">조회</th><th class="num">저장</th><th class="num">공유</th><th class="num">랜딩 방문</th><th class="num">방문율</th><th class="num">링크 클릭</th><th class="num">클릭률</th><th class="num">귀속 수수료</th><th class="num">RPM</th><th class="num">비용</th><th class="num">실측 손익</th><th class="num est">추정 구매(범위)</th></tr>
+  {% for r in rows %}<tr>
+    <td>{{ r.content_id }} {% if r.is_demo %}<span class="badge demo">DEMO</span>{% endif %}<br><span class="muted small">{{ r.product }} · {{ r.hook_type }}</span></td>
+    <td class="small"><span class="badge {{ r.status }}">{{ r.status }}</span>{% for k, v in r.publications.items() %}<br>{{ k }} {{ v }}{% endfor %}</td>
+    <td class="num">{{ r.measured.views|num }}</td><td class="num">{{ r.measured.saved|num }}</td><td class="num">{{ r.measured.shares|num }}</td>
+    <td class="num">{{ r.measured.landing_visits }}</td><td class="num">{{ r.rates.landing_rate|pct(2) }}</td>
+    <td class="num">{{ r.measured.link_clicks }}</td><td class="num">{{ r.rates.link_ctr|pct }}</td>
+    <td class="num">{{ r.measured.commission_krw|num }}</td><td class="num">{{ r.rpm_measured|num(1) }}</td><td class="num">{{ r.cost_krw|num }}</td><td class="num">{{ r.profit_measured|num }}</td>
+    <td class="num est small">약 {{ r.estimated.orders_low|round|int }}~{{ r.estimated.orders_high|round|int }}건<br><span class="muted">{{ r.estimated.basis }}</span></td></tr>
+  {% else %}<tr><td colspan="14" class="muted">콘텐츠 없음</td></tr>{% endfor %}
+</table>
+</div>
+<div class="grid wide">
+  <div class="card">
+    <h2>미귀속 제휴 실적</h2>
+    <p>주문 {{ un.orders }}건 · 구매액 {{ un.gmv_krw|krw }} · 수수료 {{ un.commission_krw|krw }} · 취소 {{ un.cancel_amount_krw|krw }}</p>
+    <p class="muted small">콘텐츠별로 나누지 않습니다. 콘텐츠별 귀속이 필요하면 링크마다 sub_id 를 다르게 등록하세요(쿠팡 리포트의 sub_id 분리 지원 여부는 계정에서 확인 필요).</p>
+  </div>
+  <div class="card stack">
+    <h2>CSV 업로드</h2>
+    <form method="post" enctype="multipart/form-data" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="kind" value="metrics">
+      <input type="file" name="file" accept=".csv" required aria-label="지표 CSV"><button>플랫폼 지표 적재</button></form>
+    <p class="muted small">형식: data/templates/metrics_import_template.csv (date,platform,content_id,variant,metric,value)</p>
+    <form method="post" enctype="multipart/form-data" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="kind" value="affiliate">
+      <input type="file" name="file" accept=".csv" required aria-label="쿠팡 리포트 CSV"><button>쿠팡 실적 적재</button></form>
+    <p class="muted small">형식: data/templates/coupang_report_template.csv (date,sub_id,clicks,orders,gmv_krw,commission_krw,cancel_count,cancel_amount_krw,status)</p>
+  </div>
+  <div class="card">
+    <h2>비용·호출</h2>
+    <p>API 비용 누적 {{ cost.api_cost_krw|krw }} · 호출 {{ cost.api_calls }}회 · 실패 {{ cost.api_errors }}회</p>
+    <p class="muted small">수동 비용: {{ cost.manual_costs }}</p>
+  </div>
+</div>
+{% endblock %}

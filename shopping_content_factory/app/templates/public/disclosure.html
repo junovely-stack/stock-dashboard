@@ -1,0 +1,15 @@
+{% extends "public/base.html" %}
+{% block title %}광고·제휴 안내{% endblock %}
+{% block main %}
+<h1 class="section-title page-title">광고·제휴 안내</h1>
+<section class="box">
+  <p>{{ disclosure.coupang_required }}</p>
+  <p>{{ disclosure.landing_notice }}</p>
+  <ul class="list">
+    <li>상품은 운영자가 정한 평가 기준(고객 문제 해결도, 정보 신뢰도, 주의사항 확인 가능 여부 등)으로 고릅니다. 판매처로부터 상품·금전을 받고 쓰는 글은 없습니다. 생긴다면 해당 글에 따로 표시합니다.</li>
+    <li>가격은 확인 시각을 함께 표시하며, 일정 시간이 지나면 표시하지 않습니다.</li>
+    <li>영상·이미지의 배경과 장면 일부는 연출 그래픽입니다. 실제 사용 전후 비교 사진이 아닙니다.</li>
+    <li>버튼을 눌러야만 쿠팡으로 이동합니다. 자동 이동이나 숨은 링크를 쓰지 않습니다.</li>
+  </ul>
+</section>
+{% endblock %}

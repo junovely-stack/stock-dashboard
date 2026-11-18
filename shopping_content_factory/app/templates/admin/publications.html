@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% block title %}게시 이력{% endblock %}
+{% block main %}
+<h1>게시 이력</h1>
+<div class="fresh">api_accepted = 플랫폼이 ID 를 돌려줌(공개 확인 전) · published_verified = 플랫폼 조회로 공개 확인 · pending_credentials = 권한 없어 게시하지 않음 · unknown = 응답 불확실, 앱에서 직접 확인</div>
+<div class="card table-scroll">
+<table>
+  <tr><th>콘텐츠</th><th>플랫폼</th><th>상태</th><th>미디어</th><th>요청</th><th>API 수락</th><th>공개 확인</th><th>교란요인</th><th>메모</th></tr>
+  {% for x in rows %}<tr>
+    <td><a href="{{ url_for('admin.content_detail', cid=x.content_id) }}">{{ x.content_id }}</a> {{ x.variant }}</td><td>{{ x.platform }}</td>
+    <td><span class="badge {{ x.status }}">{{ x.status }}</span></td>
+    <td class="small">{% if x.platform_url %}<a href="{{ x.platform_url }}" rel="noopener" target="_blank">{{ x.platform_media_id }}</a>{% else %}{{ x.platform_media_id or '-' }}{% endif %}</td>
+    <td class="small">{{ x.requested_at|dt }}</td><td class="small">{{ x.api_accepted_at|dt }}</td><td class="small">{{ x.verified_at|dt }}</td>
+    <td class="small muted">{{ x.confounders|tojson if x.confounders else '-' }}</td>
+    <td class="small muted">{{ x.error or ((x.detail or {}).get('reasons') or (x.detail or {}).get('missing') or '')  }}</td></tr>
+  {% else %}<tr><td colspan="9" class="muted">게시 기록 없음</td></tr>{% endfor %}
+</table>
+</div>
+{% endblock %}

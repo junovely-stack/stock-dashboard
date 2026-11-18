@@ -1,0 +1,42 @@
+# 상품 선정 100점 배점과 보수적 채점 규칙
+# 근거가 없는 항목은 만점의 conservative_cap 비율까지만 준다.
+
+[weights]
+interest = 15            # 검색·쇼핑 관심도
+momentum = 10            # 관심도 상승 속도
+problem_strength = 20    # 고객 문제 해결 강도
+purchase_intent = 15     # 구매 의도
+credibility = 15         # 실제 상품 경쟁력·정보 신뢰도
+visual_fit = 10          # 이미지·영상 시각화 적합성
+expected_profit = 10     # 예상 제휴 수익성
+differentiation = 5      # 콘텐츠 차별화 가능성
+
+[rules]
+conservative_cap = 0.3         # 근거 부족 시 최대 만점의 30%
+mock_evidence_cap = 0.8        # mock 데이터 근거는 만점의 80%까지만
+momentum_full_growth = 0.6     # 직전 21일 평균 대비 최근 7일 +60% 이상이면 만점
+surge_threshold = 0.4          # +40% 이상이면 '급상승' 표시
+target_commission_krw = 2500   # 주문 1건당 수수료가 이 값 이상이면 수익성 만점 기준
+min_verified_specs = 3         # 검증 사양이 3개 미만이면 보류
+duplicate_product_days = 30    # 같은 상품 30일 내 재선정 금지
+same_category_recent_days = 3  # 최근 3일 같은 카테고리면 차별화 감점
+price_volatility_pct = 15      # 7일 내 가격 변동 15% 초과면 감점
+low_profit_commission_krw = 500  # 주문 1건 수수료가 이 값 미만이면 제작비 회수 어려움 감점
+
+[penalties]
+price_volatility = 3
+low_stock = 2
+low_profit = 2
+
+[intent]
+# 키워드 의도 분류 가중치 (rule-based)
+purchase = 1.0
+problem = 0.7
+buzz = 0.1
+purchase_markers = ["추천", "정리함", "정리대", "트레이", "선반", "수납", "거치대", "무타공", "행거", "바구니", "건조대", "커버", "케이스", "랙", "보관함", "가격", "구매", "세트"]
+problem_markers = ["방법", "하는법", "정리", "청소", "냄새", "곰팡이", "좁은", "원룸", "자취"]
+buzz_markers = ["밈", "논란", "뉴스", "연예인", "랜선집들이", "챌린지", "짤", "브이로그"]
+
+[price_band]
+# (하한, 상한, 점수) — 충동 구매 가능 구간에 가점, 너무 싼 상품은 수수료가 작다
+bands = [[0, 8000, 1], [8000, 40000, 3], [40000, 80000, 2], [80000, 99999999, 1]]

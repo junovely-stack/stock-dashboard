@@ -1,0 +1,68 @@
+{% extends "public/base.html" %}
+{% block title %}{{ p.name }} — 장단점·주의사항{% endblock %}
+{% block product_id %}{{ p.id }}{% endblock %}
+{% block content_id %}{{ c.id }}{% endblock %}
+{% block src %}{{ src }}{% endblock %}
+{% block main %}
+<p class="notice" role="note"><b>광고</b> · {{ disclosure.coupang_required }}</p>
+<div class="product-top">
+  <div class="media">
+    {% if image %}<img src="{{ image }}" alt="{{ p.name }} 상품 이미지" width="1200" height="900">{% else %}<div class="empty">이미지 사용 권한 확인 중</div>{% endif %}
+  </div>
+  <div>
+    <div class="eyebrow">{{ cat_label }}</div>
+    <h1>{{ p.name }}</h1>
+    <p class="sub m0">{{ p.description }}</p>
+    {% if sold_out %}
+      <p class="notice mt12">판매처 기준 품절·판매중지로 확인되었습니다.</p>
+    {% elif price_fresh %}
+      <div class="price">{{ p.base_price|krw }}</div>
+      <div class="price-meta">{{ p.price_checked_at|dt }} 확인 기준 · 가격과 배송비는 바뀔 수 있으니 이동 후 다시 확인하세요</div>
+    {% else %}
+      <p class="notice mt12">가격 확인 후 {{ price_age|round|int if price_age is not none else '-' }}시간이 지나 표시하지 않습니다. 쿠팡에서 현재 가격을 확인하세요.</p>
+    {% endif %}
+    {% if link and not sold_out %}
+      <a class="buy" href="{{ link.url }}" target="_blank" rel="sponsored nofollow noopener" data-link-id="{{ link.id }}">쿠팡에서 가격·리뷰 확인하기</a>
+      <p class="buy-note">버튼을 누르면 쿠팡 상품 페이지가 새 창으로 열립니다. 이 링크로 구매하면 운영자가 일정액의 수수료를 받으며, 구매 가격은 같습니다.</p>
+    {% else %}
+      <span class="buy disabled" aria-disabled="true">{{ '구매 링크 없음' if sold_out else '제휴 링크 등록 대기' }}</span>
+    {% endif %}
+  </div>
+</div>
+
+{% if problem.real_pain %}
+<section class="box">
+  <h2>이럴 때 찾는 물건</h2>
+  <p class="m0">{{ problem.situation }} — {{ problem.real_pain }}.</p>
+  {% if problem.not_solved %}<p class="sub small mt8">해결하지 못하는 것: {{ problem.not_solved }}</p>{% endif %}
+</section>
+{% endif %}
+
+<div class="two">
+  <section class="box pro"><h2>좋은 점</h2><ul class="list">{% for x in p.pros %}<li>{{ x }}</li>{% endfor %}</ul></section>
+  <section class="box con"><h2>아쉬운 점</h2><ul class="list">{% for x in p.cons %}<li>{{ x }}</li>{% endfor %}</ul></section>
+  <section class="box"><h2>이런 분께 맞아요</h2><ul class="list">{% for x in p.recommended_for %}<li>{{ x }}</li>{% endfor %}</ul></section>
+  <section class="box"><h2>이런 분께는 안 맞아요</h2><ul class="list">{% for x in p.not_recommended_for %}<li>{{ x }}</li>{% endfor %}</ul></section>
+</div>
+
+<section class="box">
+  <h2>구매 전 꼭 확인하세요</h2>
+  <ul class="list">{% for x in p.cautions %}<li>{{ x }}</li>{% endfor %}</ul>
+</section>
+
+<section class="box">
+  <h2>확인된 사양</h2>
+  <table class="specs">
+    {% for s in p.verified_specs %}<tr><th scope="row">{{ s.key }}</th><td>{{ s.value }}{{ s.unit }}</td></tr>{% endfor %}
+  </table>
+  <p class="sub xsmall mt8">판매처 정보 기준 · {{ p.price_checked_at|dt }} 확인. 실제 상품과 다를 수 있으니 판매 페이지에서 다시 확인하세요.</p>
+</section>
+
+{% if video %}
+<section class="box">
+  <h2>짧은 영상으로 보기</h2>
+  <div class="video-wrap"><video src="{{ video }}" poster="{{ poster }}" controls playsinline preload="none" data-track width="1080" height="1920"></video></div>
+  {% if c.ai_generated_media %}<p class="sub xsmall">{{ disclosure.ai_notice }}</p>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+# API 단가표 — 추측 금지. 공식 가격표에서 확인한 값만 넣고 확인일·출처를 남긴다.
+# price 가 -1 이면 '미확인' → 비용 상한 판단이 불가하므로 해당 유료 어댑터 실행을 막는다.
+
+[anthropic."claude-opus-5-5"]
+input_usd_per_mtok = 4.0
+output_usd_per_mtok = 20.0
+checked = "2026-11-03"
+source = "Anthropic 공식 가격표 (claude-api 스킬 캐시, 2026-11-03 기준) — 운영 전 https://platform.claude.com/docs/en/about-claude/pricing 재확인"
+
+[anthropic."claude-sonnet-5-5"]
+input_usd_per_mtok = 2.0
+output_usd_per_mtok = 10.0
+checked = "2026-11-03"
+source = "Anthropic 공식 가격표 (claude-api 스킬 캐시)"
+
+[anthropic."claude-haiku-5-5"]
+input_usd_per_mtok = 0.10
+output_usd_per_mtok = 0.50
+checked = "2026-11-03"
+source = "Anthropic 공식 가격표 (claude-api 스킬 캐시, 100K 토큰 이하 프롬프트 기준)"
+
+[openai_image]
+usd_per_image = -1
+checked = ""
+source = "미확인 — docs/COST_MODEL.md 의 조사 결과로 갱신"
+
+[openai_tts]
+usd_per_1m_chars = -1
+checked = ""
+source = "미확인"
+
+[higgsfield]
+krw_per_image = -1
+krw_per_video = -1
+checked = ""
+source = "미확인 — 크레딧 단가는 계정 요금제마다 다름"
+
+[local]
+# 로컬 Pillow/FFmpeg 렌더링: API 비용 0, 전기·PC 비용은 월 운영현금비에 포함
+krw_per_render = 0
+
+[estimate]
+# 콘텐츠 1개당 LLM 토큰 사용량 추정(심리분석 + 대본). 실제 호출 후 usage 로 덮어쓴다.
+psychology_input_tokens = 3500
+psychology_output_tokens = 2500
+script_input_tokens = 5000
+script_output_tokens = 4000

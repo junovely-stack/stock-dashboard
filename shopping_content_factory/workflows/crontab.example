@@ -1,0 +1,16 @@
+# cron 으로 돌릴 때 (리눅스/맥). scheduler 루프와 동시에 쓰지 말 것 — 하나만 선택.
+# 같은 단계를 두 번 호출해도 job_runs 유니크·파일 잠금 때문에 중복 실행되지 않는다.
+CRON_TZ=Asia/Seoul
+SCF=/opt/shopping_content_factory
+PY=/opt/shopping_content_factory/.venv/bin/python
+
+0  7 * * *  cd $SCF && $PY scf.py run-stage collect_metrics && $PY scf.py run-stage daily_report
+0  7 * * *  cd $SCF && $PY scf.py run-stage collect_trends
+20 7 * * *  cd $SCF && $PY scf.py run-stage score_candidates
+35 7 * * *  cd $SCF && $PY scf.py run-stage select_verify
+45 7 * * *  cd $SCF && $PY scf.py run-stage generate_script
+0  8 * * *  cd $SCF && $PY scf.py run-stage produce_media
+0  9 * * *  cd $SCF && $PY scf.py run-stage qa_check
+0 12 * * *  cd $SCF && $PY scf.py run-stage publish_approved
+# 실패 단계 재시도 (최대 SCF_JOB_MAX_ATTEMPTS 회, 백오프 지난 것만)
+*/15 7-13 * * * cd $SCF && $PY scf.py retry-failed

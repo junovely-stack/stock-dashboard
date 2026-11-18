@@ -1,0 +1,104 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ c.id }}{% endblock %}
+{% block main %}
+<div class="row"><h1>{{ c.id }} · {{ c.title }}</h1> <span class="badge {{ c.status }}">{{ c.status }}</span> {% if c.is_demo %}<span class="badge demo">DEMO</span>{% endif %}</div>
+<div class="fresh">상품: <a href="{{ url_for('admin.product_edit', pid=p.id) }}">{{ p.name }}</a> · 가격 {{ p.base_price|krw }} ({{ p.price_checked_at|dt }} 확인) · 재고 {{ p.stock_status }} · 이미지 권리 {{ p.image_rights_status }} · 제휴 링크 <span class="badge {{ p.affiliate_link_status }}">{{ p.affiliate_link_status }}</span>
+{% if facts_changed %}<br><b>⚠ 생성 이후 상품 사실 정보가 바뀌었습니다 — 재생성 전에는 승인·게시 불가</b>{% endif %}</div>
+
+<div class="grid wide">
+  <div class="card accent stack">
+    <h2>검수 체크 (승인 전 사람이 확인)</h2>
+    <ul class="small">
+      <li>권리: 상품 이미지 출처·증빙 → {{ p.image_rights_status }} {% if man %}/ 원형 보존 {{ '통과' if man.all_preserved else '실패' }}{% endif %}</li>
+      <li>사실성: 자막의 숫자·사양이 판매처 정보와 같은지 (자동 검사 {{ '통과' if (c.fact_check or {}).get('passed') else '실패' }})</li>
+      <li>광고 표시: 첫 장면·마지막 장면·캡션 첫 줄·첫 해시태그 #광고</li>
+      <li>제휴(수수료) 게시물 → 인스타그램 '유료 파트너십' 라벨, 유튜브 '유료 프로모션' 체크 확인 (Meta·YouTube 정책)</li>
+    </ul>
+    {% if c.block_reasons %}<div class="flash">차단 사유: {{ c.block_reasons|join(' / ') }}</div>{% endif %}
+    <form method="post" action="{{ url_for('admin.content_action', cid=c.id) }}" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <textarea name="notes" placeholder="검수 메모 / 거절·수정 요청 사유"></textarea>
+      <div class="row">
+        <button name="action" value="approve">승인</button>
+        <button name="action" value="revision" class="ghost">수정 요청</button>
+        <button name="action" value="reject" class="danger">거절</button>
+      </div>
+    </form>
+    <form method="post" action="{{ url_for('admin.content_action', cid=c.id) }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="datetime-local" name="when" required aria-label="예약 시각"><button name="action" value="schedule" class="ghost">예약 (KST)</button>
+    </form>
+    <div class="row">
+      {% for pf in platforms %}
+      <form method="post" action="{{ url_for('admin.content_action', cid=c.id) }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="platform" value="{{ pf }}">
+        <button name="action" value="publish">{{ pf }} 게시</button>
+      </form>
+      {% endfor %}
+      <form method="post" action="{{ url_for('admin.rerender', cid=c.id) }}" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="ghost">이미지·영상 재생성</button></form>
+    </div>
+    <p class="muted small">게시 버튼은 승인·QA·사실 변경·가격 유효시간·재고·링크 확인·권리를 다시 검사합니다. 자격증명이 없으면 'pending_credentials'로 남고 실제 게시하지 않습니다.</p>
+  </div>
+
+  <div class="card">
+    <h2>영상 미리보기</h2>
+    <div class="row">
+      {% if (c.assets or {}).get('videos', {}).get('reel_final') %}<div><h3>Reels</h3><video class="preview" src="{{ url_for('admin.admin_media', cid=c.id, filename='reel_final.mp4') }}" controls playsinline preload="metadata"></video></div>{% endif %}
+      {% if (c.assets or {}).get('videos', {}).get('shorts_final') %}<div><h3>Shorts</h3><video class="preview" src="{{ url_for('admin.admin_media', cid=c.id, filename='shorts_final.mp4') }}" controls playsinline preload="metadata"></video></div>{% endif %}
+    </div>
+    {% if cman.video_info %}<p class="small muted">{% for k, v in cman.video_info.items() %}{{ k }}: {{ v.width }}×{{ v.height }} {{ v.duration }}초 {{ v.codec }} 오디오={{ v.has_audio }}<br>{% endfor %}</p>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2>이미지 · 권리 · 원형 보존</h2>
+  <div class="media-row">
+    {% for m in man.get('images', []) %}
+    <figure><img src="{{ url_for('admin.admin_media', cid=c.id, filename=m.file) }}" alt="{{ m.role }}" loading="lazy">
+      <figcaption class="small"><b>{{ m.role }}</b> <span class="badge {{ 'good' if m.rights_status in ('own','licensed','ai_generated') else 'bad' }}">{{ m.rights_status }}</span><br>
+      <span class="muted">{{ m.source }}</span>{% if m.product_preservation %}<br>보존 {{ '통과' if m.product_preservation.passed else '실패' }} (색차 {{ m.product_preservation.color_delta }}, 비율차 {{ m.product_preservation.aspect_ratio_delta }}){% endif %}</figcaption></figure>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="grid wide">
+  <div class="card">
+    <h2>대본 (A형 기준 · B형은 첫 장면만 다름)</h2>
+    <p class="small">A {{ c.script.variants.A.hook_type }}: <b>{{ c.script.variants.A.hook }}</b><br>B {{ c.script.variants.B.hook_type }}: <b>{{ c.script.variants.B.hook }}</b></p>
+    <p class="small muted">심리 요소: {{ c.script.levers|join(', ') }} · 생성: {{ c.script.generator }} · 예상 비용 {{ c.script.cost_estimate_krw.total_cash|krw }}</p>
+    <form method="post" action="{{ url_for('admin.content_action', cid=c.id) }}" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label class="small">제목<br><input name="title" value="{{ c.script.title }}" size="60"></label>
+      {% for sc in c.script.scenes %}
+      <div class="scene"><b>{{ sc.id }} · {{ sc.role }}</b> <span class="muted small">{{ sc.start }}~{{ sc.start + sc.duration }}초 · {{ sc.visual }} · 근거 {{ sc.fact_refs|join(', ') or '-' }}</span>
+        <textarea name="scene_{{ sc.id }}" aria-label="{{ sc.id }} 자막">{{ sc.on_screen_text }}</textarea>
+        <div class="small muted">내레이션: {{ sc.narration }}</div></div>
+      {% endfor %}
+      <button name="action" value="edit" class="ghost">문구 수정 저장 (검사 재실행)</button>
+    </form>
+  </div>
+  <div class="card stack">
+    <h2>캡션·표시</h2>
+    <pre>{{ c.script.caption.instagram }}</pre>
+    <p class="small"><b>YouTube 제목</b> {{ c.script.caption.youtube_title }}</p>
+    <pre>{{ c.script.caption.youtube_description }}</pre>
+    <p class="small">랜딩: <a href="{{ c.script.landing_urls.instagram }}">{{ c.script.landing_urls.instagram }}</a></p>
+    <h2>사실·표시 검사</h2>
+    {% for i in (c.fact_check or {}).get('issues', []) %}<p class="small"><span class="badge bad">{{ i.rule }}</span> {{ i.where }} — {{ i.message }}</p>{% else %}<p class="small muted">문제 없음</p>{% endfor %}
+    <h2>자동 QA</h2>
+    {% for ch in (c.qa_result or {}).get('checks', []) %}<p class="small"><span class="badge {{ 'good' if ch.passed else ('warn' if ch.severity=='warning' else 'bad') }}">{{ 'OK' if ch.passed else ch.severity }}</span> {{ ch.name }} — {{ ch.detail }}</p>{% else %}<p class="muted small">QA 전</p>{% endfor %}
+  </div>
+</div>
+
+<div class="grid wide">
+  <div class="card">
+    <h2>게시 이력</h2>
+    <table><tr><th>플랫폼</th><th>상태</th><th>미디어 ID</th><th>시도</th><th>메모</th></tr>
+    {% for x in pubs %}<tr><td>{{ x.platform }}</td><td><span class="badge {{ x.status }}">{{ x.status }}</span></td><td class="small">{{ x.platform_media_id or '-' }}</td><td>{{ x.attempts }}</td><td class="small muted">{{ x.error or (x.detail or {})|tojson }}</td></tr>{% else %}<tr><td colspan="5" class="muted">없음</td></tr>{% endfor %}</table>
+  </div>
+  <div class="card">
+    <h2>감사 로그</h2>
+    {% for a in audits %}<p class="small">{{ a.ts|dt }} <b>{{ a.actor }}</b> {{ a.action }} <span class="muted">{{ a.detail|tojson if a.detail else '' }}</span></p>{% else %}<p class="muted">없음</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

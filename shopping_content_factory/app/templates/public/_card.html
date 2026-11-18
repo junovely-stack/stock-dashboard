@@ -1,0 +1,4 @@
+<a class="card" href="{{ url_for('public.product', slug=c.slug, c=c.content_id) }}">
+  {% if c.image %}<img class="thumb" src="{{ c.image }}" alt="{{ c.name }}" loading="lazy" width="1200" height="900">{% else %}<div class="thumb"></div>{% endif %}
+  <div class="t"><b>{{ c.name }}</b><small>{{ c.hook }}</small></div>
+</a>

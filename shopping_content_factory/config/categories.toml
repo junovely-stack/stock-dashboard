@@ -1,0 +1,38 @@
+# 초기 타깃 카테고리 — 수익성 확인 후 확장
+# naver_category: 네이버 쇼핑인사이트 대분류 코드(가구/인테리어 50000004, 생활/건강 50000008) — 실제 호출 전 공식 문서로 재확인
+# anchor: DataLab 상대지수 정규화용 기준 키워드 (모든 요청 묶음에 함께 넣어 비교 가능하게 만든다)
+
+[desk_cable]
+label = "책상·케이블 정리"
+naver_category = "50000004"
+anchor = "책상 정리"
+required_specs = ["크기"]
+seed_keywords = ["케이블 정리", "책상 아래 케이블 트레이", "멀티탭 정리함", "모니터 받침대 수납", "선정리"]
+
+[small_space]
+label = "좁은 주거공간"
+naver_category = "50000004"
+anchor = "원룸 인테리어"
+required_specs = ["크기"]
+seed_keywords = ["접이식 테이블", "틈새 수납장", "벽걸이 선반", "공간 활용"]
+
+[oneroom_storage]
+label = "원룸 수납"
+naver_category = "50000004"
+anchor = "수납"
+required_specs = ["크기"]
+seed_keywords = ["옷장 정리", "침대 밑 수납", "리빙박스", "행거 정리"]
+
+[laundry_cleaning]
+label = "세탁·청소"
+naver_category = "50000008"
+anchor = "청소"
+required_specs = ["크기"]
+seed_keywords = ["빨래 건조대", "세탁망", "먼지 제거", "욕실 청소"]
+
+[no_drill]
+label = "무타공 생활용품"
+naver_category = "50000008"
+anchor = "무타공"
+required_specs = ["부착 방식", "내하중"]  # 무타공은 부착 방식·하중이 없으면 안전 문제
+seed_keywords = ["무타공 선반", "무타공 수건걸이", "무타공 커튼", "접착 훅"]

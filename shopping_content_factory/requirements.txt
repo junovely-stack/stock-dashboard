@@ -1,0 +1,9 @@
+# 런타임 (Python 3.11+). 시스템에 FFmpeg 필요 (README 참조)
+flask>=3.0,<4
+sqlalchemy>=2.0,<3
+python-dotenv>=1.0
+requests>=2.31
+pillow>=10
+numpy>=1.26
+# 선택: SCF_LLM_PROVIDER=anthropic 일 때만 필요
+anthropic>=2.0

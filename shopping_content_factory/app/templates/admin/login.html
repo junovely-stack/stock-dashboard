@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% block title %}로그인{% endblock %}
+{% block main %}
+<div class="card login stack">
+  <h1>관리자 로그인</h1>
+  {% if not configured %}<p class="flash">SCF_ADMIN_PASSWORD 가 .env 에 없습니다. 설정 후 서버를 다시 시작하세요.</p>{% endif %}
+  {% if error %}<p class="flash">{{ error }}</p>{% endif %}
+  <form method="post" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>이름(감사 로그용)<br><input name="name" autocomplete="username" placeholder="admin"></label>
+    <label>비밀번호<br><input name="password" type="password" autocomplete="current-password" required></label>
+    <button>로그인</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{
+  "note": "MOCK — 실데이터 아님. 네이버 데이터랩 상대지수 형태를 흉내 낸 모의 시계열. base·slope·spike 로 모양만 정의.",
+  "keywords": [
+    {"keyword": "케이블 정리", "category": "desk_cable", "base": 40, "slope": 0.3},
+    {"keyword": "책상 아래 케이블 트레이", "category": "desk_cable", "base": 18, "slope": 0.5, "spike": {"days": 7, "mult": 1.55}},
+    {"keyword": "멀티탭 정리함", "category": "desk_cable", "base": 30, "slope": 0.1},
+    {"keyword": "모니터 받침대 수납", "category": "desk_cable", "base": 25, "slope": -0.1},
+    {"keyword": "선정리", "category": "desk_cable", "base": 22, "slope": 0.05},
+    {"keyword": "헤드셋 거치대", "category": "desk_cable", "base": 14, "slope": 0.0},
+    {"keyword": "접이식 테이블", "category": "small_space", "base": 35, "slope": 0.0},
+    {"keyword": "틈새 수납장", "category": "small_space", "base": 28, "slope": 0.2},
+    {"keyword": "벽걸이 선반", "category": "small_space", "base": 20, "slope": 0.1},
+    {"keyword": "미니 공기정화기", "category": "small_space", "base": 33, "slope": 0.3},
+    {"keyword": "침대 밑 수납", "category": "oneroom_storage", "base": 26, "slope": 0.3},
+    {"keyword": "리빙박스", "category": "oneroom_storage", "base": 45, "slope": -0.25},
+    {"keyword": "옷장 정리", "category": "oneroom_storage", "base": 38, "slope": 0.15, "weekend": 1.2},
+    {"keyword": "압축팩", "category": "oneroom_storage", "base": 30, "slope": 0.35},
+    {"keyword": "이불 수납", "category": "oneroom_storage", "base": 27, "slope": 0.4},
+    {"keyword": "빨래 건조대", "category": "laundry_cleaning", "base": 30, "slope": 0.25, "spike": {"days": 7, "mult": 1.3}},
+    {"keyword": "결로 방지", "category": "laundry_cleaning", "base": 15, "slope": 0.6, "spike": {"days": 7, "mult": 1.5}},
+    {"keyword": "세탁망", "category": "laundry_cleaning", "base": 22, "slope": 0.0},
+    {"keyword": "욕실 곰팡이", "category": "laundry_cleaning", "base": 26, "slope": 0.1},
+    {"keyword": "먼지 제거", "category": "laundry_cleaning", "base": 30, "slope": 0.1},
+    {"keyword": "무타공 선반", "category": "no_drill", "base": 24, "slope": 0.2},
+    {"keyword": "무타공 수건걸이", "category": "no_drill", "base": 16, "slope": 0.1},
+    {"keyword": "무타공 커튼", "category": "no_drill", "base": 20, "slope": 0.45},
+    {"keyword": "접착 훅", "category": "no_drill", "base": 25, "slope": 0.0},
+    {"keyword": "무타공 TV 벽걸이", "category": "no_drill", "base": 12, "slope": 0.2},
+    {"keyword": "연예인 원룸 랜선집들이", "category": "small_space", "base": 60, "slope": 0.0, "spike": {"days": 3, "mult": 2.2}},
+    {"keyword": "케이블 정리 밈", "category": "desk_cable", "base": 40, "slope": 0.0, "spike": {"days": 4, "mult": 1.8}},
+    {"keyword": "자취방 브이로그", "category": "oneroom_storage", "base": 55, "slope": 0.1}
+  ]
+}

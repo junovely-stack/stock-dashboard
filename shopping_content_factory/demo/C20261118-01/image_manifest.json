@@ -1,0 +1,130 @@
+{
+  "content_id": "C20261118-01",
+  "product_id": "DEMO-001",
+  "created_at": "2026-11-18T03:54:27.063829+00:00",
+  "is_demo": true,
+  "images": [
+    {
+      "source": "demo_illustration (코드로 직접 그림, 실제 상품 사진 아님)",
+      "generator": "pillow",
+      "file": "product_original.png",
+      "role": "product_original",
+      "rights_status": "own",
+      "rights_evidence": "DEMO 일러스트 — 코드로 직접 그림",
+      "ai_generated": false,
+      "contains_product": true,
+      "edited": false,
+      "sha256_16": "bd5d09ae9c20bc9d"
+    },
+    {
+      "file": "problem_scene.png",
+      "role": "problem_scene",
+      "source": "procedural_illustration (pillow, 연출 이미지)",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": false,
+      "note": "연출 일러스트 — 실제 사용 전 사진 아님",
+      "sha256_16": "dcea7b3b1ad36917"
+    },
+    {
+      "file": "usage_scene.png",
+      "role": "usage_scene",
+      "source": "procedural_illustration (pillow, 연출 이미지) + 상품 원본 합성",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": true,
+      "product_preservation": {
+        "checked": true,
+        "aspect_ratio_delta": 0.0009,
+        "color_delta": 0.027,
+        "opaque_pixels": 89665,
+        "passed": true
+      },
+      "note": "사용 상황 연출 — 실제 설치 사진 아님",
+      "sha256_16": "b1eb22bbb48f3449"
+    },
+    {
+      "file": "product_hero.png",
+      "role": "product_hero",
+      "source": "상품 원본 + 그래픽 배경·사양 칩",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": true,
+      "product_preservation": {
+        "checked": true,
+        "aspect_ratio_delta": 0.0,
+        "color_delta": 0.002,
+        "opaque_pixels": 233311,
+        "passed": true
+      },
+      "sha256_16": "50e2f25e937a2db4"
+    },
+    {
+      "file": "product_stage.png",
+      "role": "video_stage",
+      "source": "상품 원본 + 그래픽 배경",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": true,
+      "product_preservation": {
+        "checked": true,
+        "aspect_ratio_delta": 0.0,
+        "color_delta": 0.001,
+        "opaque_pixels": 203210,
+        "passed": true
+      },
+      "sha256_16": "4a4cbd76a0947c15"
+    },
+    {
+      "file": "endcard.png",
+      "role": "endcard_bg",
+      "source": "단색 그라디언트",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": false,
+      "sha256_16": "8fb26e69ac754764"
+    },
+    {
+      "file": "thumbnail.png",
+      "role": "thumbnail",
+      "source": "문제 장면 + 상품 원본 + 후킹 문구",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": true,
+      "product_preservation": {
+        "checked": true,
+        "aspect_ratio_delta": 0.0,
+        "color_delta": 0.026,
+        "opaque_pixels": 93192,
+        "passed": true
+      },
+      "sha256_16": "80a8c0480b9e4463"
+    },
+    {
+      "file": "landing_card.png",
+      "role": "landing",
+      "source": "상품 원본 + 단색 배경",
+      "rights_status": "own",
+      "generator": "pillow",
+      "ai_generated": false,
+      "contains_product": true,
+      "product_preservation": {
+        "checked": true,
+        "aspect_ratio_delta": 0.001,
+        "color_delta": 0.021,
+        "opaque_pixels": 287270,
+        "passed": true
+      },
+      "sha256_16": "f9506e6b2f0bd4f6"
+    }
+  ],
+  "all_preserved": true,
+  "all_rights_cleared": true,
+  "ai_generated_any": false
+}

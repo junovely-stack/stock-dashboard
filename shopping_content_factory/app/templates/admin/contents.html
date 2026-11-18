@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+{% block title %}콘텐츠{% endblock %}
+{% block main %}
+<h1>콘텐츠 검수</h1>
+<div class="card table-scroll">
+<table>
+  <tr><th>ID</th><th>상품</th><th>상태</th><th>사실 검사</th><th>QA</th><th>생성</th></tr>
+  {% for c in items %}
+  <tr><td><a href="{{ url_for('admin.content_detail', cid=c.id) }}">{{ c.id }}</a> {% if c.is_demo %}<span class="badge demo">DEMO</span>{% endif %}</td>
+    <td>{{ c.product.name }}<br><span class="muted small">{{ c.title }}</span></td>
+    <td><span class="badge {{ c.status }}">{{ c.status }}</span></td>
+    <td><span class="badge {{ 'pass' if (c.fact_check or {}).get('passed') else 'blocked' }}">{{ 'pass' if (c.fact_check or {}).get('passed') else 'fail' }}</span></td>
+    <td>{% if c.qa_result %}<span class="badge {{ 'pass' if c.qa_result.passed else 'blocked' }}">{{ 'pass' if c.qa_result.passed else 'fail' }}</span>{% else %}-{% endif %}</td>
+    <td class="small">{{ c.created_at|dt }}</td></tr>
+  {% else %}<tr><td colspan="6" class="muted">콘텐츠 없음</td></tr>{% endfor %}
+</table>
+</div>
+{% endblock %}

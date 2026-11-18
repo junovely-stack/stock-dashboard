@@ -1,0 +1,25 @@
+# docker compose up -d  → web(5000) + scheduler(상시 루프). 값은 .env 에서 읽는다.
+# PostgreSQL 로 바꾸려면 db 서비스 주석을 풀고 SCF_DATABASE_URL 을 지정 (psycopg 설치 필요).
+services:
+  web:
+    build: .
+    env_file: .env
+    environment:
+      SCF_DATABASE_URL: ${SCF_DATABASE_URL:-sqlite:////app/data/scf.db}
+    ports: ["5000:5000"]
+    volumes: ["./data:/app/data", "./outputs:/app/outputs"]
+    restart: unless-stopped
+  scheduler:
+    build: .
+    env_file: .env
+    environment:
+      SCF_DATABASE_URL: ${SCF_DATABASE_URL:-sqlite:////app/data/scf.db}
+    command: ["python", "scf.py", "scheduler"]
+    volumes: ["./data:/app/data", "./outputs:/app/outputs"]
+    restart: unless-stopped
+  # db:
+  #   image: postgres:16
+  #   environment: {POSTGRES_USER: scf, POSTGRES_PASSWORD: change-me, POSTGRES_DB: scf}
+  #   volumes: ["pgdata:/var/lib/postgresql/data"]
+# volumes:
+#   pgdata:

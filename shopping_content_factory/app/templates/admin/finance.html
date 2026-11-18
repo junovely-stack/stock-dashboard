@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+{% block title %}수익성{% endblock %}
+{% block main %}
+<h1>12개월 수익 시뮬레이션 (가정)</h1>
+<div class="fresh">입력값은 config/finance.toml 의 가정입니다(벤치마크 아님). 실측 30개 콘텐츠가 쌓이면 퍼널 비율을 실측으로 바꾸세요. 목표 ROE {{ sim.assumptions.target_roe_pct }}% 를 맞추려고 가정을 바꾸지 않습니다.</div>
+<div class="grid">
+{% for key, s in sim.scenarios.items() %}{% set a = s.annual %}
+  <div class="card {{ 'good' if a.adjusted_roe_pct >= sim.assumptions.target_roe_pct else ('warn' if a.cash_profit > 0 else 'bad') }}">
+    <h3>{{ s.label }} — 퍼널 {{ s.assumptions.landing_rate|pct }} × {{ s.assumptions.link_ctr|pct(0) }} × {{ s.assumptions.purchase_cvr|pct(0) }}</h3>
+    <div class="kpi">ROE {{ a.adjusted_roe_pct|num(1) }}%</div>
+    <p class="small">연 조회 {{ a.views|num }} · 주문 {{ a.orders|num(1) }}건 · 제휴수익 {{ a.revenue|krw }}<br>
+    현금이익(노동비 제외) {{ a.cash_profit|krw }} · 조정이익 {{ a.adjusted_profit|krw }}<br>
+    RPM {{ a.rpm|num(1) }}원 · 노동비 {{ a.labor_cost|krw }}</p>
+  </div>
+{% endfor %}
+</div>
+<div class="card table-scroll">
+  <h2>손익분기 — 1일 1콘텐츠 기준 필요한 조회수</h2>
+  <table><tr><th>시나리오 퍼널</th><th class="num">조회 1,000회당 수익</th><th class="num">월 고정비(현금+노동)</th><th class="num">월 손익분기 조회</th><th class="num">콘텐츠당</th><th class="num">ROE 목표 월 조회</th><th class="num">콘텐츠당</th></tr>
+  {% for b in sim.breakeven %}<tr><td>{{ b.scenario }} {{ b.funnel }}</td><td class="num">{{ b.revenue_per_1k_views|num(1) }}원</td><td class="num">{{ b.monthly_fixed_cost|krw }}</td><td class="num">{{ b.breakeven_monthly_views|num }}</td><td class="num">{{ b.breakeven_views_per_content|num }}</td><td class="num">{{ b.roe_target_monthly_views|num }}</td><td class="num">{{ b.roe_target_views_per_content|num }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% for key, s in sim.scenarios.items() %}
+<details class="card"><summary>월별 — {{ s.label }}</summary>
+<div class="table-scroll"><table><tr><th>월</th><th class="num">하루 콘텐츠</th><th class="num">콘텐츠당 조회</th><th class="num">주문</th><th class="num">제휴수익</th><th class="num">현금비</th><th class="num">구축비</th><th class="num">노동비</th><th class="num">조정이익</th></tr>
+{% for r in s.months %}<tr><td>{{ r.month }}</td><td class="num">{{ r.contents_per_day }}</td><td class="num">{{ r.views_per_content|num }}</td><td class="num">{{ r.orders|num(1) }}</td><td class="num">{{ r.revenue|num }}</td><td class="num">{{ r.cash_opex|num }}</td><td class="num">{{ r.build_cost|num }}</td><td class="num">{{ r.labor_cost|num }}</td><td class="num">{{ r.adjusted_profit|num }}</td></tr>{% endfor %}
+</table></div></details>
+{% endfor %}
+{% endblock %}

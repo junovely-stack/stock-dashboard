@@ -1,0 +1,13 @@
+{% extends "public/base.html" %}
+{% block title %}개인정보 처리방침{% endblock %}
+{% block main %}
+<h1 class="section-title page-title">개인정보 처리방침 (초안)</h1>
+<section class="box">
+  <p><b>수집하는 정보:</b> 페이지 조회·구매 버튼 클릭·영상 재생 이벤트의 발생 시각, 상품·콘텐츠 번호, 유입 경로(예: ig, yt), 이전 페이지의 도메인 이름.</p>
+  <p><b>수집하지 않는 정보:</b> IP 주소, 브라우저·기기 정보, 쿠키 식별자, 이름·연락처 등 개인을 알아볼 수 있는 정보.</p>
+  <p><b>목적:</b> 어떤 콘텐츠가 실제로 도움이 되었는지 집계하여 추천 품질을 개선.</p>
+  <p><b>보관:</b> {{ settings.event_retention_days }}일 후 삭제.</p>
+  <p><b>제3자 제공:</b> 없음. 다만 쿠팡으로 이동한 뒤의 정보 처리는 쿠팡의 개인정보 처리방침을 따릅니다.</p>
+  <p class="sub small">운영 전 사업자 정보·문의처를 채우고, 법률 검토를 받아 확정하세요 (docs/COMPLIANCE_CHECKLIST.md).</p>
+</section>
+{% endblock %}

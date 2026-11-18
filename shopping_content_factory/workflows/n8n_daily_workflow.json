@@ -1,0 +1,71 @@
+{
+  "name": "Shopping Content Factory — Daily (Asia/Seoul)",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 7 * * *"}]}},
+      "id": "t0700", "name": "07:00 성과·트렌드", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 0]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "20 7 * * *"}]}},
+      "id": "t0720", "name": "07:20 후보 평가", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 160]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "35 7 * * *"}]}},
+      "id": "t0735", "name": "07:35 최종 선정", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 320]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "45 7 * * *"}]}},
+      "id": "t0745", "name": "07:45 대본", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 480]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 8 * * *"}]}},
+      "id": "t0800", "name": "08:00 이미지·영상", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 640]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 9 * * *"}]}},
+      "id": "t0900", "name": "09:00 QA", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 800]
+    },
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 12 * * *"}]}},
+      "id": "t1200", "name": "12:00 게시", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 960]
+    },
+    {
+      "parameters": {"assignments": {"assignments": [{"name": "stages", "type": "array", "value": "={{ ({\"07:00 성과·트렌드\": [\"collect_metrics\",\"daily_report\",\"collect_trends\"], \"07:20 후보 평가\": [\"score_candidates\"], \"07:35 최종 선정\": [\"select_verify\"], \"07:45 대본\": [\"generate_script\"], \"08:00 이미지·영상\": [\"produce_media\"], \"09:00 QA\": [\"qa_check\"], \"12:00 게시\": [\"publish_approved\"]})[$prevNode.name] }}"}]}},
+      "id": "map", "name": "단계 목록", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [300, 480]
+    },
+    {
+      "parameters": {"fieldToSplitOut": "stages"},
+      "id": "split", "name": "단계별", "type": "n8n-nodes-base.splitOut", "typeVersion": 1, "position": [520, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SCF_BASE_URL || 'http://localhost:5000' }}/api/jobs/run",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "X-SCF-Token", "value": "={{ $env.SCF_API_TOKEN }}"}]},
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ stage: $json.stages }) }}",
+        "options": {"timeout": 900000}
+      },
+      "id": "http", "name": "SCF 단계 실행", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [740, 480]
+    },
+    {
+      "parameters": {"conditions": {"conditions": [{"leftValue": "={{ $json.status }}", "rightValue": "failed", "operator": {"type": "string", "operation": "equals"}}]}},
+      "id": "if", "name": "실패?", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [960, 480]
+    }
+  ],
+  "connections": {
+    "07:00 성과·트렌드": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "07:20 후보 평가": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "07:35 최종 선정": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "07:45 대본": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "08:00 이미지·영상": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "09:00 QA": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "12:00 게시": {"main": [[{"node": "단계 목록", "type": "main", "index": 0}]]},
+    "단계 목록": {"main": [[{"node": "단계별", "type": "main", "index": 0}]]},
+    "단계별": {"main": [[{"node": "SCF 단계 실행", "type": "main", "index": 0}]]},
+    "SCF 단계 실행": {"main": [[{"node": "실패?", "type": "main", "index": 0}]]}
+  },
+  "settings": {"timezone": "Asia/Seoul", "executionOrder": "v1"},
+  "meta": {"note": "n8n 은 시각만 트리거하고, 실행·중복 방지·재시도 판단은 SCF(job_runs)가 한다. '실패?' 노드 뒤에 알림(메일·슬랙)을 붙여 쓴다. 노드 typeVersion 은 n8n 버전에 맞춰 조정."}
+}

@@ -1,0 +1,7 @@
+{% extends "public/base.html" %}
+{% block title %}{{ label }} — 생활정리 큐레이션{% endblock %}
+{% block main %}
+<h1 class="section-title page-title">{{ label }}</h1>
+{% if cards %}<div class="grid">{% for c in cards %}{% include "public/_card.html" %}{% endfor %}</div>
+{% else %}<div class="empty">이 카테고리에 공개된 콘텐츠가 없습니다.</div>{% endif %}
+{% endblock %}

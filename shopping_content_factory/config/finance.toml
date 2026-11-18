@@ -1,0 +1,47 @@
+# 재무 가정 — 검증 전 시뮬레이션 출발점. 실측치가 생기면 실측치를 우선한다.
+# 아래 퍼널 비율은 벤치마크가 아니라 '가정'이다. 근거 없는 업계 평균을 넣지 않는다.
+
+[assumptions]
+initial_equity_krw = 5000000        # 초기 운영자본
+avg_order_value_krw = 65000         # 평균 인정 구매금액
+effective_commission_rate = 0.03    # 가상 실효 수수료율
+initial_build_cost_krw = 1000000    # 최초 현금 구축비 (1개월차 1회)
+monthly_cash_opex_krw = 250000      # 월 운영현금비
+founder_hours_per_month = 30        # 창업자 노동 시간/월 (1일 1콘텐츠 기준)
+labor_rate_krw_per_hour = 25000     # 노동 기회비용
+extra_hours_per_extra_daily_content = 10  # 하루 콘텐츠 1개 늘 때마다 추가 월 노동시간 (가정)
+tax_rate = 0.066                    # 가정: 종합소득세 최저구간 6% + 지방소득세 0.6%. 실제 세율 확인 필요
+cancel_rate = 0.05                  # 취소·반품으로 인정 제외되는 비율 (가정)
+days_per_month = 30
+target_roe_pct = 25
+
+# 시나리오: views 는 콘텐츠 1개당 평균 조회수, 1개월차 → 12개월차로 선형 증가 가정
+[scenarios.conservative]
+label = "보수"
+views_start = 500
+views_end = 3000
+landing_rate = 0.005      # 조회 → 랜딩 방문
+link_ctr = 0.20           # 랜딩 방문 → 쿠팡 링크 클릭
+purchase_cvr = 0.03       # 링크 클릭 → 인정 구매
+contents_per_day = 1
+scale_to_per_day = 1
+
+[scenarios.base]
+label = "기준"
+views_start = 1500
+views_end = 15000
+landing_rate = 0.01
+link_ctr = 0.30
+purchase_cvr = 0.05
+contents_per_day = 1
+scale_to_per_day = 3      # 직전 2개월 현금이익(노동비 제외) > 0 이면 확대
+
+[scenarios.optimistic]
+label = "낙관"
+views_start = 5000
+views_end = 50000
+landing_rate = 0.02
+link_ctr = 0.40
+purchase_cvr = 0.08
+contents_per_day = 1
+scale_to_per_day = 3

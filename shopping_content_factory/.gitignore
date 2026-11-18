@@ -1,0 +1,19 @@
+# 비밀값 — 절대 커밋 금지
+.env
+.env.*
+!.env.example
+
+# 실행 산출물·DB
+outputs/
+data/*.db
+data/*.db-*
+*.db
+*.sqlite3
+data/manual/
+!data/templates/
+
+# 파이썬
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+{% block title %}후보·선정{% endblock %}
+{% block main %}
+<div class="row"><h1>후보 상품 평가 — {{ d }}</h1>
+<form method="get" class="inline"><input type="date" name="date" value="{{ d }}"><button class="ghost">조회</button></form></div>
+<div class="fresh">100점 = 관심도 {{ weights.interest }} · 상승속도 {{ weights.momentum }} · 문제해결 {{ weights.problem_strength }} · 구매의도 {{ weights.purchase_intent }} · 신뢰도 {{ weights.credibility }} · 시각화 {{ weights.visual_fit }} · 수익성 {{ weights.expected_profit }} · 차별화 {{ weights.differentiation }}. 노란 막대 = 근거 부족·mock 으로 보수적 부여. 상대지수는 검색량이 아님.</div>
+
+<div class="card table-scroll">
+<table>
+  <tr><th>순위</th><th>상품</th><th class="num">총점</th><th>필터</th><th>항목별 (점수/만점)</th><th>감점·사유</th><th>예상 수익(가정)</th></tr>
+  {% for r in rows %}{% set sc = r.score %}{% set p = r.p %}
+  <tr>
+    <td>{{ sc.rank or '-' }} {% if sc.selection %}<span class="badge {{ 'good' if sc.selection=='final' else 'warn' }}">{{ sc.selection }}</span>{% endif %}</td>
+    <td><a href="{{ url_for('admin.product_edit', pid=p.id) }}">{{ p.name }}</a><br><span class="muted small">{{ p.category_key }} · {{ p.base_price|krw }} · 이미지 {{ p.image_rights_status }} · 링크 {{ p.affiliate_link_status }}</span></td>
+    <td class="num"><b>{{ sc.total|num(1) }}</b></td>
+    <td><span class="badge {{ sc.filter_result }}">{{ sc.filter_result }}</span></td>
+    <td>
+      {% for k, v in sc.breakdown.items() %}
+      <div class="row small" title="{{ v.evidence }}"><span class="muted">{{ k }}</span>
+        <progress class="bar {{ 'cons' if v.conservative }}" max="{{ v.max }}" value="{{ v.score }}"></progress>{{ v.score|num(1) }}/{{ v.max|int }}</div>
+      {% endfor %}
+      <details><summary class="small">근거</summary>{% for k, v in sc.breakdown.items() %}<div class="small"><b>{{ k }}</b> {{ v.evidence }}</div>{% endfor %}</details>
+    </td>
+    <td class="small">{% for x in sc.penalties %}<div>−{{ x.points }} {{ x.reason }}</div>{% endfor %}{% for x in sc.filter_reasons %}<div class="muted">{{ x }}</div>{% endfor %}</td>
+    <td class="small est">{% if sc.expected_revenue %}콘텐츠당 약 {{ sc.expected_revenue.revenue_krw|krw }}<br>주문당 {{ sc.expected_revenue.commission_per_order_krw|krw }}<br><span class="muted">{{ sc.expected_revenue.basis }}</span>{% endif %}</td>
+  </tr>
+  {% else %}<tr><td colspan="7" class="muted">평가 기록 없음</td></tr>{% endfor %}
+</table>
+</div>
+
+<div class="grid wide">
+<div class="card">
+  <h2>트렌드 키워드</h2>
+  <table>
+    <tr><th>키워드</th><th>의도</th><th class="num">최근7일 상대지수</th><th class="num">7일 증감</th><th>출처·신뢰</th></tr>
+    {% for t in trends %}<tr><td>{{ t.keyword }} {% if t.is_surging %}<span class="badge good">급상승</span>{% endif %}{% if t.excluded_reason %}<br><span class="muted small">제외: {{ t.excluded_reason }}</span>{% endif %}</td>
+      <td>{{ t.intent }}</td><td class="num">{{ t.latest_ratio|num(1) }}</td><td class="num">{{ t.growth_7d|pct }}</td>
+      <td><span class="badge {{ t.confidence }}">{{ t.confidence }}</span> <span class="muted small">{{ t.collected_at|dt }}</span></td></tr>{% endfor %}
+  </table>
+</div>
+<div class="card"><h2>선정 과정</h2>{% for l in logs %}<p><span class="badge">{{ l.step }}</span> {{ l.message }}</p>{% if l.data and l.data.checked %}<pre>{{ l.data.checked|tojson(indent=1) }}</pre>{% endif %}{% endfor %}</div>
+</div>
+{% endblock %}

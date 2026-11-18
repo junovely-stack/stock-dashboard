@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ p.name }}{% endblock %}
+{% block main %}
+<div class="row"><h1>{{ p.name }}</h1>{% if p.is_demo %}<span class="badge demo">DEMO</span>{% endif %}<span class="muted">{{ p.id }} · {{ p.source_type }}</span></div>
+<div class="fresh">사실 정보 해시 {{ p.facts_hash }} · 사실 정보를 바꾸면 기존 콘텐츠는 게시 차단(재생성·재승인 필요)</div>
+<div class="grid wide">
+  <div class="card stack">
+    <h2>가격·재고 확인</h2>
+    <p class="small muted">현재 {{ p.base_price|krw }} · {{ p.price_checked_at|dt }} 확인 · 유효 {{ settings.price_ttl_hours }}시간</p>
+    <form method="post" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="price">
+      <input name="price" type="number" min="0" value="{{ p.base_price or '' }}" required aria-label="가격">
+      <select name="stock" aria-label="재고">{% for o in stock_options %}<option {{ 'selected' if o==p.stock_status }}>{{ o }}</option>{% endfor %}</select>
+      <button>판매처에서 지금 확인함</button></form>
+
+    <h2>제휴 링크</h2>
+    <table><tr><th>URL</th><th>상태</th><th>sub_id</th><th></th></tr>
+    {% for l in p.links %}<tr><td class="small">{{ l.url }}<br><span class="muted">{{ l.note }}</span></td><td><span class="badge {{ l.status }}">{{ l.status }}</span></td><td>{{ l.sub_id or '-' }}</td>
+      <td>{% if l.status == 'registered' %}<form method="post" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="link_confirm"><input type="hidden" name="link_id" value="{{ l.id }}"><button class="ghost" title="직접 열어서 이 상품 페이지로 가는지 확인한 뒤 누르세요">직접 열어 확인함</button></form>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="4" class="muted">등록된 링크 없음 — 쿠팡파트너스 화면에서 만든 링크를 붙여넣으세요 (임의 URL 생성 안 함)</td></tr>{% endfor %}</table>
+    <form method="post" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="link_register">
+      <input name="url" placeholder="https://link.coupang.com/a/..." size="34" required aria-label="제휴 링크">
+      <input name="sub_id" placeholder="sub_id(선택)" size="12" aria-label="sub_id">
+      <select name="content_id" aria-label="연결 콘텐츠"><option value="">콘텐츠 연결 없음</option>{% for c in contents %}<option>{{ c.id }}</option>{% endfor %}</select>
+      <button>등록</button></form>
+    <p class="muted small">링크 정상 여부 확인을 위해 시스템이 링크를 자동으로 열지 않습니다(클릭 집계 오염 방지).</p>
+
+    <h2>이미지 권리</h2>
+    {% for img in p.images %}
+    <form method="post" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="rights"><input type="hidden" name="image_id" value="{{ img.id }}">
+      <div class="small">{{ img.role }} · 출처 {{ img.source }} {% if img.url %}· {{ img.url }}{% endif %}</div>
+      <div class="row"><select name="rights" aria-label="권리 상태">{% for r in rights_options %}<option {{ 'selected' if r==img.rights_status }}>{{ r }}</option>{% endfor %}</select>
+      <input name="evidence" value="{{ img.rights_evidence or '' }}" placeholder="증빙 (허락 메일·라이선스 번호 등)" size="36" aria-label="증빙"><button class="ghost">저장</button></div>
+    </form>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <h2>사실 정보 (검증된 것만)</h2>
+    <form method="post" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="facts">
+      <label class="small">검증 사양 JSON<textarea name="specs_json" rows="8">{{ p.verified_specs|tojson(indent=1) }}</textarea></label>
+      {% for f, label in [('pros','장점'),('cons','단점'),('cautions','주의사항'),('recommended_for','추천 대상'),('not_recommended_for','비추천 대상')] %}
+      <label class="small">{{ label }} (줄마다 1개)<textarea name="{{ f }}">{{ (p[f] or [])|join('\n') }}</textarea></label>
+      {% endfor %}
+      <button>사실 정보 저장</button>
+    </form>
+    <h2>삭제</h2>
+    <form method="post" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="delete">
+      <input name="confirm" placeholder="{{ p.id }} 입력" aria-label="삭제 확인"><button class="danger">상품·콘텐츠·파일·이벤트 삭제</button></form>
+  </div>
+</div>
+{% endblock %}
