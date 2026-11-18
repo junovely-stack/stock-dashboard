@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCF 온톨로지 /*__REV__*/</title>
+<style>
+:root {
+  --navy: #0A1A2F; --card: #16263D; --card2: #1C3150; --line: #2A4566; --orange: #FF6B1A; --sub: #AAB7C4; --white: #FFFFFF;
+  --good: #2c8a5f; --warn: #c89010; --bad: #b3402a; --short: #FFA05C; --mid: #4C86C6; --out: #6C8299; --adj: #C8933A;
+  --neutral: #3A4A63;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--navy); color: var(--white); font-size: 14px; line-height: 1.55;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+  word-break: keep-all; overflow-wrap: break-word;
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.3; }
+button { font-family: inherit; }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 18px 16px 48px; }
+header.top { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px; margin-bottom: 10px; }
+header.top h1 { font-size: 21px; }
+.rev { background: var(--orange); color: var(--navy); font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
+.meta { color: var(--sub); font-size: 12.5px; }
+.lead { background: var(--card); border-left: 4px solid var(--orange); border-radius: 8px; padding: 12px 16px; margin: 6px 0 12px; }
+.lead b { font-size: 16px; display: block; }
+.lead span { color: var(--sub); }
+.limits { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.limits .chip { background: #2A1F1A; border: 1px solid #5A3A28; color: #FFD2B8; border-radius: 8px; padding: 6px 10px; font-size: 12.5px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+.tabs button { background: transparent; border: 0; color: var(--sub); padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; }
+.tabs button[aria-selected="true"] { color: var(--white); border-bottom-color: var(--orange); }
+.tabs button:focus-visible, .seg button:focus-visible, .chipbtn:focus-visible { outline: 2px solid #FFB27F; outline-offset: 2px; }
+section.panel { display: none; }
+section.panel.on { display: block; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-bottom: 10px; }
+.seg { display: inline-flex; background: var(--card); border-radius: 8px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { background: transparent; border: 0; color: var(--sub); padding: 6px 11px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--orange); color: var(--navy); }
+.toggle { color: var(--sub); font-size: 13px; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--sub); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.hint { color: var(--sub); font-size: 12.5px; }
+.graph { background: #0D2038; border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+.graph svg { display: block; width: 100%; min-width: 1080px; height: auto; }
+/* SVG — 색은 전부 클래스로 (인쇄 대응) */
+.lanebg { fill: #10243F; }
+.lanehead { fill: var(--sub); font-size: 15px; font-weight: 800; }
+.bandbg { fill: #0B1C31; stroke: #22395A; stroke-dasharray: 4 4; }
+.bandhead { fill: var(--sub); font-size: 13px; font-weight: 700; }
+.edge { fill: none; stroke: #5D7A9E; stroke-width: 1.4; opacity: .28; }
+.edge.hl { stroke: var(--orange); opacity: 1; stroke-width: 2.2; }
+.edge.dim { opacity: .06; }
+.arrow { fill: #5D7A9E; }
+.arrow-hl { fill: var(--orange); }
+.node { cursor: pointer; }
+.node .box { fill: var(--card); stroke: var(--line); stroke-width: 1.2; }
+.node:hover .box, .node:focus .box { stroke: #FFB27F; }
+.node.sel .box { stroke: var(--orange); stroke-width: 2.4; }
+.node.dim { opacity: .25; }
+.node .bar { fill: var(--orange); }
+.node .t { fill: var(--white); font-size: 15px; font-weight: 800; }
+.node .s { fill: var(--sub); font-size: 11px; }
+.node .mb { fill: var(--navy); stroke: var(--line); }
+.node .mt { fill: #FFD2B8; font-size: 11px; font-weight: 800; }
+svg[data-mode="input"] .node.in-system .bar { fill: var(--mid); }
+svg[data-mode="input"] .node.in-field .bar { fill: var(--adj); }
+svg[data-mode="input"] .node.in-human .bar { fill: var(--orange); }
+svg[data-mode="stage"] .node.st-done .bar { fill: var(--good); }
+svg[data-mode="stage"] .node.st-now .bar { fill: var(--orange); }
+svg[data-mode="stage"] .node.st-short .bar { fill: var(--short); }
+svg[data-mode="stage"] .node.st-mid .bar { fill: var(--mid); }
+svg[data-mode="stage"] .node.st-out .bar { fill: var(--out); }
+svg[data-mode="state"] .node.ds-mock .bar { fill: var(--warn); }
+svg[data-mode="state"] .node.ds-manual .bar { fill: var(--short); }
+svg[data-mode="state"] .node.ds-pending .bar { fill: var(--bad); }
+svg[data-mode="state"] .node.ds-internal .bar { fill: var(--mid); }
+svg[data-mode="state"] .node.ds-connected .bar { fill: var(--good); }
+.elabel rect { fill: var(--navy); stroke: var(--orange); stroke-width: 1; }
+.elabel text { fill: #FFD2B8; font-size: 11.5px; font-weight: 700; }
+.elabel .leader { stroke: var(--orange); stroke-width: 1; stroke-dasharray: 3 2; }
+.elabel .leaderdot { fill: var(--orange); }
+.sw-orange { background: var(--orange); } .sw-mid { background: var(--mid); } .sw-adj { background: var(--adj); }
+.sw-good { background: var(--good); } .sw-short { background: var(--short); } .sw-out { background: var(--out); }
+.sw-warn { background: var(--warn); } .sw-bad { background: var(--bad); }
+/* 드로어 */
+.drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(440px, 100vw); background: #0F2239; border-left: 2px solid var(--orange);
+  box-shadow: -8px 0 24px rgba(0,0,0,.45); transform: translateX(105%); transition: transform .2s ease; z-index: 20; overflow-y: auto; padding: 18px 18px 40px; }
+.drawer.open { transform: none; }
+.drawer .x { float: right; background: var(--card); color: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+.drawer h2 { font-size: 19px; margin: 4px 0 2px; }
+.drawer h3 { font-size: 13px; color: var(--sub); margin: 16px 0 6px; }
+.drawer ul { margin: 0; padding-left: 18px; }
+.drawer li { margin: 3px 0; }
+.drawer code { background: var(--card); padding: 1px 5px; border-radius: 4px; font-size: 12px; word-break: break-all; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 9px; background: var(--neutral); color: var(--white); }
+.b-system { background: var(--mid); } .b-field { background: var(--adj); color: var(--navy); } .b-human { background: var(--orange); color: var(--navy); }
+.b-done { background: var(--good); } .b-now { background: var(--orange); color: var(--navy); } .b-short { background: var(--short); color: var(--navy); }
+.b-mid { background: var(--mid); } .b-out { background: var(--out); }
+.b-mock { background: var(--warn); color: var(--navy); } .b-manual { background: var(--short); color: var(--navy); } .b-pending { background: var(--bad); } .b-internal { background: var(--mid); }
+.gap { background: #2A1F1A; border-left: 3px solid var(--orange); padding: 8px 10px; border-radius: 6px; color: #FFD2B8; margin-top: 8px; }
+.rel { font-size: 13px; }
+.rel b { color: #FFB27F; }
+.chipbtn { background: var(--card); border: 1px solid var(--line); color: var(--white); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; cursor: pointer; margin: 2px 4px 2px 0; }
+.chipbtn:hover { border-color: var(--orange); }
+/* 자동화 */
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card { background: var(--card); border-radius: 10px; padding: 12px 14px; border-top: 3px solid var(--line); }
+.card.acc { border-top-color: var(--orange); }
+.card h3 { font-size: 15px; margin-bottom: 6px; }
+.card p { margin: 4px 0; color: var(--sub); font-size: 13px; }
+.kpis { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+.kpi { background: var(--card); border-radius: 8px; padding: 8px 12px; min-width: 112px; border-left: 4px solid var(--neutral); }
+.kpi b { font-size: 20px; display: block; }
+.kpi span { color: var(--sub); font-size: 12px; }
+.k-out { border-left-color: var(--out); } .k-now { border-left-color: var(--orange); } .k-short { border-left-color: var(--short); }
+.k-mid { border-left-color: var(--mid); } .k-done { border-left-color: var(--good); }
+.tablewrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line); margin: 8px 0 18px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); font-size: 13px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 9px; text-align: left; vertical-align: top; }
+th { color: var(--sub); font-weight: 700; font-size: 12.5px; white-space: nowrap; background: #13233A; }
+.matrix td { min-width: 150px; }
+.matrix th:first-child, .matrix td:first-child { position: sticky; left: 0; background: #13233A; min-width: 64px; }
+.act { display: block; width: 100%; text-align: left; background: var(--card2); color: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--neutral);
+  border-radius: 6px; padding: 5px 8px; margin: 3px 0; cursor: pointer; font-size: 12.5px; }
+.act small { color: var(--sub); display: block; }
+.act.in-human { border-left-color: var(--orange); } .act.in-system { border-left-color: var(--mid); } .act.in-field { border-left-color: var(--adj); }
+.section-title { font-size: 17px; margin: 18px 0 8px; }
+/* 결정 */
+.dgroup { margin-bottom: 18px; }
+.dcard { background: var(--card); border-radius: 10px; padding: 12px 14px; border-left: 4px solid var(--orange); }
+.dcard.later { border-left-color: var(--out); } .dcard.before { border-left-color: var(--short); }
+.dcard h3 { font-size: 15px; margin-bottom: 4px; }
+.dcard .q { color: var(--sub); font-size: 13px; margin: 2px 0 6px; }
+.dcard ol { margin: 4px 0; padding-left: 20px; font-size: 13px; }
+.dcard li.rec { color: #FFD2B8; font-weight: 700; }
+.dcard .why { font-size: 12.5px; color: var(--sub); margin-top: 6px; }
+.dcard .def { font-size: 12.5px; color: #F2B7A6; margin-top: 4px; }
+footer.note { color: var(--sub); font-size: 12px; margin-top: 24px; }
+@media (max-width: 600px) {
+  header.top h1 { font-size: 18px; }
+  .tabs button { padding: 8px 10px; font-size: 13px; }
+}
+@media print {
+  body { background: #fff; color: #111; }
+  .tabs, .toolbar .seg, .toggle, .drawer, .hint { display: none !important; }
+  section.panel { display: block !important; page-break-before: always; }
+  section.panel:first-of-type { page-break-before: auto; }
+  .lead, .card, .dcard, table, th, .kpi, .act { background: #fff !important; color: #111 !important; }
+  .lead span, .card p, .dcard .q, .dcard .why, .meta, .act small { color: #444 !important; }
+  .graph { background: #fff; border-color: #999; overflow: visible; }
+  .graph svg { min-width: 0; }
+  .lanebg { fill: #F2F4F7; } .bandbg { fill: #FAFAFA; stroke: #999; }
+  .lanehead, .bandhead { fill: #333; }
+  .node .box { fill: #fff; stroke: #777; } .node .t { fill: #111; } .node .s { fill: #555; }
+  .node .mb { fill: #fff; stroke: #999; } .node .mt { fill: #B4470F; }
+  .edge { stroke: #888; opacity: .5; } .arrow { fill: #888; }
+  th { background: #EEE !important; color: #333 !important; }
+  .matrix th:first-child, .matrix td:first-child { background: #EEE !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Shopping Content Factory — 도메인 온톨로지 · 자동화 지도</h1>
+    <span class="rev">/*__REV__*/</span>
+    <span class="meta" id="asof"></span>
+  </header>
+  <div class="lead"><b id="conclusion"></b><span id="reason"></span></div>
+  <div class="limits" id="limits" aria-label="먼저 밝히는 한계"></div>
+
+  <nav class="tabs" role="tablist" aria-label="보기 전환">
+    <button role="tab" aria-selected="true" aria-controls="p-map" id="t-map">온톨로지 지도</button>
+    <button role="tab" aria-selected="false" aria-controls="p-auto" id="t-auto">자동화 재검토</button>
+    <button role="tab" aria-selected="false" aria-controls="p-dec" id="t-dec">결정할 것</button>
+    <button role="tab" aria-selected="false" aria-controls="p-rel" id="t-rel">관계 목록</button>
+  </nav>
+
+  <section class="panel on" id="p-map" role="tabpanel" aria-labelledby="t-map">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="색 기준">
+        <button data-mode="stage" aria-pressed="true">착수 단계</button>
+        <button data-mode="input" aria-pressed="false">입력 유형</button>
+        <button data-mode="state" aria-pressed="false">데이터 상태</button>
+        <button data-mode="lane" aria-pressed="false">영역만</button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="showLabels"> 관계 이름 항상 표시</label>
+      <div class="legend" id="legend"></div>
+    </div>
+    <p class="hint">노드를 누르면 정의·속성·관계·구현 위치·막힌 것이 열립니다. 왼쪽 막대 색 = 선택한 기준, 오른쪽 위 M = 현재 자동화 성숙도(M0 수작업 ~ M4 예측). 빈 곳을 누르면 선택 해제.</p>
+    <div class="graph" id="graph"></div>
+  </section>
+
+  <section class="panel" id="p-auto" role="tabpanel" aria-labelledby="t-auto">
+    <h2 class="section-title">사람이 확정해야 하는 6곳 — 일일 루프의 병목</h2>
+    <div class="grid" id="humanPoints"></div>
+    <h2 class="section-title">착수 단계별 액션 <span class="hint">(개수는 액션 수이지 업무량이 아님)</span></h2>
+    <div class="kpis" id="stageKpis"></div>
+    <div class="tablewrap"><table class="matrix" id="matrix"></table></div>
+    <h2 class="section-title">원 기획 대비 수정안</h2>
+    <div class="tablewrap"><table id="planChanges"></table></div>
+    <h2 class="section-title">관측 성숙도</h2>
+    <div class="grid">
+      <div class="card"><h3>현재 Lv2 — 연결된 파이프라인 + 스케줄 실행</h3><p>단계별 상태·재시도·중복 방지는 됨. 실패는 대시보드를 열어야 알고, 크래시 후 running 고착은 사람이 DB 를 고쳐야 풀린다.</p></div>
+      <div class="card acc"><h3>Lv3 진입 조건</h3><p>① 실패 알림(A23) ② 작업 자가 복구(A24) ③ 신선도 4신호 — 산출물 시각, 행 수 전일 대비, 데이터 기준일, 적재 시각.</p></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-dec" role="tabpanel" aria-labelledby="t-dec">
+    <p class="hint">★ = 권장안. 카드의 노드 이름을 누르면 지도에서 영향 범위가 강조됩니다. 결정하면 docs/DECISIONS.md 의 결정 기록에 적고 데이터 파일을 갱신해 다시 생성합니다.</p>
+    <div id="decisions"></div>
+  </section>
+
+  <section class="panel" id="p-rel" role="tabpanel" aria-labelledby="t-rel">
+    <div class="tablewrap"><table id="relations"></table></div>
+  </section>
+
+  <footer class="note">생성: scripts/build_ontology.py · 원본 데이터: scripts/ontology_data.py · 외부 의존 없음(오프라인 단일 파일). 사실 확인 수준은 docs/API_ACCESS_MATRIX.md 참조.</footer>
+</div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="dTitle" tabindex="-1">
+  <button class="x" id="dClose" aria-label="닫기">닫기 ✕</button>
+  <div id="dBody"></div>
+</aside>
+
+<script>
+const D = /*__DATA__*/;
+const INPUT = { system: "시스템 데이터", field: "현장 실측", human: "사람 확정" };
+const STAGE = { done: "구현 완료", now: "즉시", short: "단기", mid: "중기", out: "대상 외(사람이 계속)" };
+const STATE = { mock: "mock(모의)", manual: "수동 입력", pending: "연동 대기", internal: "내부 계산", connected: "연동됨" };
+const MLV = { M0: "수작업", M1: "도구화", M2: "자동실행", M3: "자동판정", M4: "예측" };
+const LEG = {
+  stage: [["sw-good", "구현 완료"], ["sw-orange", "즉시"], ["sw-short", "단기"], ["sw-mid", "중기"], ["sw-out", "대상 외"]],
+  input: [["sw-mid", "시스템 데이터"], ["sw-adj", "현장 실측"], ["sw-orange", "사람 확정"]],
+  state: [["sw-warn", "mock"], ["sw-short", "수동 입력"], ["sw-bad", "연동 대기"], ["sw-mid", "내부 계산"]],
+  lane: [["sw-orange", "영역은 열 제목으로 구분"]],
+};
+const NODE = Object.fromEntries(D.nodes.map((n) => [n.id, n]));
+const ACT = Object.fromEntries(D.actions.map((a) => [a.id, a]));
+const DEC = Object.fromEntries(D.decisions.map((d) => [d.id, d]));
+const LANE_IDX = Object.fromEntries(D.lanes.map((l, i) => [l.id, i]));
+const W = 210, H = 52, LX = (i) => 40 + i * 250, RY = (r) => 98 + r * 80, CY = 724, VW = 1540, VH = 800;
+const NS = "http://www.w3.org/2000/svg";
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+// ---------- 헤더·한계
+document.getElementById("asof").textContent = `기준일 ${D.asOf}`;
+document.getElementById("conclusion").textContent = D.conclusion;
+document.getElementById("reason").textContent = D.reason;
+(function limits() {
+  const outActs = D.actions.filter((a) => a.stage === "out").map((a) => a.name);
+  const mocks = D.nodes.filter((n) => n.state === "mock").map((n) => n.label);
+  const pend = D.nodes.filter((n) => n.state === "pending").map((n) => n.label);
+  const box = document.getElementById("limits");
+  [["자동화 대상 외", outActs], ["지금 mock 데이터", mocks], ["연동 대기", pend]].forEach(([k, arr]) => {
+    const c = document.createElement("span");
+    c.className = "chip";
+    c.textContent = `${k}: ${arr.join(" · ")}`;
+    box.appendChild(c);
+  });
+})();
+
+// ---------- 그래프
+const svg = el("svg", { viewBox: `0 0 ${VW} ${VH}`, "data-mode": "stage", role: "img", "aria-label": "SCF 도메인 온톨로지 지도" });
+document.getElementById("graph").appendChild(svg);
+const defs = el("defs", {}, svg);
+[["arr", "arrow"], ["arrH", "arrow-hl"]].forEach(([id, cls]) => {
+  const m = el("marker", { id, viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto-start-reverse" }, defs);
+  el("path", { d: "M0,0 L10,5 L0,10 z", class: cls }, m);
+});
+const gLanes = el("g", {}, svg), gEdges = el("g", {}, svg), gNodes = el("g", {}, svg), gLabels = el("g", {}, svg);
+
+D.lanes.forEach((l, i) => {
+  el("rect", { x: LX(i) - 12, y: 76, width: W + 24, height: 584, rx: 10, class: "lanebg" }, gLanes);
+  const t = el("text", { x: LX(i) + W / 2, y: 62, "text-anchor": "middle", class: "lanehead" }, gLanes);
+  t.textContent = l.label;
+});
+el("rect", { x: 28, y: 690, width: VW - 56, height: 100, rx: 10, class: "bandbg" }, gLanes);
+const bh = el("text", { x: 44, y: 710, class: "bandhead" }, gLanes);
+bh.textContent = D.controlLabel;
+
+D.nodes.forEach((n) => {
+  if (n.lane === "control") { n._x = LX(n.col); n._y = CY; } else { n._x = LX(LANE_IDX[n.lane]); n._y = RY(n.row); }
+});
+
+function edgePath(e) {
+  const s = NODE[e.s], t = NODE[e.o];
+  const sc = s.lane === "control", tc = t.lane === "control";
+  if (sc || tc) {
+    const ctrl = sc ? s : t, other = sc ? t : s;
+    const a = { x: ctrl._x + W / 2, y: ctrl._y }, b = { x: other._x + W / 2, y: other._y + H };
+    const my = (a.y + b.y) / 2;
+    const d = `M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`;
+    return { d, toEnd: !tc };          // 목적어가 위쪽(other)이면 끝 화살표
+  }
+  const si = LANE_IDX[s.lane], ti = LANE_IDX[t.lane];
+  if (si === ti) {
+    const bulge = 24 + 7 * Math.abs(s.row - t.row);
+    const a = { x: s._x + W, y: s._y + H / 2 }, b = { x: t._x + W, y: t._y + H / 2 };
+    return { d: `M${a.x},${a.y} C${a.x + bulge},${a.y} ${b.x + bulge},${b.y} ${b.x},${b.y}`, toEnd: true };
+  }
+  const L = si < ti ? s : t, R = si < ti ? t : s;
+  const a = { x: L._x + W, y: L._y + H / 2 }, b = { x: R._x, y: R._y + H / 2 };
+  const dx = (b.x - a.x) / 2;
+  return { d: `M${a.x},${a.y} C${a.x + dx},${a.y} ${b.x - dx},${b.y} ${b.x},${b.y}`, toEnd: R === t };
+}
+
+const edgeEls = D.edges.map((e, i) => {
+  const p = edgePath(e);
+  const path = el("path", { d: p.d, class: "edge", "data-i": i }, gEdges);
+  path.setAttribute(p.toEnd ? "marker-end" : "marker-start", "url(#arr)");
+  e._toEnd = p.toEnd;
+  return path;
+});
+
+const nodeEls = {};
+D.nodes.forEach((n) => {
+  const g = el("g", { class: `node lane-${n.lane} in-${n.input} st-${n.stage} ds-${n.state}`, tabindex: "0", role: "button",
+    "aria-label": `${n.label}: ${STAGE[n.stage]}, ${INPUT[n.input]}, ${n.m}`, "data-id": n.id }, gNodes);
+  el("rect", { x: n._x, y: n._y, width: W, height: H, rx: 8, class: "box" }, g);
+  el("rect", { x: n._x, y: n._y, width: 7, height: H, rx: 3, class: "bar" }, g);
+  const t = el("text", { x: n._x + 18, y: n._y + 23, class: "t" }, g); t.textContent = n.label;
+  const s = el("text", { x: n._x + 18, y: n._y + 41, class: "s" }, g); s.textContent = n.sub;
+  el("rect", { x: n._x + W - 38, y: n._y + 8, width: 30, height: 18, rx: 4, class: "mb" }, g);
+  const m = el("text", { x: n._x + W - 23, y: n._y + 21, "text-anchor": "middle", class: "mt" }, g); m.textContent = n.m;
+  g.addEventListener("click", (ev) => { ev.stopPropagation(); selectNodes([n.id], true); openNode(n.id); });
+  g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); selectNodes([n.id], true); openNode(n.id); } });
+  nodeEls[n.id] = g;
+});
+
+let selected = [];
+function clearLabels() { while (gLabels.firstChild) gLabels.removeChild(gLabels.firstChild); }
+function placeLabels(idxs) {
+  clearLabels();
+  const boxes = D.nodes.map((n) => ({ x: n._x, y: n._y, w: W, h: H }));
+  const placed = [];
+  const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  idxs.forEach((i) => {
+    const e = D.edges[i], path = edgeEls[i], len = path.getTotalLength();
+    const g = el("g", { class: "elabel" }, gLabels);
+    const tx = el("text", { "text-anchor": "middle" }, g); tx.textContent = e.p;
+    const tw = tx.getComputedTextLength() + 12, th = 18;
+    // 경로 위 여러 지점 × 위아래 이동 후보 중 겹침이 가장 적은 곳 (라벨끼리 > 노드 침범 > 경로에서 먼 정도)
+    let best = null, bestScore = Infinity, anchorPt = null;
+    const fs = [0.5, 0.42, 0.58, 0.34, 0.66, 0.26, 0.74, 0.18, 0.82, 0.1, 0.9];
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    outer: for (const dx of [0, -70, 70, -125, 125]) {
+      for (const f of fs) {
+        const pt = path.getPointAtLength(len * f);
+        for (const dy of [0, -15, 15, -27, 27, -39, 39]) {
+          const r = { x: clamp(pt.x - tw / 2 + dx, 2, VW - tw - 2), y: clamp(pt.y - th / 2 + dy, 2, VH - th - 2), w: tw, h: th };
+          const score = 100 * placed.filter((q) => hit(r, q)).length + 30 * boxes.filter((q) => hit(r, q)).length
+            + Math.abs(f - 0.5) * 6 + Math.abs(dy) / 10 + Math.abs(dx) / 12;
+          if (score < bestScore) { bestScore = score; best = r; anchorPt = pt; }
+          if (score < 1) break outer;
+        }
+      }
+      if (bestScore < 30) break;   // 겹침 없는 자리를 찾았으면 더 멀리 가지 않음
+    }
+    placed.push(best);
+    // 경로에서 떨어진 라벨은 지시선으로 연결
+    const cx = best.x + best.w / 2, cy = best.y + best.h / 2;
+    if (Math.hypot(cx - anchorPt.x, cy - anchorPt.y) > 16) {
+      const ex = clamp(anchorPt.x, best.x, best.x + best.w), ey = clamp(anchorPt.y, best.y, best.y + best.h);
+      el("line", { x1: anchorPt.x, y1: anchorPt.y, x2: ex, y2: ey, class: "leader" }, g);
+      el("circle", { cx: anchorPt.x, cy: anchorPt.y, r: 2.5, class: "leaderdot" }, g);
+    }
+    const rect = el("rect", { x: best.x, y: best.y, width: best.w, height: best.h, rx: 4 }, g);
+    g.appendChild(tx);  // 글자를 맨 위로
+    void rect;
+    tx.setAttribute("x", best.x + best.w / 2); tx.setAttribute("y", best.y + 13);
+  });
+}
+function selectNodes(ids, withLabels) {
+  selected = ids;
+  const set = new Set(ids);
+  const hl = [];
+  D.edges.forEach((e, i) => { if (set.has(e.s) || set.has(e.o)) hl.push(i); });
+  const near = new Set(ids);
+  hl.forEach((i) => { near.add(D.edges[i].s); near.add(D.edges[i].o); });
+  D.nodes.forEach((n) => {
+    nodeEls[n.id].classList.toggle("sel", set.has(n.id));
+    nodeEls[n.id].classList.toggle("dim", ids.length > 0 && !near.has(n.id));
+  });
+  edgeEls.forEach((p, i) => {
+    const on = hl.includes(i);
+    p.classList.toggle("hl", on);
+    p.classList.toggle("dim", ids.length > 0 && !on);
+    p.setAttribute(D.edges[i]._toEnd ? "marker-end" : "marker-start", on ? "url(#arrH)" : "url(#arr)");
+  });
+  if (ids.length && (withLabels || showAll.checked)) placeLabels(hl);
+  else if (showAll.checked) placeLabels(D.edges.map((_, i) => i));
+  else clearLabels();
+}
+svg.addEventListener("click", () => { selectNodes([], false); closeDrawer(); });
+const showAll = document.getElementById("showLabels");
+showAll.addEventListener("change", () => selectNodes(selected, true));
+
+// 색 기준
+const legend = document.getElementById("legend");
+function setMode(mode) {
+  svg.setAttribute("data-mode", mode);
+  document.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+  legend.innerHTML = LEG[mode].map(([c, l]) => `<span><i class="${c}"></i>${esc(l)}</span>`).join("");
+}
+document.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.mode)));
+setMode("stage");
+
+// ---------- 드로어
+const drawer = document.getElementById("drawer"), dBody = document.getElementById("dBody");
+function openDrawer(html) { dBody.innerHTML = html; drawer.classList.add("open"); drawer.focus(); bindChips(dBody); }
+function closeDrawer() { drawer.classList.remove("open"); }
+document.getElementById("dClose").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); } });
+const nodeChip = (id) => `<button class="chipbtn" data-node="${id}">${esc(NODE[id].label)}</button>`;
+const decChip = (id) => `<button class="chipbtn" data-dec="${id}">${id} ${esc(DEC[id].title)}</button>`;
+const actChip = (id) => `<button class="chipbtn" data-act="${id}">${id} ${esc(ACT[id].name)} · ${STAGE[ACT[id].stage]}</button>`;
+function bindChips(root) {
+  root.querySelectorAll("[data-node]").forEach((b) => b.addEventListener("click", (ev) => {
+    ev.stopPropagation(); showTab("map"); selectNodes([b.dataset.node], true); openNode(b.dataset.node);
+  }));
+  root.querySelectorAll("[data-dec]").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); openDecision(b.dataset.dec); }));
+  root.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); openAction(b.dataset.act); }));
+  root.querySelectorAll("[data-decnodes]").forEach((b) => b.addEventListener("click", (ev) => {
+    ev.stopPropagation(); const ids = b.dataset.decnodes.split(",").filter(Boolean); showTab("map"); selectNodes(ids, true); closeDrawer();
+  }));
+}
+function openNode(id) {
+  const n = NODE[id];
+  const out = D.edges.filter((e) => e.s === id).map((e) => `<li class="rel">→ <b>${esc(e.p)}</b> ${nodeChip(e.o)} <span class="hint">${esc(e.impl)}</span></li>`).join("");
+  const inn = D.edges.filter((e) => e.o === id).map((e) => `<li class="rel">${nodeChip(e.s)} <b>${esc(e.p)}</b> → <span class="hint">${esc(e.impl)}</span></li>`).join("");
+  const acts = D.actions.filter((a) => a.node === id).map((a) => actChip(a.id)).join("");
+  openDrawer(`<h2 id="dTitle">${esc(n.label)}</h2><div class="hint">${esc(n.sub)}</div>
+    <div class="badges"><span class="badge b-${n.input}">${INPUT[n.input]}</span><span class="badge">${n.m} ${MLV[n.m]}</span>
+    <span class="badge b-${n.stage}">${STAGE[n.stage]}</span><span class="badge b-${n.state}">${STATE[n.state]}</span></div>
+    <p>${esc(n.desc)}</p>${n.gap ? `<div class="gap">막힌 것·한계 — ${esc(n.gap)}</div>` : ""}
+    <h3>핵심 속성</h3><ul>${n.attrs.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>
+    <h3>구현 위치</h3><ul>${n.impl.map((a) => `<li><code>${esc(a)}</code></li>`).join("")}</ul>
+    <h3>나가는 관계</h3><ul>${out || "<li class='hint'>없음</li>"}</ul>
+    <h3>들어오는 관계</h3><ul>${inn || "<li class='hint'>없음</li>"}</ul>
+    ${acts ? `<h3>관련 자동화 액션</h3><div>${acts}</div>` : ""}
+    ${n.decisions.length ? `<h3>관련 결정</h3><div>${n.decisions.map(decChip).join("")}</div>` : ""}`);
+}
+function openAction(id) {
+  const a = ACT[id];
+  openDrawer(`<h2 id="dTitle">${a.id} ${esc(a.name)}</h2><div class="hint">계층: ${a.layer}</div>
+    <div class="badges"><span class="badge b-${a.input}">${INPUT[a.input]}</span><span class="badge">${a.m_now} → ${a.m_to}</span>
+    <span class="badge b-${a.stage}">${STAGE[a.stage]}</span></div>
+    <h3>선행 조건</h3><p>${esc(a.pre)}</p><h3>메모</h3><p>${esc(a.note)}</p>
+    <h3>대상 개념</h3><div>${nodeChip(a.node)}</div>${a.dec.length ? `<h3>관련 결정</h3><div>${a.dec.map(decChip).join("")}</div>` : ""}`);
+}
+function openDecision(id) {
+  const d = DEC[id];
+  openDrawer(`<h2 id="dTitle">${d.id} ${esc(d.title)}</h2><div class="hint">${esc(D.whenLabel[d.when])}</div>
+    <p>${esc(d.q)}</p><ol>${d.options.map((o, i) => `<li${i === d.rec ? " class='rec'" : ""}>${i === d.rec ? "★ " : ""}${esc(o)}</li>`).join("")}</ol>
+    <h3>이유</h3><p>${esc(d.why)}</p><h3>안 정하면</h3><p>${esc(d.default)}</p>
+    ${d.nodes.length ? `<h3>영향 범위</h3><div>${d.nodes.map(nodeChip).join("")}</div>` : ""}`);
+}
+
+// ---------- 탭
+const TABS = ["map", "auto", "dec", "rel"];
+function showTab(name) {
+  TABS.forEach((t) => {
+    document.getElementById(`t-${t}`).setAttribute("aria-selected", String(t === name));
+    document.getElementById(`p-${t}`).classList.toggle("on", t === name);
+  });
+}
+TABS.forEach((t) => document.getElementById(`t-${t}`).addEventListener("click", () => showTab(t)));
+
+// ---------- 자동화 재검토
+(function automation() {
+  document.getElementById("humanPoints").innerHTML = D.humanPoints.map((id) => {
+    const a = ACT[id];
+    return `<div class="card acc"><h3>${esc(a.name)}</h3><p>${INPUT[a.input]} · ${a.m_now} → ${a.m_to} · ${STAGE[a.stage]}</p>
+      <p>${esc(a.note)}</p><p>${a.pre === "—" ? "줄일 방법 없음 — 사람이 계속 맡는다" : "줄이는 조건: " + esc(a.pre)}</p><div>${actChip(id)}${a.dec.map(decChip).join("")}</div></div>`;
+  }).join("");
+  const order = ["out", "now", "short", "mid", "done"];
+  document.getElementById("stageKpis").innerHTML = order.map((s) =>
+    `<div class="kpi k-${s}"><b>${D.actions.filter((a) => a.stage === s).length}</b><span>${STAGE[s]}</span></div>`).join("");
+  let html = `<thead><tr><th>계층</th>${order.map((s) => `<th>${STAGE[s]}</th>`).join("")}</tr></thead><tbody>`;
+  D.layers.forEach((layer) => {
+    html += `<tr><td><b>${layer}</b></td>`;
+    order.forEach((s) => {
+      const acts = D.actions.filter((a) => a.layer === layer && a.stage === s);
+      html += `<td>${acts.map((a) => `<button class="act in-${a.input}" data-act="${a.id}">${a.id} ${esc(a.name)}<small>${INPUT[a.input]} · ${a.m_now}→${a.m_to}</small></button>`).join("")}</td>`;
+    });
+    html += "</tr>";
+  });
+  document.getElementById("matrix").innerHTML = html + "</tbody>";
+  document.getElementById("planChanges").innerHTML = `<thead><tr><th>원 기획</th><th>수정안</th><th>이유</th><th>결정</th></tr></thead><tbody>` +
+    D.planChanges.map((c) => `<tr><td>${esc(c.from)}</td><td><b>${esc(c.to)}</b></td><td>${esc(c.why)}</td><td>${c.dec.map(decChip).join("")}</td></tr>`).join("") + "</tbody>";
+  bindChips(document.getElementById("p-auto"));
+})();
+
+// ---------- 결정
+(function decisions() {
+  const box = document.getElementById("decisions");
+  box.innerHTML = Object.entries(D.whenLabel).map(([w, label]) => {
+    const ds = D.decisions.filter((d) => d.when === w);
+    return `<div class="dgroup"><h2 class="section-title">${esc(label)} — ${ds.length}건</h2><div class="grid">` + ds.map((d) =>
+      `<div class="dcard ${w}"><h3>${d.id} ${esc(d.title)}</h3><div class="q">${esc(d.q)}</div>
+       <ol>${d.options.map((o, i) => `<li${i === d.rec ? " class='rec'" : ""}>${i === d.rec ? "★ " : ""}${esc(o)}</li>`).join("")}</ol>
+       <div class="why">이유: ${esc(d.why)}</div><div class="def">안 정하면: ${esc(d.default)}</div>
+       ${d.nodes.length ? `<div>${d.nodes.length > 1 ? `<button class="chipbtn" data-decnodes="${d.nodes.join(",")}">지도에서 영향 범위 보기</button>` : ""}${d.nodes.map(nodeChip).join("")}</div>` : ""}</div>`).join("") + "</div></div>";
+  }).join("");
+  bindChips(box);
+})();
+
+// ---------- 관계 목록
+document.getElementById("relations").innerHTML = `<thead><tr><th>주어</th><th>관계</th><th>목적어</th><th>근거·구현</th></tr></thead><tbody>` +
+  D.edges.map((e) => `<tr><td>${esc(NODE[e.s].label)}</td><td><b>${esc(e.p)}</b></td><td>${esc(NODE[e.o].label)}</td><td class="hint">${esc(e.impl)}</td></tr>`).join("") + "</tbody>";
+</script>
+</body>
+</html>

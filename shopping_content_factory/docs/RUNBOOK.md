@@ -12,8 +12,30 @@
 | `failed` + 시도 3회 | 자동 재시도 중단 | 원인 해결 후 `python scf.py run-stage <stage> --force` |
 | `blocked` | 정책상 중단(기준 미달·비용 상한·한도·권리·사실 검사) — 재시도 안 함 | 메시지의 사유를 해결(아래 표) 후 `--force` |
 | `skipped_upstream` | 선행 단계 미성공 | 선행 단계부터 해결. 선행이 성공하면 다음 실행에서 자동 진행 |
-| `running` 이 계속 | 프로세스가 죽었거나 오래 걸림 | 잠금 파일 `outputs/.pipeline.lock` 확인(2시간 지나면 자동 회수). 프로세스 없으면 파일 삭제 후 `--force` |
+| `running` 이 계속 | 프로세스가 죽었거나 오래 걸림 | **알려진 결함(D2): `--force` 로도 안 풀림.** 아래 '임시 복구' 절차 사용. 잠금 파일 `outputs/.pipeline.lock` 은 2시간 지나면 자동 회수 |
 | 대시보드 '스케줄러 마지막 동작'이 오래됨 | 스케줄러 중지 | `python scf.py scheduler` 재시작(또는 compose `scheduler` 서비스) |
+
+### 임시 복구 — 크래시 후 `running` 고착 (결함 수정 D2 전까지)
+
+1. 실행 중인 파이프라인 프로세스가 정말 없는지 확인 (`ps aux | grep scf.py`, Windows 는 작업 관리자).
+2. 프로젝트 폴더에서:
+
+```bash
+python - <<'PY'
+from sqlalchemy import update
+from services.common.db import session_scope
+from app.models import JobRun
+with session_scope() as s:
+    n = s.execute(update(JobRun).where(JobRun.status == "running")
+                  .values(status="failed", message="수동 회수: 크래시 후 running 고착")).rowcount
+print(n, "건 회수")
+PY
+```
+
+3. 잠금 파일이 남아 있으면 삭제: `outputs/.pipeline.lock`
+4. `python scf.py run-stage <멈춘 단계> --force` → 뒤 단계는 다음 실행에서 이어짐 (2026-11-18 재현·복구 확인)
+
+**원인 요약**: 관리자 '실행' 버튼과 `/api/jobs/run` 이 단계를 웹 요청 안에서 실행 → gunicorn 기본 30초 시간초과로 영상 제작(약 75초) 중 워커가 죽으면 바로 이 상태가 된다. 수정 전까지는 무거운 단계(produce_media)를 CLI·스케줄러로만 실행할 것.
 
 ## 2. blocked 사유별
 
@@ -69,3 +91,7 @@
 
 - 이벤트 정리: `python scf.py purge-events --days 90`
 - 상품 단위 삭제: 관리자 상품 화면 하단 또는 `python scf.py delete-product <id> --by <이름>` — 플랫폼에 올라간 게시물은 각 앱에서 직접 삭제(결과에 개수 표시).
+
+## 변경 이력
+- REV01 (2026-11-18): 최초 작성.
+- REV02 (2026-11-18): `running` 고착 항목 정정 — 기존 안내(`--force`)는 동작하지 않음을 재현으로 확인, 임시 복구 절차와 원인 추가.
