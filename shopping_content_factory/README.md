@@ -4,9 +4,9 @@
 
 **현재 상태: MVP (PHASE 2) 완료 — 외부 API 키 없이 mock 으로 전 구간 실행, 테스트 74개 통과.** 실제 게시·실데이터 연결은 권한이 생기는 대로 하나씩 켠다.
 
-먼저 읽을 문서: [docs/DECISIONS.md](docs/DECISIONS.md) (내가 정할 것 — 이번 주 6건) → [docs/AUTOMATION_REVIEW.md](docs/AUTOMATION_REVIEW.md) (기획안 재검토) → [docs/SCF_온톨로지_REV01.html](docs/SCF_온톨로지_REV01.html) (개념·자동화 지도) → [docs/BUSINESS_RISK_ANALYSIS.md](docs/BUSINESS_RISK_ANALYSIS.md) (수익성 위험). 전체 문서 지도: [docs/README.md](docs/README.md)
+먼저 읽을 문서: [docs/DECISIONS.md](docs/DECISIONS.md) (내가 정할 것 — 이번 주 7건) → [docs/VIRTUAL_OPERATION.md](docs/VIRTUAL_OPERATION.md) (가상 운영 30일 — 방해 요소·필요한 도움) → [docs/AUTOMATION_REVIEW.md](docs/AUTOMATION_REVIEW.md) (기획안 재검토) → [docs/SCF_온톨로지_REV02.html](docs/SCF_온톨로지_REV02.html) (개념·자동화 지도) → [docs/BUSINESS_RISK_ANALYSIS.md](docs/BUSINESS_RISK_ANALYSIS.md) (수익성 위험). 전체 문서 지도: [docs/README.md](docs/README.md)
 
-> **알려진 결함 (2026-11-18 자체 검토)** — 크래시 후 작업이 `running` 으로 고착되면 `--force` 로도 안 풀림(임시 복구: [docs/RUNBOOK.md](docs/RUNBOOK.md)), 웹 실행 버튼은 gunicorn 30초 시간초과에 걸림, 쿠팡 API 모드는 후보가 전부 '보류', 메인→상품 이동 시 유입경로 유실, 관리자 로그인 시도 제한 없음. 수정은 결정 D2 대기. 목록: [docs/BUSINESS_RISK_ANALYSIS.md](docs/BUSINESS_RISK_ANALYSIS.md) 6절.
+> **알려진 결함 (2026-11-18 자체 검토·가상 운영)** — **수동 입력 모드는 가격 확인 시각이 매일 자동 갱신되고 관리자 재확인 가격이 덮어써짐(재현) → 수정 전 실운영 금지**, 상품명 속 숫자를 사실 검사가 오탐, 크래시 후 작업이 `running` 으로 고착되면 `--force` 로도 안 풀림(임시 복구: [docs/RUNBOOK.md](docs/RUNBOOK.md)), 웹 실행 버튼은 gunicorn 30초 시간초과에 걸림, 쿠팡 API 모드는 후보가 전부 '보류', 메인→상품 이동 시 유입경로 유실, 관리자 로그인 시도 제한 없음. 수정은 결정 D2 대기. 목록: [docs/BUSINESS_RISK_ANALYSIS.md](docs/BUSINESS_RISK_ANALYSIS.md) 6절.
 
 ---
 
@@ -141,6 +141,7 @@ shopping_content_factory/
 ```bash
 python scripts/build_ontology.py --rev 02            # scripts/ontology_data.py → HTML 새 REV + md 자동 구간 갱신
 node scripts/check_ontology_html.mjs docs/SCF_온톨로지_REV02.html <스크린샷폴더>   # 글자 넘침·겹침·콘솔 오류 점검
+python scripts/simulate_operations.py --days 30 --with-links   # 가상 운영(임시 DB) — 후보 고갈일·차단 사유·사람 개입 기록
 ```
 
 외부 게시, 유료 API 활성화, 결제, 계정 설정 변경은 사용자가 직접 승인한 범위에서만 한다. 이 저장소의 어떤 명령도 기본 설정으로는 외부에 게시하지 않는다.
@@ -148,3 +149,4 @@ node scripts/check_ontology_html.mjs docs/SCF_온톨로지_REV02.html <스크린
 ## 변경 이력
 - REV01 (2026-11-18): 최초 작성.
 - REV02 (2026-11-18): 먼저 읽을 문서에 결정·재검토·온톨로지 추가, 알려진 결함 고지, 온톨로지 갱신 명령.
+- REV03 (2026-11-18): 가상 운영 문서·결함 3건 추가, 온톨로지 REV02, 시뮬레이터 명령.

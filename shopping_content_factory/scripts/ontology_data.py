@@ -12,8 +12,8 @@ docs/SCF_온톨로지_REVNN.html 과 docs/ONTOLOGY.md · DECISIONS.md · AUTOMAT
 """
 
 AS_OF = "2026-11-18"
-CONCLUSION = "자동화의 병목은 코드가 아니라 사람이 확정해야 하는 6곳이다."
-REASON = "사양·이미지 권리·가격 재확인·승인·링크 등록·업로드는 공식 API가 없거나 사람이 판단해야 한다."
+CONCLUSION = "자동화의 병목은 코드가 아니라 사람이 확정해야 하는 7곳과 상품 후보 공급이다."
+REASON = "가상 운영 30일에서 후보는 D11에 바닥났고, 사양·권리·가격·승인·링크·업로드·성과 입력은 사람이 해야 한다."
 
 LANES = [
     {"id": "demand", "label": "① 수요"},
@@ -66,7 +66,7 @@ NODES = [
      "attrs": ["판매자·가격·재고", "사실 해시(facts_hash)", "출처(mock/수동/쿠팡 API)", "DEMO 여부"],
      "impl": ["products", "services/product_discovery/discovery.py", "data/templates/manual_products_template.json"],
      "input": "human", "m": "M1", "stage": "mid", "state": "manual",
-     "gap": "쿠팡 API 는 최종 승인 후 — 그 전엔 JSON 수동 입력(등록 화면 없음)", "decisions": ["D11"]},
+     "gap": "쿠팡 API 는 최종 승인 후 — 그 전엔 JSON 수동 입력(등록 화면 없음). 가상 운영: 후보 24개로 D11 고갈", "decisions": ["D11", "D20"]},
     {"id": "spec", "label": "검증 사양", "sub": "verified_specs", "lane": "product", "row": 2,
      "desc": "판매 페이지에서 사람이 확인한 사양(key·값·단위·출처·확인 시각). 영상·캡션 속 숫자는 이것과 같아야 통과.",
      "attrs": ["key / value / unit", "출처·확인 시각", "카테고리 필수 사양"],
@@ -81,8 +81,8 @@ NODES = [
      "desc": "가격과 재고는 확인 시각과 함께만 쓴다. 24시간이 지나면 랜딩에서 숨기고 게시를 막는다.",
      "attrs": ["가격·확인 시각", "유효 24시간", "재고 상태", "7일 가격 변동"],
      "impl": ["products.price_checked_at", "price_history"], "input": "human", "m": "M1", "stage": "mid",
-     "state": "manual", "gap": "API 전엔 사람이 매일 재확인 — 승인·게시 시각과 맞물림. 쿠팡 응답의 재고 필드는 미확인",
-     "decisions": ["D11", "D18"]},
+     "state": "manual", "gap": "결함(재현): 수동 모드에서 확인 시각이 매일 자동으로 '방금'이 되고, 관리자가 재확인한 가격이 JSON 옛값으로 덮어써짐 → 가격 만료 게이트 무력화",
+     "decisions": ["D2", "D11", "D18"]},
     {"id": "image", "label": "상품 이미지", "sub": "product_images", "lane": "product", "row": 5,
      "desc": "상품 원본 이미지와 권리 상태. 권리가 불분명하면 영상에 쓰지 않고 콘텐츠를 멈춘다.",
      "attrs": ["권리 상태 7종", "증빙", "원형 보존 검수"], "impl": ["product_images", "services/image_generator/composer.py"],
@@ -108,7 +108,7 @@ NODES = [
      "desc": "상위 5개를 순서대로 재검증해 처음 통과한 1개. 기준 점수 미달이면 그날은 만들지 않는다.",
      "attrs": ["상위 5", "재검증(가격·재고·권리·사양)", "최종 1 또는 미제작"],
      "impl": ["selection_logs", "services/product_scoring/selection.py"], "input": "system", "m": "M3",
-     "stage": "done", "state": "internal", "gap": "재검증은 DB 값의 유효시간만 봄 — 판매처 재조회 아님", "decisions": []},
+     "stage": "done", "state": "internal", "gap": "재검증은 DB 값의 유효시간만 봄. 가상 운영: 기준 이상 후보가 떨어진 D11부터 20일 연속 미제작", "decisions": ["D20"]},
     # ④ 콘텐츠
     {"id": "content", "label": "콘텐츠", "sub": "contents", "lane": "content", "row": 0,
      "desc": "상품 1개 = 하루 1개. 생성 → 승인 대기 → 승인 → 게시, 또는 차단·수정 요청·거절.",
@@ -136,19 +136,19 @@ NODES = [
      "attrs": ["1080×1920 H.264+AAC", "이미지 권리·출처 매니페스트", "AI 생성 여부"],
      "impl": ["services/image_generator/", "services/video_renderer/renderer.py"], "input": "system", "m": "M2",
      "stage": "short", "state": "internal",
-     "gap": "실상품은 그라디언트 배경+사진+자막 슬라이드 → 템플릿 반복 정책 위험. 무음", "decisions": ["D7", "D8"]},
+     "gap": "가상 운영 10개 중 9개가 범용 그라디언트 배경(전용 연출은 데모 1개뿐) → 템플릿 반복 정책 위험. 무음", "decisions": ["D7", "D8"]},
     {"id": "check", "label": "사실 검사·QA", "sub": "fact_guard / qa", "lane": "content", "row": 5,
      "desc": "숫자+단위는 검증 사양과 일치, 금액 표기·금칙어·경험 주장 차단, 광고 표시 5곳·주의사항 장면 확인, 영상 규격 검사.",
      "attrs": ["사실 검사", "표시 검사", "영상 규격", "권리·보존"],
      "impl": ["services/script_generator/fact_guard.py", "services/video_renderer/qa.py"], "input": "system",
      "m": "M3", "stage": "done", "state": "internal",
-     "gap": "숫자 없는 과장('어떤 책상에도 맞아요')은 못 잡음 → 사람 검수가 실질 방어선", "decisions": []},
+     "gap": "숫자 없는 과장은 못 잡음. 오탐(가상 운영 D7): 상품명 속 '2단'을 미검증 수치로 보고 차단", "decisions": ["D2"]},
     # ⑤ 유통
     {"id": "approval", "label": "승인", "sub": "approved_by", "lane": "distrib", "row": 0,
      "desc": "사람이 권리·사실성·광고 표시를 확인하고 승인. 승인 후 사실·영상이 바뀌면 효력이 없어진다.",
      "attrs": ["승인자·시각", "검수 메모", "감사 로그"], "impl": ["services/social_publishers/review.py", "audit_logs"],
      "input": "human", "m": "M0", "stage": "out", "state": "internal",
-     "gap": "본업 시간과 겹침 — 09~12시 승인이 현실적인지가 관건", "decisions": ["D13", "D18"]},
+     "gap": "본업 시간과 겹침 — 09~12시 승인이 현실적인지가 관건. 관리자 화면은 모바일 승인 점검 전", "decisions": ["D13", "D18", "D19"]},
     {"id": "link", "label": "제휴 링크", "sub": "affiliate_links", "lane": "distrib", "row": 1,
      "desc": "쿠팡파트너스 링크. 임의 생성 금지, 자동으로 열어 확인하지 않음(클릭 오염) — 형식 검증 후 사람 확인.",
      "attrs": ["URL·상태", "sub_id ↔ 콘텐츠", "출처(수동/API)"], "impl": ["affiliate_links", "services/affiliate_links/links.py"],
@@ -173,7 +173,7 @@ NODES = [
     {"id": "pmetric", "label": "플랫폼 지표", "sub": "metric_observations", "lane": "perf", "row": 0,
      "desc": "조회·저장·공유·시청시간. 48~72시간 지연. 조회는 매출이 아니다.",
      "attrs": ["조회·저장·공유", "출처(API/CSV)", "실측/추정 구분"], "impl": ["metric_observations", "services/analytics/importers.py"],
-     "input": "system", "m": "M1", "stage": "short", "state": "manual", "gap": "API 전엔 CSV 수동 적재", "decisions": ["D3", "D4"]},
+     "input": "human", "m": "M1", "stage": "short", "state": "manual", "gap": "앱 수동 업로드(D4)면 성과도 앱에서 읽어 CSV 로 입력 — 사람 확정 지점이 하나 늘어남", "decisions": ["D3", "D4"]},
     {"id": "event", "label": "랜딩 이벤트", "sub": "site_events", "lane": "perf", "row": 1,
      "desc": "페이지 조회·구매 버튼 클릭·영상 재생. IP·브라우저 정보·쿠키 저장 안 함. ?c= 로 콘텐츠에 귀속.",
      "attrs": ["유입경로 src", "콘텐츠 귀속 c", "개인정보 미수집"], "impl": ["site_events", "app/static/js/track.js"],
@@ -338,6 +338,12 @@ ACTIONS = [
      "stage": "mid", "node": "learning", "pre": "콘텐츠별 귀속 수수료", "dec": ["D3"], "note": "30개 이후"},
     {"id": "A23", "layer": "관측", "name": "실패 감지·알림", "input": "system", "m_now": "M1", "m_to": "M3",
      "stage": "now", "node": "job", "pre": "알림 채널", "dec": ["D17"], "note": "Lv3 진입점 — 지금은 대시보드를 봐야만 앎"},
+    {"id": "A25", "layer": "관측", "name": "후보 잔량 경보", "input": "system", "m_now": "M0", "m_to": "M3",
+     "stage": "now", "node": "selection", "pre": "기준 이상 후보 수 계산(코드 있음) + 알림 채널", "dec": ["D20", "D17"],
+     "note": "가상 운영에서 D11 고갈을 아무도 미리 알지 못함 — '남은 일수 7일 미만'이면 알림"},
+    {"id": "A26", "layer": "관측", "name": "성과 수치 입력(앱 → CSV)", "input": "human", "m_now": "M0", "m_to": "M1",
+     "stage": "short", "node": "pmetric", "pre": "관리자 입력 폼(CSV 대신)", "dec": ["D4"],
+     "note": "앱 수동 업로드를 고르면 생기는 사람 확정 지점"},
     {"id": "A24", "layer": "관측", "name": "작업 자가 복구", "input": "system", "m_now": "M2", "m_to": "M3",
      "stage": "now", "node": "job", "pre": "결함 수정", "dec": ["D2"], "note": "running 고착 회수 + 신선도 4신호"},
 ]
@@ -350,10 +356,10 @@ DECISIONS = [
      "rec": 0, "why": "주식 대시보드와 성격이 다르고, 전략 문서가 노출된다. 비밀키는 없음(검사 완료).",
      "default": "공개 유지 — 전략 문서 노출 지속", "nodes": []},
     {"id": "D2", "when": "now", "title": "결함 수정 묶음 승인",
-     "q": "확인된 결함 4건(running 고착, 웹 실행 30초 시간초과, src 유실, 로그인·SECRET_KEY·프록시)을 지금 고칠까?",
+     "q": "확인된 결함 7건(running 고착, 웹 실행 30초 시간초과, src 유실, 로그인·SECRET_KEY·프록시 + 가상 운영에서 찾은 수동 가격 시각 자동 갱신, 관리자 가격 덮어쓰기, 상품명 숫자 오탐)을 지금 고칠까?",
      "options": ["지금 수정", "실험 시작 전에 수정", "보류"], "rec": 0,
-     "why": "running 고착은 재현 확인 — 한 번 걸리면 그날 파이프라인이 멈추고 --force 로도 안 풀린다.",
-     "default": "미수정 — 크래시 시 수동 DB 조작 필요", "nodes": ["job", "event"]},
+     "why": "running 고착·수동 가격 결함 2건은 재현 확인. 수동 가격 결함은 실운영 첫 경로(수동 입력)에서 가격 만료 게이트를 조용히 무력화한다.",
+     "default": "미수정 — 수동 모드 실운영 불가, 크래시 시 DB 수동 조작", "nodes": ["job", "event", "price", "check"]},
     {"id": "D3", "when": "now", "title": "첫 30개 실험 설계",
      "q": "기간·판정 지표·중단 기준·현금 예산 상한을 정한다.",
      "options": ["30일·30개, 판정은 랜딩 방문율·클릭률, 구매전환율은 판정 제외",
@@ -375,6 +381,16 @@ DECISIONS = [
      "options": ["전날 밤 생성 → 출근 전·퇴근 후 승인 → 다음 날 정해진 시각 게시", "현행(09~12시 승인)", "주말에 7개 몰아 승인"], "rec": 0,
      "why": "가격 확인 유효 24시간과 승인 가능 시간이 맞아야 게시가 막히지 않는다.",
      "default": "승인이 늦으면 가격 만료로 게시 차단 반복", "nodes": ["approval", "price", "job", "publication"]},
+    {"id": "D19", "when": "now", "title": "회사 겸업 규정·장비 사용",
+     "q": "본업 회사의 취업규칙에 겸업·영리활동 신고(허가) 조항이 있는지, 회사 장비·사내망·사내 AI 를 쓰지 않는지 확인했나?",
+     "options": ["취업규칙 확인 → 필요하면 신고·허가 후 착수", "확인 없이 진행(권장하지 않음)"], "rec": 0,
+     "why": "수익이 나는 순간부터 문제가 될 수 있고, 개인 사업 작업을 회사 PC·사내 Claude 로 하면 별도 위반 소지. 회사마다 규정이 달라 확인이 필요하다.",
+     "default": "고용 관련 위험을 모른 채 운영", "nodes": ["approval"]},
+    {"id": "D20", "when": "before", "title": "후보 공급 목표·게시 빈도",
+     "q": "가상 운영 30일에서 후보 24개로는 D11에 바닥났다. 후보를 얼마나 공급하고 얼마나 자주 올릴까?",
+     "options": ["30개는 유지하되 주 5개 × 6주, 후보는 주말에 일괄 등록", "1일 1개 유지(하루 약 2~3개 후보 등록)", "후보가 있는 날만 제작"], "rec": 0,
+     "why": "mock 기준 선정 가능 비율은 24개 중 10개(약 42%) — 1일 1개면 하루 2.4개꼴로 새 후보가 필요하다(실제 비율은 실측). 카테고리를 좁히면(D10) 더 빨리 바닥난다.",
+     "default": "후보가 떨어지는 날부터 연속 미제작", "nodes": ["product", "selection", "category"]},
     {"id": "D5", "when": "before", "title": "채널 우선순위",
      "q": "Reels 와 Shorts 중 어디에 먼저, 혹은 동시에?",
      "options": ["같은 영상을 동시에(비교 데이터 확보)", "YouTube 먼저(쇼핑 제휴 경로)", "Instagram 먼저"], "rec": 0,
@@ -399,7 +415,7 @@ DECISIONS = [
     {"id": "D10", "when": "before", "title": "카테고리 범위",
      "q": "5개 카테고리를 유지할까, 1~2개로 좁힐까?",
      "options": ["1~2개 집중(예: 책상·케이블 + 원룸 수납)", "5개 유지"], "rec": 0,
-     "why": "30개 표본을 5개로 나누면 카테고리당 6개 — 비교가 안 된다. 채널 정체성에도 집중이 유리.",
+     "why": "30개 표본을 5개로 나누면 카테고리당 6개 — 비교가 안 된다. 다만 좁힐수록 후보가 빨리 바닥난다(D20 과 같이 정할 것).",
      "default": "5개 유지", "nodes": ["category", "keyword"]},
     {"id": "D11", "when": "before", "title": "상품 입력 방식",
      "q": "쿠팡 API 전 상품을 어떻게 넣을까?",
@@ -440,7 +456,7 @@ DECISIONS = [
 WHEN_LABEL = {"now": "지금 (착수 전, 이번 주)", "before": "첫 실콘텐츠 전", "later": "진행 중·30개 이후"}
 
 # 사람 확정 지점 (일일 루프의 병목) — ACTIONS id
-HUMAN_POINTS = ["A03", "A05", "A04", "A15", "A16", "A17"]
+HUMAN_POINTS = ["A03", "A05", "A04", "A15", "A16", "A17", "A26"]
 
 # 원 기획 대비 수정안
 PLAN_CHANGES = [
@@ -458,6 +474,8 @@ PLAN_CHANGES = [
      "why": "30개 표본을 5개로 나누면 카테고리당 6개 — 비교 불가", "dec": ["D10"]},
     {"from": "성과를 다음 날 선정에 반영", "to": "30개까지는 측정만, 학습은 콘텐츠별 귀속 데이터 확보 후",
      "why": "귀속 수수료가 없으면 학습 신호가 조회수뿐 — 조회는 매출이 아니다", "dec": ["D3"]},
+    {"from": "1일 1개 30일 연속", "to": "30개는 유지하되 주 5개 × 6주, 후보는 주말 일괄 등록 + 후보 잔량 경보",
+     "why": "가상 운영에서 후보 24개가 D11에 바닥나 20일 연속 미제작", "dec": ["D20"]},
     {"from": "대시보드로 상태 확인(Lv2)", "to": "실패 알림 + 작업 자가 복구 + 신선도 4신호(Lv3)",
      "why": "지금은 화면을 열어야만 실패를 알고, 크래시 후 running 고착은 사람이 DB 를 고쳐야 풀린다", "dec": ["D2", "D17"]},
 ]

@@ -4,9 +4,10 @@
 
 | 순서 | 문서 | 무엇을 답하나 | 갱신 시점 |
 |---|---|---|---|
-| 1 | [DECISIONS.md](DECISIONS.md) | **내가 정해야 할 것** 18건, 이번 주 6건, 결정 기록 | 결정할 때마다 |
+| 1 | [DECISIONS.md](DECISIONS.md) | **내가 정해야 할 것** 20건, 이번 주 7건, 결정 기록 | 결정할 때마다 |
+| 1-1 | [VIRTUAL_OPERATION.md](VIRTUAL_OPERATION.md) | **가상 운영 30일** — 어디서 막히고 누구 도움이 필요한가 | 시뮬레이터 재실행 시 |
 | 2 | [AUTOMATION_REVIEW.md](AUTOMATION_REVIEW.md) | 기획안 재검토 — 무엇을 자동화하고 무엇을 사람이 계속하나, 로드맵 | 결정·실측 반영 시 |
-| 3 | [SCF_온톨로지_REV01.html](SCF_온톨로지_REV01.html) | 개념·관계·자동화 수준·막힌 것을 한 장으로 (더블클릭) | 데이터 파일 수정 시 REV 올려 재생성 |
+| 3 | [SCF_온톨로지_REV02.html](SCF_온톨로지_REV02.html) (이전판 REV01) | 개념·관계·자동화 수준·막힌 것을 한 장으로 (더블클릭) | 데이터 파일 수정 시 REV 올려 재생성 |
 | — | [ONTOLOGY.md](ONTOLOGY.md) | 위 HTML 의 텍스트판 + 핵심 경로 3개 | HTML 과 같이 |
 | — | [BUSINESS_RISK_ANALYSIS.md](BUSINESS_RISK_ANALYSIS.md) | 수익 구조 한계, 논리적 결점, 자체 검토 결함 | 판정 게이트마다 |
 | — | [FEASIBILITY_REPORT.md](FEASIBILITY_REPORT.md) | 가능 / 승인 필요 / 불가, MVP 범위 | 권한이 생길 때 |

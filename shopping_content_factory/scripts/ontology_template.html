@@ -196,7 +196,7 @@ footer.note { color: var(--sub); font-size: 12px; margin-top: 24px; }
   </section>
 
   <section class="panel" id="p-auto" role="tabpanel" aria-labelledby="t-auto">
-    <h2 class="section-title">사람이 확정해야 하는 6곳 — 일일 루프의 병목</h2>
+    <h2 class="section-title" id="hpTitle">사람이 확정해야 하는 곳 — 일일 루프의 병목</h2>
     <div class="grid" id="humanPoints"></div>
     <h2 class="section-title">착수 단계별 액션 <span class="hint">(개수는 액션 수이지 업무량이 아님)</span></h2>
     <div class="kpis" id="stageKpis"></div>
@@ -480,6 +480,7 @@ TABS.forEach((t) => document.getElementById(`t-${t}`).addEventListener("click", 
 
 // ---------- 자동화 재검토
 (function automation() {
+  document.getElementById("hpTitle").textContent = `사람이 확정해야 하는 ${D.humanPoints.length}곳 — 일일 루프의 병목`;
   document.getElementById("humanPoints").innerHTML = D.humanPoints.map((id) => {
     const a = ACT[id];
     return `<div class="card acc"><h3>${esc(a.name)}</h3><p>${INPUT[a.input]} · ${a.m_now} → ${a.m_to} · ${STAGE[a.stage]}</p>
