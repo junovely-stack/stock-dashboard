@@ -2,7 +2,7 @@
 
 쇼핑 키워드에서 고객 문제를 찾고 → 상품을 100점 기준으로 고르고 → 사실 검사를 통과한 9:16 숏폼·이미지·랜딩을 만들고 → 사람이 승인한 것만 게시하고 → 조회부터 제휴수익까지 실측과 추정을 나눠 기록하는 파이프라인.
 
-**현재 상태: MVP (PHASE 2) 완료 — 외부 API 키 없이 mock 으로 전 구간 실행, 테스트 74개 통과.** 실제 게시·실데이터 연결은 권한이 생기는 대로 하나씩 켠다.
+**현재 상태: MVP (PHASE 2) 완료 — 외부 API 키 없이 mock 으로 전 구간 실행, 테스트 78개 통과.** 실제 게시·실데이터 연결은 권한이 생기는 대로 하나씩 켠다.
 
 먼저 읽을 문서: [docs/PROGRESS.md](docs/PROGRESS.md) (진행 현황) → [docs/SCF_지식체계_REV01.html](docs/SCF_지식체계_REV01.html) (모든 내용을 한 그래프로 — 진행·지도·탐색기·추적표) → [docs/DECISIONS.md](docs/DECISIONS.md) (내가 정할 것 — 이번 주 7건) → [docs/VIRTUAL_OPERATION.md](docs/VIRTUAL_OPERATION.md) (가상 운영 30일 — 방해 요소·필요한 도움) → [docs/AUTOMATION_REVIEW.md](docs/AUTOMATION_REVIEW.md) (기획안 재검토) → [docs/SCF_온톨로지_REV02.html](docs/SCF_온톨로지_REV02.html) (개념·자동화 지도) → [docs/BUSINESS_RISK_ANALYSIS.md](docs/BUSINESS_RISK_ANALYSIS.md) (수익성 위험). 전체 문서 지도: [docs/README.md](docs/README.md)
 
@@ -55,7 +55,7 @@ python scf.py serve --port 5000               # http://localhost:5000 (랜딩), 
 ## 3. 테스트
 
 ```bash
-python -m pytest                     # 74개, 약 25초 (mock, 외부 호출 없음, 영상은 6fps 로 렌더)
+python -m pytest                     # 78개, 약 27초 (mock, 외부 호출 없음, 영상은 6fps 로 렌더)
 node scripts/e2e_check.mjs http://localhost:5000 <관리자비밀번호> <스크린샷폴더>   # 서버 띄운 뒤, 콘솔 오류·가로 넘침·필수 요소 점검
 ```
 
