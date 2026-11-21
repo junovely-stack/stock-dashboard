@@ -1,0 +1,11351 @@
+{
+ "rev": "01",
+ "asOf": "2026-11-21",
+ "headline": "MVP 는 끝났고, 다음 단계는 결정 대기와 미해결 결함에 막혀 있다.",
+ "headline2": "산출물 20개 중 완료 15·부분 5, 결정 0/20, 미해결 결함·약점 14건, 외부 API 실호출 0건.",
+ "classes": [
+  {
+   "id": "Deliverable",
+   "label": "산출물",
+   "desc": "요구서 16장 최종 산출물 20개",
+   "group": "goal"
+  },
+  {
+   "id": "Criterion",
+   "label": "완료 기준",
+   "desc": "요구서 17장 MVP 완료 판정 15개",
+   "group": "goal"
+  },
+  {
+   "id": "Phase",
+   "label": "단계",
+   "desc": "PHASE 1~5 · STEP 1~10 · 수정 로드맵",
+   "group": "goal"
+  },
+  {
+   "id": "PlanChange",
+   "label": "기획 수정안",
+   "desc": "원 기획 대비 수정",
+   "group": "goal"
+  },
+  {
+   "id": "Concept",
+   "label": "도메인 개념",
+   "desc": "시스템이 다루는 업무 개념(도메인 온톨로지)",
+   "group": "system"
+  },
+  {
+   "id": "Component",
+   "label": "구현 요소",
+   "desc": "코드·설정·스크립트 모듈",
+   "group": "system"
+  },
+  {
+   "id": "Verification",
+   "label": "검증",
+   "desc": "pytest·브라우저 점검·시뮬레이션·재현",
+   "group": "system"
+  },
+  {
+   "id": "Evidence",
+   "label": "증거",
+   "desc": "실행 결과물·재현 기록",
+   "group": "system"
+  },
+  {
+   "id": "Document",
+   "label": "문서",
+   "desc": "README 와 docs/",
+   "group": "system"
+  },
+  {
+   "id": "Action",
+   "label": "자동화 액션",
+   "desc": "6계층 자동화 액션",
+   "group": "system"
+  },
+  {
+   "id": "Party",
+   "label": "외부 주체",
+   "desc": "플랫폼·기관·전문가·고용주·운영자",
+   "group": "judge"
+  },
+  {
+   "id": "Fact",
+   "label": "사실",
+   "desc": "조사로 확인한 외부 사실(확인 수준 A/B/C)",
+   "group": "judge"
+  },
+  {
+   "id": "Regulation",
+   "label": "정책·규정",
+   "desc": "법·심사지침·플랫폼 정책·약관",
+   "group": "judge"
+  },
+  {
+   "id": "Assumption",
+   "label": "가정",
+   "desc": "재무·운영 가정과 판단값",
+   "group": "judge"
+  },
+  {
+   "id": "Risk",
+   "label": "리스크",
+   "desc": "사업·운영·정책 위험",
+   "group": "judge"
+  },
+  {
+   "id": "Defect",
+   "label": "결함·약점",
+   "desc": "확인된 결함과 설계상 약점",
+   "group": "judge"
+  },
+  {
+   "id": "Decision",
+   "label": "결정",
+   "desc": "사용자가 정할 것",
+   "group": "judge"
+  },
+  {
+   "id": "Metric",
+   "label": "지표",
+   "desc": "측정할 숫자",
+   "group": "judge"
+  }
+ ],
+ "props": [
+  {
+   "id": "realizes",
+   "label": "충족한다",
+   "domain": [
+    "Component"
+   ],
+   "range": [
+    "Deliverable"
+   ]
+  },
+  {
+   "id": "implements",
+   "label": "구현한다",
+   "domain": [
+    "Component"
+   ],
+   "range": [
+    "Concept"
+   ]
+  },
+  {
+   "id": "verifies",
+   "label": "검증한다",
+   "domain": [
+    "Verification"
+   ],
+   "range": [
+    "Criterion",
+    "Component",
+    "Defect",
+    "Deliverable"
+   ]
+  },
+  {
+   "id": "produces",
+   "label": "산출한다",
+   "domain": [
+    "Verification",
+    "Component"
+   ],
+   "range": [
+    "Evidence"
+   ]
+  },
+  {
+   "id": "describes",
+   "label": "기술한다",
+   "domain": [
+    "Document"
+   ],
+   "range": [
+    "*"
+   ]
+  },
+  {
+   "id": "sourcedFrom",
+   "label": "출처",
+   "domain": [
+    "Fact",
+    "Regulation"
+   ],
+   "range": [
+    "Party"
+   ]
+  },
+  {
+   "id": "supports",
+   "label": "근거가 된다",
+   "domain": [
+    "Fact",
+    "Evidence",
+    "Assumption"
+   ],
+   "range": [
+    "Risk",
+    "Decision",
+    "Defect",
+    "Concept",
+    "Regulation",
+    "PlanChange",
+    "Assumption"
+   ]
+  },
+  {
+   "id": "constrains",
+   "label": "제약한다",
+   "domain": [
+    "Regulation"
+   ],
+   "range": [
+    "Concept",
+    "Component",
+    "Phase"
+   ]
+  },
+  {
+   "id": "feeds",
+   "label": "입력된다",
+   "domain": [
+    "Assumption"
+   ],
+   "range": [
+    "Metric",
+    "Component",
+    "Concept",
+    "Phase"
+   ]
+  },
+  {
+   "id": "threatens",
+   "label": "위협한다",
+   "domain": [
+    "Risk"
+   ],
+   "range": [
+    "Concept",
+    "Metric",
+    "Phase"
+   ]
+  },
+  {
+   "id": "mitigatedBy",
+   "label": "완화된다",
+   "domain": [
+    "Risk"
+   ],
+   "range": [
+    "Decision",
+    "Component",
+    "Action"
+   ]
+  },
+  {
+   "id": "affects",
+   "label": "영향을 준다",
+   "domain": [
+    "Defect"
+   ],
+   "range": [
+    "Concept",
+    "Component",
+    "Criterion"
+   ]
+  },
+  {
+   "id": "resolvedBy",
+   "label": "해결된다",
+   "domain": [
+    "Defect"
+   ],
+   "range": [
+    "Decision",
+    "Document"
+   ]
+  },
+  {
+   "id": "foundBy",
+   "label": "발견됐다",
+   "domain": [
+    "Defect"
+   ],
+   "range": [
+    "Evidence",
+    "Verification"
+   ]
+  },
+  {
+   "id": "impacts",
+   "label": "영향 범위",
+   "domain": [
+    "Decision"
+   ],
+   "range": [
+    "Concept"
+   ]
+  },
+  {
+   "id": "gates",
+   "label": "선행 조건이다",
+   "domain": [
+    "Decision"
+   ],
+   "range": [
+    "Phase"
+   ]
+  },
+  {
+   "id": "decidedBy",
+   "label": "결정 주체",
+   "domain": [
+    "Decision"
+   ],
+   "range": [
+    "Party"
+   ]
+  },
+  {
+   "id": "targets",
+   "label": "대상",
+   "domain": [
+    "Action"
+   ],
+   "range": [
+    "Concept"
+   ]
+  },
+  {
+   "id": "dependsOn",
+   "label": "필요로 한다",
+   "domain": [
+    "Action",
+    "PlanChange"
+   ],
+   "range": [
+    "Decision"
+   ]
+  },
+  {
+   "id": "partOf",
+   "label": "속한다",
+   "domain": [
+    "Phase"
+   ],
+   "range": [
+    "Phase"
+   ]
+  },
+  {
+   "id": "deliveredIn",
+   "label": "만든 단계",
+   "domain": [
+    "Deliverable"
+   ],
+   "range": [
+    "Phase"
+   ]
+  },
+  {
+   "id": "measures",
+   "label": "측정한다",
+   "domain": [
+    "Metric"
+   ],
+   "range": [
+    "Concept"
+   ]
+  },
+  {
+   "id": "provides",
+   "label": "제공한다",
+   "domain": [
+    "Party"
+   ],
+   "range": [
+    "Concept"
+   ]
+  },
+  {
+   "id": "domain",
+   "label": "도메인 관계",
+   "domain": [
+    "Concept"
+   ],
+   "range": [
+    "Concept"
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "id": "keyword",
+   "cls": "Concept",
+   "label": "키워드",
+   "desc": "트렌드 소스에서 온 쇼핑·검색 키워드. 값은 묶음마다 최댓값 100인 상대지수이며 검색량·판매량이 아니다.",
+   "status": "now",
+   "props": {
+    "area": "① 수요",
+    "input": "system",
+    "m": "M2",
+    "data_state": "mock",
+    "gap": "실데이터 키 없음 — 네이버 DataLab 신규 신청은 2026-07-30 종료(API HUB 이관)",
+    "sub": "trend_snapshots"
+   }
+  },
+  {
+   "id": "persona",
+   "cls": "Concept",
+   "label": "고객 페르소나",
+   "desc": "이 상품이 필요한 사람. 생활 맥락까지 구체적으로(예: 모니터 2대 쓰는 재택근무자).",
+   "status": "short",
+   "props": {
+    "area": "① 수요",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "지금은 사람이 메모를 쓰고 규칙이 재배열만 함 — 분석 노동은 사람 몫",
+    "sub": "problem.persona"
+   }
+  },
+  {
+   "id": "problem",
+   "cls": "Concept",
+   "label": "고객 문제",
+   "desc": "표면 문제 뒤의 실제 불편. 반복 상황과 잃는 것(시간·공간·돈·노력), 상품이 해결 못 하는 것까지 포함.",
+   "status": "short",
+   "props": {
+    "area": "① 수요",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "가설 — 실사용자 확인 전. LLM 을 켜면 초안 자동화(사람 확정은 유지)",
+    "sub": "problem / answers"
+   }
+  },
+  {
+   "id": "barrier",
+   "cls": "Concept",
+   "label": "구매 장벽",
+   "desc": "구매를 망설이게 하는 가장 큰 이유와, 그것을 푸는 결정적 정보(대개 사양 1~2개).",
+   "status": "short",
+   "props": {
+    "area": "① 수요",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "",
+    "sub": "hesitation"
+   }
+  },
+  {
+   "id": "lever",
+   "cls": "Concept",
+   "label": "심리 요소",
+   "desc": "허용 목록 12개 중 상품에 맞는 1~2개만. 거짓 희소성·가짜 후기류는 목록에 없다.",
+   "status": "done",
+   "props": {
+    "area": "① 수요",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "levers (1~2)"
+   }
+  },
+  {
+   "id": "category",
+   "cls": "Concept",
+   "label": "카테고리",
+   "desc": "초기 타깃 5개(책상·케이블, 좁은 공간, 원룸 수납, 세탁·청소, 무타공). 카테고리마다 필수 사양이 다르다.",
+   "status": "out",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M0",
+    "data_state": "internal",
+    "gap": "범위 결정은 사람 — 5개를 유지할지 1~2개로 좁힐지",
+    "sub": "categories.toml"
+   }
+  },
+  {
+   "id": "product",
+   "cls": "Concept",
+   "label": "상품",
+   "desc": "제휴 링크를 걸 수 있는 실제 상품. 이름·사양·장단점·주의사항을 묶은 '사실 해시'로 변경을 감지한다.",
+   "status": "mid",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "쿠팡 API 는 최종 승인 후 — 그 전엔 JSON 수동 입력(등록 화면 없음). 가상 운영: 후보 24개로 D11 고갈",
+    "sub": "products"
+   }
+  },
+  {
+   "id": "spec",
+   "cls": "Concept",
+   "label": "검증 사양",
+   "desc": "판매 페이지에서 사람이 확인한 사양(key·값·단위·출처·확인 시각). 영상·캡션 속 숫자는 이것과 같아야 통과.",
+   "status": "short",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M0",
+    "data_state": "manual",
+    "gap": "쿠팡 API 응답에 사양 없음 → 완전 자동은 대상 외. 붙여넣은 텍스트에서 LLM 추출 + 사람 확인이 최대치",
+    "sub": "verified_specs"
+   }
+  },
+  {
+   "id": "caution",
+   "cls": "Concept",
+   "label": "주의사항·비추천",
+   "desc": "설치 조건·하중·호환처럼 사기 전에 확인할 것과 맞지 않는 사람. 영상의 '확인할 점' 장면에 반드시 나온다.",
+   "status": "short",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M0",
+    "data_state": "manual",
+    "gap": "",
+    "sub": "cautions"
+   }
+  },
+  {
+   "id": "price",
+   "cls": "Concept",
+   "label": "가격·재고 확인",
+   "desc": "가격과 재고는 확인 시각과 함께만 쓴다. 24시간이 지나면 랜딩에서 숨기고 게시를 막는다.",
+   "status": "mid",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "결함(재현): 수동 모드에서 확인 시각이 매일 자동으로 '방금'이 되고, 관리자가 재확인한 가격이 JSON 옛값으로 덮어써짐 → 가격 만료 게이트 무력화",
+    "sub": "price_checked_at"
+   }
+  },
+  {
+   "id": "image",
+   "cls": "Concept",
+   "label": "상품 이미지",
+   "desc": "상품 원본 이미지와 권리 상태. 권리가 불분명하면 영상에 쓰지 않고 콘텐츠를 멈춘다.",
+   "status": "out",
+   "props": {
+    "area": "② 상품",
+    "input": "human",
+    "m": "M0",
+    "data_state": "manual",
+    "gap": "권리 판단은 사람만 — 쿠팡 이미지 편집 허용 범위 미확인",
+    "sub": "product_images"
+   }
+  },
+  {
+   "id": "usage",
+   "cls": "Concept",
+   "label": "실사용 확인",
+   "desc": "직접 써 보고 찍은 기록. 있어야만 '써보니'류 경험 표현을 허용한다. 신뢰·원본성 정책 모두에 가장 유리.",
+   "status": "out",
+   "props": {
+    "area": "② 상품",
+    "input": "field",
+    "m": "M0",
+    "data_state": "manual",
+    "gap": "상품 구매비가 가장 큰 변동비(2만 원 상품 = 주문 약 33건분 수수료)",
+    "sub": "own_usage_verified"
+   }
+  },
+  {
+   "id": "score",
+   "cls": "Concept",
+   "label": "평가",
+   "desc": "8개 항목 100점. 근거 없는 항목은 만점의 30%까지만(mock 근거는 80%). 항목마다 근거 문장 저장.",
+   "status": "done",
+   "props": {
+    "area": "③ 판단",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "가중치·임계값은 실데이터로 보정 전(판단값)",
+    "sub": "product_scores"
+   }
+  },
+  {
+   "id": "filter",
+   "cls": "Concept",
+   "label": "필터 판정",
+   "desc": "점수와 별개인 필수 조건. 제외(품절·효과 주장·규제·중복)와 보류(권리·사양·가격 만료·판매자)를 나눈다.",
+   "status": "done",
+   "props": {
+    "area": "③ 판단",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "pass/hold/exclude"
+   }
+  },
+  {
+   "id": "selection",
+   "cls": "Concept",
+   "label": "선정",
+   "desc": "상위 5개를 순서대로 재검증해 처음 통과한 1개. 기준 점수 미달이면 그날은 만들지 않는다.",
+   "status": "done",
+   "props": {
+    "area": "③ 판단",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "재검증은 DB 값의 유효시간만 봄. 가상 운영: 기준 이상 후보가 떨어진 D11부터 20일 연속 미제작",
+    "sub": "selection_logs"
+   }
+  },
+  {
+   "id": "content",
+   "cls": "Concept",
+   "label": "콘텐츠",
+   "desc": "상품 1개 = 하루 1개. 생성 → 승인 대기 → 승인 → 게시, 또는 차단·수정 요청·거절.",
+   "status": "done",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "contents"
+   }
+  },
+  {
+   "id": "script",
+   "cls": "Concept",
+   "label": "대본",
+   "desc": "5장면 28초(후킹·불편·사용법·장점과 주의·대상과 안내). 각 장면이 인용한 사양을 fact_refs 로 남긴다.",
+   "status": "now",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M2",
+    "data_state": "mock",
+    "gap": "기본은 규칙 기반 — Claude 를 켜야 문장 품질이 올라감(실호출 검증 전)",
+    "sub": "script.json"
+   }
+  },
+  {
+   "id": "variant",
+   "cls": "Concept",
+   "label": "후킹 변형",
+   "desc": "A=문제 공감형, B=사용 결과 설명형. 첫 장면만 다르고 나머지는 같다(조건 통제).",
+   "status": "short",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M1",
+    "data_state": "internal",
+    "gap": "B 는 대본만 만들고 렌더·게시 안 함 — A/B 비교 데이터가 생기지 않음",
+    "sub": "variants A/B"
+   }
+  },
+  {
+   "id": "disclosure",
+   "cls": "Concept",
+   "label": "광고 표시",
+   "desc": "전 장면 '광고' 배지, 첫·끝 장면 문구, 캡션 첫 줄, 첫 해시태그 #광고, 유튜브 제목 [광고]. 조건부 표현 금지.",
+   "status": "done",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "쿠팡 문구 최신 표기('게시물'/'포스팅') 원문 확인 필요",
+    "sub": "disclosure"
+   }
+  },
+  {
+   "id": "media",
+   "cls": "Concept",
+   "label": "미디어 산출물",
+   "desc": "영상 2종(Reels·Shorts), 이미지 6종, 자막, 매니페스트. 상품 이미지는 원본 그대로 합성하고 보존을 검수.",
+   "status": "short",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "가상 운영 10개 중 9개가 범용 그라디언트 배경(전용 연출은 데모 1개뿐) → 템플릿 반복 정책 위험. 무음",
+    "sub": "mp4 · png · srt"
+   }
+  },
+  {
+   "id": "check",
+   "cls": "Concept",
+   "label": "사실 검사·QA",
+   "desc": "숫자+단위는 검증 사양과 일치, 금액 표기·금칙어·경험 주장 차단, 광고 표시 5곳·주의사항 장면 확인, 영상 규격 검사.",
+   "status": "done",
+   "props": {
+    "area": "④ 콘텐츠",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "숫자 없는 과장은 못 잡음. 오탐(가상 운영 D7): 상품명 속 '2단'을 미검증 수치로 보고 차단",
+    "sub": "fact_guard / qa"
+   }
+  },
+  {
+   "id": "approval",
+   "cls": "Concept",
+   "label": "승인",
+   "desc": "사람이 권리·사실성·광고 표시를 확인하고 승인. 승인 후 사실·영상이 바뀌면 효력이 없어진다.",
+   "status": "out",
+   "props": {
+    "area": "⑤ 유통",
+    "input": "human",
+    "m": "M0",
+    "data_state": "internal",
+    "gap": "본업 시간과 겹침 — 09~12시 승인이 현실적인지가 관건. 관리자 화면은 모바일 승인 점검 전",
+    "sub": "approved_by"
+   }
+  },
+  {
+   "id": "link",
+   "cls": "Concept",
+   "label": "제휴 링크",
+   "desc": "쿠팡파트너스 링크. 임의 생성 금지, 자동으로 열어 확인하지 않음(클릭 오염) — 형식 검증 후 사람 확인.",
+   "status": "mid",
+   "props": {
+    "area": "⑤ 유통",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "딥링크 API 는 최종 승인 후. sub_id 별 실적 분리 여부 미확인",
+    "sub": "affiliate_links"
+   }
+  },
+  {
+   "id": "publication",
+   "cls": "Concept",
+   "label": "게시",
+   "desc": "플랫폼별 1회만. '플랫폼이 ID 반환'과 '공개 확인'을 다른 상태로 기록. 응답이 불확실하면 자동 재시도하지 않는다.",
+   "status": "short",
+   "props": {
+    "area": "⑤ 유통",
+    "input": "system",
+    "m": "M2",
+    "data_state": "pending",
+    "gap": "자격증명 없음 — 초기엔 앱 수동 업로드가 더 쌈",
+    "sub": "publications"
+   }
+  },
+  {
+   "id": "platform",
+   "cls": "Concept",
+   "label": "플랫폼",
+   "desc": "Reels·Shorts. 캡션·설명란 링크는 클릭되지 않는다 → 프로필 링크 경유. 유료 파트너십·유료 프로모션 표시 규정.",
+   "status": "short",
+   "props": {
+    "area": "⑤ 유통",
+    "input": "system",
+    "m": "M1",
+    "data_state": "pending",
+    "gap": "Instagram 은 공개 영상 URL 필요",
+    "sub": "Instagram · YouTube"
+   }
+  },
+  {
+   "id": "landing",
+   "cls": "Concept",
+   "label": "랜딩 페이지",
+   "desc": "승인된 상품만 공개. 가격은 확인 시각과 함께, 장단점·주의사항·영상, 사용자가 직접 누르는 구매 버튼.",
+   "status": "now",
+   "props": {
+    "area": "⑤ 유통",
+    "input": "system",
+    "m": "M2",
+    "data_state": "pending",
+    "gap": "공개 호스팅·도메인 미정 — 측정 장치라 필수",
+    "sub": "/p/<slug>"
+   }
+  },
+  {
+   "id": "pmetric",
+   "cls": "Concept",
+   "label": "플랫폼 지표",
+   "desc": "조회·저장·공유·시청시간. 48~72시간 지연. 조회는 매출이 아니다.",
+   "status": "short",
+   "props": {
+    "area": "⑥ 성과",
+    "input": "human",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "앱 수동 업로드(D4)면 성과도 앱에서 읽어 CSV 로 입력 — 사람 확정 지점이 하나 늘어남",
+    "sub": "metric_observations"
+   }
+  },
+  {
+   "id": "event",
+   "cls": "Concept",
+   "label": "랜딩 이벤트",
+   "desc": "페이지 조회·구매 버튼 클릭·영상 재생. IP·브라우저 정보·쿠키 저장 안 함. ?c= 로 콘텐츠에 귀속.",
+   "status": "done",
+   "props": {
+    "area": "⑥ 성과",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "메인→상품 이동 시 src 유실(결함). 프록시 뒤 요청 제한 공용 버킷",
+    "sub": "site_events"
+   }
+  },
+  {
+   "id": "report",
+   "cls": "Concept",
+   "label": "제휴 실적",
+   "desc": "주문·구매액·수수료·취소. sub_id 로 연결된 것만 콘텐츠에 귀속, 나머지는 미귀속으로 따로 둔다.",
+   "status": "mid",
+   "props": {
+    "area": "⑥ 성과",
+    "input": "system",
+    "m": "M1",
+    "data_state": "manual",
+    "gap": "리포트 API 는 최종 승인 후. 콘텐츠별 귀속이 거의 안 될 가능성",
+    "sub": "affiliate_reports"
+   }
+  },
+  {
+   "id": "funnel",
+   "cls": "Concept",
+   "label": "퍼널",
+   "desc": "조회 → 랜딩 방문 → 링크 클릭 → 구매·수수료. 실측과 추정(클릭 × 가정 전환율 범위)을 다른 칸에.",
+   "status": "done",
+   "props": {
+    "area": "⑥ 성과",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "30개로는 구매전환율 판정 불가(주문 수 건 수준)",
+    "sub": "content_funnels()"
+   }
+  },
+  {
+   "id": "learning",
+   "cls": "Concept",
+   "label": "학습 보정",
+   "desc": "카테고리별 실측 RPM 으로 다음 날 수익성 점수를 0.7~1.3배 보정. 표본 조건 미달이면 가정값 유지.",
+   "status": "mid",
+   "props": {
+    "area": "⑥ 성과",
+    "input": "system",
+    "m": "M1",
+    "data_state": "internal",
+    "gap": "귀속 수수료가 있어야 작동 — 몇 달간 사실상 미작동",
+    "sub": "learning.py"
+   }
+  },
+  {
+   "id": "source",
+   "cls": "Concept",
+   "label": "데이터 소스 상태",
+   "desc": "각 외부 소스가 공식 연동인지, mock 인지, 수동 입력인지, 연동 대기인지. 화면·보고서 상단에 항상 표시.",
+   "status": "done",
+   "props": {
+    "area": "통제·운영",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "data_sources"
+   }
+  },
+  {
+   "id": "policy",
+   "cls": "Concept",
+   "label": "정책 규칙",
+   "desc": "배점·필터·금칙어·광고 표시·제외 영역·재무 가정·단가. 사람이 관리하는 규칙이고 코드는 이것만 따른다.",
+   "status": "out",
+   "props": {
+    "area": "통제·운영",
+    "input": "human",
+    "m": "M0",
+    "data_state": "internal",
+    "gap": "법·약관 원문 재확인 6건 대기",
+    "sub": "config/*.toml"
+   }
+  },
+  {
+   "id": "job",
+   "cls": "Concept",
+   "label": "작업 큐",
+   "desc": "날짜·단계당 한 번 성공. 실패는 백오프 재시도, 정책 차단은 대기, 선행 실패면 후행 건너뜀.",
+   "status": "now",
+   "props": {
+    "area": "통제·운영",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "크래시 후 running 고착(--force 로도 복구 불가, 재현 확인). 실패 알림 없음 → Lv3 미달",
+    "sub": "job_runs"
+   }
+  },
+  {
+   "id": "cost",
+   "cls": "Concept",
+   "label": "비용",
+   "desc": "유료 호출 전 예상 비용으로 일·월 상한 확인, 호출 후 실제 토큰으로 기록. 단가 미확인이면 실행 안 함.",
+   "status": "done",
+   "props": {
+    "area": "통제·운영",
+    "input": "system",
+    "m": "M3",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "api_usage · cost_entries"
+   }
+  },
+  {
+   "id": "audit",
+   "cls": "Concept",
+   "label": "감사 로그",
+   "desc": "승인·거절·수정·게시·삭제·권리 변경을 누가 언제 했는지.",
+   "status": "done",
+   "props": {
+    "area": "통제·운영",
+    "input": "system",
+    "m": "M2",
+    "data_state": "internal",
+    "gap": "",
+    "sub": "audit_logs"
+   }
+  },
+  {
+   "id": "A01",
+   "cls": "Action",
+   "label": "트렌드 키워드 수집",
+   "desc": "코드 완료. 지금은 mock — 키만 넣으면 실데이터",
+   "status": "now",
+   "props": {
+    "layer": "수집",
+    "input": "system",
+    "m": "M2→M2",
+    "pre": "네이버 키(기존 개발자센터) 또는 API HUB 가입"
+   }
+  },
+  {
+   "id": "A02",
+   "cls": "Action",
+   "label": "상품 후보 등록",
+   "desc": "승인 전엔 수동 입력이 유일한 합법 경로. 등록 화면 필요",
+   "status": "mid",
+   "props": {
+    "layer": "수집",
+    "input": "human",
+    "m": "M1→M2",
+    "pre": "쿠팡 최종 승인 → API 키"
+   }
+  },
+  {
+   "id": "A03",
+   "cls": "Action",
+   "label": "사양·주의사항 확인",
+   "desc": "판매 페이지 자동 수집은 하지 않음 → 최종 확인은 사람",
+   "status": "short",
+   "props": {
+    "layer": "수집",
+    "input": "human",
+    "m": "M0→M1",
+    "pre": "상품 등록 화면 + 붙여넣기 → LLM 추출"
+   }
+  },
+  {
+   "id": "A04",
+   "cls": "Action",
+   "label": "가격·재고 재확인",
+   "desc": "API 전엔 게시 24시간 이내에 사람이 확인",
+   "status": "mid",
+   "props": {
+    "layer": "수집",
+    "input": "human",
+    "m": "M1→M2",
+    "pre": "쿠팡 API(재고 필드 미확인)"
+   }
+  },
+  {
+   "id": "A05",
+   "cls": "Action",
+   "label": "이미지 권리 판단",
+   "desc": "법적 판단 — 사람이 계속",
+   "status": "out",
+   "props": {
+    "layer": "수집",
+    "input": "human",
+    "m": "M0→M0",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A06",
+   "cls": "Action",
+   "label": "실물 촬영·사용 확인",
+   "desc": "신뢰·원본성에 가장 유리, 비용 최대",
+   "status": "out",
+   "props": {
+    "layer": "수집",
+    "input": "field",
+    "m": "M0→M0",
+    "pre": "상품 구매 또는 보유"
+   }
+  },
+  {
+   "id": "A07",
+   "cls": "Action",
+   "label": "고객 문제 리서치",
+   "desc": "LLM 초안 + 사람 확정",
+   "status": "short",
+   "props": {
+    "layer": "수집",
+    "input": "human",
+    "m": "M1→M2",
+    "pre": "LLM 사용 결정"
+   }
+  },
+  {
+   "id": "A08",
+   "cls": "Action",
+   "label": "원본 응답·스냅샷 보관",
+   "desc": "비밀값 마스킹 후 저장",
+   "status": "done",
+   "props": {
+    "layer": "저장",
+    "input": "system",
+    "m": "M2→M2",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A09",
+   "cls": "Action",
+   "label": "DB·산출물 백업",
+   "desc": "현재 백업 없음",
+   "status": "short",
+   "props": {
+    "layer": "저장",
+    "input": "system",
+    "m": "M0→M2",
+    "pre": "저장 위치 결정(호스팅과 함께)"
+   }
+  },
+  {
+   "id": "A10",
+   "cls": "Action",
+   "label": "100점 평가·필수 필터",
+   "desc": "가중치는 실데이터로 보정 전",
+   "status": "done",
+   "props": {
+    "layer": "처리",
+    "input": "system",
+    "m": "M3→M3",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A11",
+   "cls": "Action",
+   "label": "구매심리·대본·캡션",
+   "desc": "규칙 기반은 완료, Claude 는 키만",
+   "status": "now",
+   "props": {
+    "layer": "처리",
+    "input": "system",
+    "m": "M2→M2",
+    "pre": "Anthropic 키"
+   }
+  },
+  {
+   "id": "A12",
+   "cls": "Action",
+   "label": "이미지·영상 렌더",
+   "desc": "데모는 완료. 실상품용 템플릿 보강 필요",
+   "status": "short",
+   "props": {
+    "layer": "처리",
+    "input": "system",
+    "m": "M2→M2",
+    "pre": "실사진 템플릿·음성 방식"
+   }
+  },
+  {
+   "id": "A13",
+   "cls": "Action",
+   "label": "최종 선정·재검증",
+   "desc": "재검증은 DB 값 기준",
+   "status": "done",
+   "props": {
+    "layer": "판단",
+    "input": "system",
+    "m": "M3→M3",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A14",
+   "cls": "Action",
+   "label": "사실·표시 검사 + QA",
+   "desc": "숫자 없는 과장은 사람이 잡아야 함",
+   "status": "done",
+   "props": {
+    "layer": "판단",
+    "input": "system",
+    "m": "M3→M3",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A15",
+   "cls": "Action",
+   "label": "콘텐츠 승인",
+   "desc": "30개까지 전량 사람. 이후 조건부 검토",
+   "status": "out",
+   "props": {
+    "layer": "판단",
+    "input": "human",
+    "m": "M0→M0",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A16",
+   "cls": "Action",
+   "label": "제휴 링크 생성·확인",
+   "desc": "자동으로 링크를 열어 확인하지 않음",
+   "status": "mid",
+   "props": {
+    "layer": "판단",
+    "input": "human",
+    "m": "M1→M2",
+    "pre": "쿠팡 딥링크 API(최종 승인 후)"
+   }
+  },
+  {
+   "id": "A17",
+   "cls": "Action",
+   "label": "플랫폼 업로드",
+   "desc": "코드 완료. 첫 30개는 앱 수동 업로드 권장",
+   "status": "short",
+   "props": {
+    "layer": "전달",
+    "input": "human",
+    "m": "M1→M2",
+    "pre": "OAuth·토큰, IG 는 공개 영상 URL"
+   }
+  },
+  {
+   "id": "A18",
+   "cls": "Action",
+   "label": "랜딩 공개",
+   "desc": "측정 장치 — 실험 전 필수",
+   "status": "now",
+   "props": {
+    "layer": "전달",
+    "input": "system",
+    "m": "M2→M2",
+    "pre": "호스팅·도메인"
+   }
+  },
+  {
+   "id": "A19",
+   "cls": "Action",
+   "label": "플랫폼 성과 수집",
+   "desc": "API 전엔 CSV",
+   "status": "short",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M1→M2",
+    "pre": "플랫폼 OAuth"
+   }
+  },
+  {
+   "id": "A20",
+   "cls": "Action",
+   "label": "제휴 실적 수집",
+   "desc": "API 전엔 대시보드 CSV",
+   "status": "mid",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M1→M2",
+    "pre": "쿠팡 리포트 API"
+   }
+  },
+  {
+   "id": "A21",
+   "cls": "Action",
+   "label": "퍼널·일일 보고서",
+   "desc": "실측/추정 분리, 신선도 표시",
+   "status": "done",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M3→M3",
+    "pre": "—"
+   }
+  },
+  {
+   "id": "A22",
+   "cls": "Action",
+   "label": "학습 보정",
+   "desc": "30개 이후",
+   "status": "mid",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M1→M3",
+    "pre": "콘텐츠별 귀속 수수료"
+   }
+  },
+  {
+   "id": "A23",
+   "cls": "Action",
+   "label": "실패 감지·알림",
+   "desc": "Lv3 진입점 — 지금은 대시보드를 봐야만 앎",
+   "status": "now",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M1→M3",
+    "pre": "알림 채널"
+   }
+  },
+  {
+   "id": "A25",
+   "cls": "Action",
+   "label": "후보 잔량 경보",
+   "desc": "가상 운영에서 D11 고갈을 아무도 미리 알지 못함 — '남은 일수 7일 미만'이면 알림",
+   "status": "now",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M0→M3",
+    "pre": "기준 이상 후보 수 계산(코드 있음) + 알림 채널"
+   }
+  },
+  {
+   "id": "A26",
+   "cls": "Action",
+   "label": "성과 수치 입력(앱 → CSV)",
+   "desc": "앱 수동 업로드를 고르면 생기는 사람 확정 지점",
+   "status": "short",
+   "props": {
+    "layer": "관측",
+    "input": "human",
+    "m": "M0→M1",
+    "pre": "관리자 입력 폼(CSV 대신)"
+   }
+  },
+  {
+   "id": "A24",
+   "cls": "Action",
+   "label": "작업 자가 복구",
+   "desc": "running 고착 회수 + 신선도 4신호",
+   "status": "now",
+   "props": {
+    "layer": "관측",
+    "input": "system",
+    "m": "M2→M3",
+    "pre": "결함 수정"
+   }
+  },
+  {
+   "id": "D1",
+   "cls": "Decision",
+   "label": "저장소 공개 범위",
+   "desc": "사업 리스크 분석·수익 시뮬레이션·관리자 화면 캡처가 공개 저장소(stock-dashboard)에 올라가 있다. 어떻게 할까?",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "별도 비공개 저장소로 이전",
+    "options": "별도 비공개 저장소로 이전 / 현 저장소를 비공개로 전환 / 공개 유지",
+    "why": "주식 대시보드와 성격이 다르고, 전략 문서가 노출된다. 비밀키는 없음(검사 완료).",
+    "default": "공개 유지 — 전략 문서 노출 지속",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D2",
+   "cls": "Decision",
+   "label": "결함 수정 묶음 승인",
+   "desc": "확인된 결함 7건(running 고착, 웹 실행 30초 시간초과, src 유실, 로그인·SECRET_KEY·프록시 + 가상 운영에서 찾은 수동 가격 시각 자동 갱신, 관리자 가격 덮어쓰기, 상품명 숫자 오탐)을 지금 고칠까?",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "지금 수정",
+    "options": "지금 수정 / 실험 시작 전에 수정 / 보류",
+    "why": "running 고착·수동 가격 결함 2건은 재현 확인. 수동 가격 결함은 실운영 첫 경로(수동 입력)에서 가격 만료 게이트를 조용히 무력화한다.",
+    "default": "미수정 — 수동 모드 실운영 불가, 크래시 시 DB 수동 조작",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D3",
+   "cls": "Decision",
+   "label": "첫 30개 실험 설계",
+   "desc": "기간·판정 지표·중단 기준·현금 예산 상한을 정한다.",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "30일·30개, 판정은 랜딩 방문율·클릭률, 구매전환율은 판정 제외",
+    "options": "30일·30개, 판정은 랜딩 방문율·클릭률, 구매전환율은 판정 제외 / 60일·60개로 늘려 구매전환율까지 판정 / 기간 없이 수익 날 때까지",
+    "why": "콘텐츠당 1,000조회 가정 시 30개 = 주문 약 4.5건 — 전환율은 표본 부족. 판정 가능한 것만 판정한다.",
+    "default": "판정 기준 없이 진행 — 확대·중단 근거가 안 생김",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D4",
+   "cls": "Decision",
+   "label": "초기 게시 방식",
+   "desc": "첫 30개를 플랫폼 앱으로 직접 올릴까, API 를 먼저 연동할까?",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "앱 수동 업로드(결과는 관리자에 기록)",
+    "options": "앱 수동 업로드(결과는 관리자에 기록) / YouTube 만 API, Instagram 은 앱 / 둘 다 API 먼저",
+    "why": "하루 1개 업로드는 짧은 반복이고, API 는 토큰·공개 영상 호스팅·앱 설정이 선행된다. 판정 후 연동해도 늦지 않다.",
+    "default": "게시 대기(pending_credentials)로 쌓임",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D6",
+   "cls": "Decision",
+   "label": "랜딩 호스팅·도메인",
+   "desc": "랜딩(측정 장치)을 어디에 띄울까?",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "저가 클라우드 서버 + 도메인",
+    "options": "저가 클라우드 서버 + 도메인 / 집 PC 상시 실행 + 터널 / 랜딩 없이 프로필 링크를 쿠팡 직링크",
+    "why": "랜딩이 없으면 조회→클릭 사이를 측정할 수 없다. 직링크는 쿠팡 정책·측정 모두 불리.",
+    "default": "로컬에서만 동작 — 실험 측정 불가",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D18",
+   "cls": "Decision",
+   "label": "운영 시간표",
+   "desc": "승인은 언제 할 수 있나? 지금 일정은 09:00 승인 대기 → 12:00 게시로 본업 시간과 겹친다.",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "전날 밤 생성 → 출근 전·퇴근 후 승인 → 다음 날 정해진 시각 게시",
+    "options": "전날 밤 생성 → 출근 전·퇴근 후 승인 → 다음 날 정해진 시각 게시 / 현행(09~12시 승인) / 주말에 7개 몰아 승인",
+    "why": "가격 확인 유효 24시간과 승인 가능 시간이 맞아야 게시가 막히지 않는다.",
+    "default": "승인이 늦으면 가격 만료로 게시 차단 반복",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D19",
+   "cls": "Decision",
+   "label": "회사 겸업 규정·장비 사용",
+   "desc": "본업 회사의 취업규칙에 겸업·영리활동 신고(허가) 조항이 있는지, 회사 장비·사내망·사내 AI 를 쓰지 않는지 확인했나?",
+   "status": "pending",
+   "props": {
+    "when": "지금 (착수 전, 이번 주)",
+    "recommend": "취업규칙 확인 → 필요하면 신고·허가 후 착수",
+    "options": "취업규칙 확인 → 필요하면 신고·허가 후 착수 / 확인 없이 진행(권장하지 않음)",
+    "why": "수익이 나는 순간부터 문제가 될 수 있고, 개인 사업 작업을 회사 PC·사내 Claude 로 하면 별도 위반 소지. 회사마다 규정이 달라 확인이 필요하다.",
+    "default": "고용 관련 위험을 모른 채 운영",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D20",
+   "cls": "Decision",
+   "label": "후보 공급 목표·게시 빈도",
+   "desc": "가상 운영 30일에서 후보 24개로는 D11에 바닥났다. 후보를 얼마나 공급하고 얼마나 자주 올릴까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "30개는 유지하되 주 5개 × 6주, 후보는 주말에 일괄 등록",
+    "options": "30개는 유지하되 주 5개 × 6주, 후보는 주말에 일괄 등록 / 1일 1개 유지(하루 약 2~3개 후보 등록) / 후보가 있는 날만 제작",
+    "why": "mock 기준 선정 가능 비율은 24개 중 10개(약 42%) — 1일 1개면 하루 2.4개꼴로 새 후보가 필요하다(실제 비율은 실측). 카테고리를 좁히면(D10) 더 빨리 바닥난다.",
+    "default": "후보가 떨어지는 날부터 연속 미제작",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D5",
+   "cls": "Decision",
+   "label": "채널 우선순위",
+   "desc": "Reels 와 Shorts 중 어디에 먼저, 혹은 동시에?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "같은 영상을 동시에(비교 데이터 확보)",
+    "options": "같은 영상을 동시에(비교 데이터 확보) / YouTube 먼저(쇼핑 제휴 경로) / Instagram 먼저",
+    "why": "실측 전엔 어느 쪽이 랜딩 방문율이 높은지 모른다. YouTube 쇼핑 제휴(Shorts 상품 태그)는 YPP + 구독자 500 이후.",
+    "default": "둘 다 대기",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D7",
+   "cls": "Decision",
+   "label": "영상 소재",
+   "desc": "실상품 영상에 무엇을 쓸까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "보유 물건 실촬영 우선 + 권리 확인된 판매처 이미지 보조",
+    "options": "보유 물건 실촬영 우선 + 권리 확인된 판매처 이미지 보조 / 판매처 이미지 위주(권리 확인 필수) / AI 배경 + 상품 사진 합성 위주",
+    "why": "지금 렌더러로 실상품은 그라디언트 배경 슬라이드가 된다 — 템플릿 반복 정책 위험. 실촬영이 신뢰·원본성에 가장 유리.",
+    "default": "실상품 콘텐츠 품질 낮음",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D8",
+   "cls": "Decision",
+   "label": "음성",
+   "desc": "내레이션을 어떻게 할까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "본인 녹음(지원됨)",
+    "options": "본인 녹음(지원됨) / 무음 + 자막(현행) / AI TTS(AI 음성 고지 필요, OpenAI TTS 3종 2027-01 종료 예정)",
+    "why": "무음은 시청 유지에 불리할 가능성. 녹음은 하루 1분 수준의 반복 작업.",
+    "default": "무음 + 자막",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D9",
+   "cls": "Decision",
+   "label": "LLM 사용·모델",
+   "desc": "구매심리·대본을 규칙 기반으로 둘까, Claude 를 켤까? 켠다면 어떤 모델?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "Claude Opus 5.5 (콘텐츠당 약 230원, 월 약 7천 원~)",
+    "options": "Claude Opus 5.5 (콘텐츠당 약 230원, 월 약 7천 원~) / Claude Sonnet 5.5 (약 115원) / Claude Haiku 5.5 (약 6원) / 규칙 기반 유지(0원, 리서치 메모는 사람이 씀)",
+    "why": "규칙 기반은 사람이 쓴 메모를 재배열할 뿐이라 분석 노동이 남는다. 비용 차이는 월 수천 원 단위. 생각 토큰이 늘면 2~3배 가능.",
+    "default": "규칙 기반 — 사람 리서치 노동 유지",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D10",
+   "cls": "Decision",
+   "label": "카테고리 범위",
+   "desc": "5개 카테고리를 유지할까, 1~2개로 좁힐까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "1~2개 집중(예: 책상·케이블 + 원룸 수납)",
+    "options": "1~2개 집중(예: 책상·케이블 + 원룸 수납) / 5개 유지",
+    "why": "30개 표본을 5개로 나누면 카테고리당 6개 — 비교가 안 된다. 다만 좁힐수록 후보가 빨리 바닥난다(D20 과 같이 정할 것).",
+    "default": "5개 유지",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D11",
+   "cls": "Decision",
+   "label": "상품 입력 방식",
+   "desc": "쿠팡 API 전 상품을 어떻게 넣을까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "관리자 등록 화면 + 판매 페이지 텍스트 붙여넣기 → LLM 사양 추출 → 사람 확인",
+    "options": "관리자 등록 화면 + 판매 페이지 텍스트 붙여넣기 → LLM 사양 추출 → 사람 확인 / CSV 일괄 업로드 / JSON 직접 편집(현행)",
+    "why": "초기 실운영의 유일한 경로인데 지금은 JSON 편집뿐 — 입력 실수와 노동이 크다.",
+    "default": "JSON 편집",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D12",
+   "cls": "Decision",
+   "label": "A/B 운영",
+   "desc": "후킹 A/B 를 실제로 돌릴까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "홀짝일 교대 게시(교란요인 기록)",
+    "options": "홀짝일 교대 게시(교란요인 기록) / Instagram 체험 릴스(API 필요) / A 만 운영",
+    "why": "지금은 B 대본만 만들고 게시하지 않아 비교 데이터가 생기지 않는다. 30개에서는 방향성만 본다.",
+    "default": "A 만 — 후킹 학습 없음",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D17",
+   "cls": "Decision",
+   "label": "실패 알림 채널",
+   "desc": "파이프라인이 멈추거나 차단되면 어디로 알릴까?",
+   "status": "pending",
+   "props": {
+    "when": "첫 실콘텐츠 전",
+    "recommend": "메일",
+    "options": "메일 / 텔레그램 봇 / 알림 없음(대시보드 확인)",
+    "why": "지금은 대시보드를 열어야만 실패를 안다 — 관측 Lv3 진입 조건.",
+    "default": "알림 없음",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D13",
+   "cls": "Decision",
+   "label": "승인 자동화 범위",
+   "desc": "30개 이후 사람 승인을 줄일까?",
+   "status": "pending",
+   "props": {
+    "when": "진행 중·30개 이후",
+    "recommend": "전량 수동 유지",
+    "options": "전량 수동 유지 / 조건부 자동(무수정 승인율 높고 위반 0인 유형만)",
+    "why": "숫자 없는 과장은 자동 검사가 못 잡는다. 실측 무수정 승인율을 보고 정한다.",
+    "default": "전량 수동",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D14",
+   "cls": "Decision",
+   "label": "재무 가정 갱신",
+   "desc": "노동 단가·시간, 운영비, ROE 목표·노동비 포함 여부를 실측으로 바꿀까?",
+   "status": "pending",
+   "props": {
+    "when": "진행 중·30개 이후",
+    "recommend": "1주 실측 후 갱신",
+    "options": "1주 실측 후 갱신 / 현행 가정 유지",
+    "why": "노동 기회비용이 현금비의 3배로 결과를 좌우한다.",
+    "default": "가정 유지",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D15",
+   "cls": "Decision",
+   "label": "사업자·세무",
+   "desc": "사업자등록·세무 처리를 언제 할까?",
+   "status": "pending",
+   "props": {
+    "when": "진행 중·30개 이후",
+    "recommend": "첫 정산 전 세무 상담",
+    "options": "첫 정산 전 세무 상담 / 수익이 일정 규모를 넘을 때",
+    "why": "쿠팡 개인 수익은 사업소득(원천징수 후 지급). 등록·신고 필요 여부는 전문가 확인.",
+    "default": "미정",
+    "decided": ""
+   }
+  },
+  {
+   "id": "D16",
+   "cls": "Decision",
+   "label": "대체 제휴 채널",
+   "desc": "30개 후 YouTube 쇼핑 제휴·네이버 쇼핑커넥트를 검토할까?",
+   "status": "pending",
+   "props": {
+    "when": "진행 중·30개 이후",
+    "recommend": "판정 결과에 따라 검토",
+    "options": "판정 결과에 따라 검토 / 쿠팡파트너스만",
+    "why": "Shorts 상품 태그는 클릭 가능한 구매 동선 — 최대 병목(조회→방문)을 직접 줄인다.",
+    "default": "쿠팡파트너스만",
+    "decided": ""
+   }
+  },
+  {
+   "id": "PC01",
+   "cls": "PlanChange",
+   "label": "쿠팡 승인 전: 사람이 후보 등록 + 자동 평가 / 승인 후: API 후보 + 사양 확인 대기열",
+   "desc": "API 는 최종 승인 후 발급, 응답에 사양 없음, 판매 페이지 무단 수집 금지",
+   "status": null,
+   "props": {
+    "before": "매일 상품 20개 자동 탐색"
+   }
+  },
+  {
+   "id": "PC02",
+   "cls": "PlanChange",
+   "label": "사람은 확인·승인 6곳만, 나머지 자동",
+   "desc": "사양 최종 확인·권리·광고 적법성은 사람이 판단해야 한다",
+   "status": null,
+   "props": {
+    "before": "사람이 매일 찾거나 편집하지 않는 무인 운영"
+   }
+  },
+  {
+   "id": "PC03",
+   "cls": "PlanChange",
+   "label": "전날 밤 생성 → 승인 가능한 시간에 승인 → 다음 날 정해진 시각 게시",
+   "desc": "승인 시간이 본업과 겹치고, 가격 확인 유효 24시간과 맞물린다",
+   "status": null,
+   "props": {
+    "before": "07:00 생성 → 09:00 승인 대기 → 12:00 게시(당일)"
+   }
+  },
+  {
+   "id": "PC04",
+   "cls": "PlanChange",
+   "label": "첫 30개는 앱 수동 업로드, 판정 후 API 연동",
+   "desc": "하루 1개 업로드는 짧고, API 는 토큰·공개 영상 호스팅이 선행된다",
+   "status": null,
+   "props": {
+    "before": "승인 즉시 API 자동 게시"
+   }
+  },
+  {
+   "id": "PC05",
+   "cls": "PlanChange",
+   "label": "홀짝일 교대 게시 + 교란요인 기록, 30개에선 방향성만",
+   "desc": "지금은 B 를 만들기만 하고 게시하지 않아 비교 데이터가 없다",
+   "status": null,
+   "props": {
+    "before": "콘텐츠마다 A/B 후킹 생성"
+   }
+  },
+  {
+   "id": "PC06",
+   "cls": "PlanChange",
+   "label": "1~2개 카테고리 집중",
+   "desc": "30개 표본을 5개로 나누면 카테고리당 6개 — 비교 불가",
+   "status": null,
+   "props": {
+    "before": "5개 카테고리 동시 운영"
+   }
+  },
+  {
+   "id": "PC07",
+   "cls": "PlanChange",
+   "label": "30개까지는 측정만, 학습은 콘텐츠별 귀속 데이터 확보 후",
+   "desc": "귀속 수수료가 없으면 학습 신호가 조회수뿐 — 조회는 매출이 아니다",
+   "status": null,
+   "props": {
+    "before": "성과를 다음 날 선정에 반영"
+   }
+  },
+  {
+   "id": "PC08",
+   "cls": "PlanChange",
+   "label": "30개는 유지하되 주 5개 × 6주, 후보는 주말 일괄 등록 + 후보 잔량 경보",
+   "desc": "가상 운영에서 후보 24개가 D11에 바닥나 20일 연속 미제작",
+   "status": null,
+   "props": {
+    "before": "1일 1개 30일 연속"
+   }
+  },
+  {
+   "id": "PC09",
+   "cls": "PlanChange",
+   "label": "실패 알림 + 작업 자가 복구 + 신선도 4신호(Lv3)",
+   "desc": "지금은 화면을 열어야만 실패를 알고, 크래시 후 running 고착은 사람이 DB 를 고쳐야 풀린다",
+   "status": null,
+   "props": {
+    "before": "대시보드로 상태 확인(Lv2)"
+   }
+  },
+  {
+   "id": "PH1",
+   "cls": "Phase",
+   "label": "PHASE 1 실행 가능성 검증",
+   "desc": "API·권한·가격·정책 조사, 4개 보고서",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "PH2",
+   "cls": "Phase",
+   "label": "PHASE 2 mock MVP",
+   "desc": "외부 키 없이 전 구간 실행 — 결함 9건 미수정(7건은 D2 수정 묶음)",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "PH3",
+   "cls": "Phase",
+   "label": "PHASE 3 실제 서비스 연결",
+   "desc": "권한 확보 순서대로 하나씩 — 실호출 0건",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "PH4",
+   "cls": "Phase",
+   "label": "PHASE 4 사업성 검증(30개)",
+   "desc": "첫 30개 실측",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "PH5",
+   "cls": "Phase",
+   "label": "PHASE 5 운영 자동화 확대",
+   "desc": "실측 수익 확인 후에만",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "ST1",
+   "cls": "Phase",
+   "label": "STEP 1 사업 결점 분석",
+   "desc": "BUSINESS_RISK_ANALYSIS",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST2",
+   "cls": "Phase",
+   "label": "STEP 2 API·정책 조사",
+   "desc": "B·C 등급 원문 재확인 6건 남음",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST3",
+   "cls": "Phase",
+   "label": "STEP 3 MVP 범위 확정",
+   "desc": "FEASIBILITY_REPORT 2절",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST4",
+   "cls": "Phase",
+   "label": "STEP 4 구조·DB 스키마",
+   "desc": "DB_SCHEMA",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST5",
+   "cls": "Phase",
+   "label": "STEP 5 코드 작성",
+   "desc": "약 8,500줄(파이썬)",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST6",
+   "cls": "Phase",
+   "label": "STEP 6 mock 수직 통합",
+   "desc": "트렌드 → 승인 대기까지",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST7",
+   "cls": "Phase",
+   "label": "STEP 7 영상·랜딩 생성·테스트",
+   "desc": "데모 C20261118-01",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "ST8",
+   "cls": "Phase",
+   "label": "STEP 8 실제 API 연결",
+   "desc": "자격증명 없음",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "ST9",
+   "cls": "Phase",
+   "label": "STEP 9 반복 실행·복구·검수 검증",
+   "desc": "가상 운영 30일 수행 → 결함 발견, 미수정",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "ST10",
+   "cls": "Phase",
+   "label": "STEP 10 문서화",
+   "desc": "문서 19종, 변경 이력 운영 중",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "RM1",
+   "cls": "Phase",
+   "label": "P2.5 착수 준비",
+   "desc": "이번 주 결정 7건 + 결함 수정 + 등록 화면",
+   "status": "active",
+   "props": {}
+  },
+  {
+   "id": "RM2",
+   "cls": "Phase",
+   "label": "P3a 30개 실험",
+   "desc": "주 5개 × 6주 또는 1일 1개(D20)",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "RM3",
+   "cls": "Phase",
+   "label": "G1 판정 게이트",
+   "desc": "확대 / 채널 전환 / 중단",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "RM4",
+   "cls": "Phase",
+   "label": "P3b API 연동",
+   "desc": "YouTube → Instagram → 쿠팡 API",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "RM5",
+   "cls": "Phase",
+   "label": "P4 이후 확대",
+   "desc": "조건부 승인 자동화·학습 보정·대체 채널",
+   "status": "todo",
+   "props": {}
+  },
+  {
+   "id": "CP01",
+   "cls": "Component",
+   "label": "설정 진입점",
+   "desc": "환경변수·경로·안전장치 기본값",
+   "status": null,
+   "props": {
+    "paths": "config/settings.py"
+   }
+  },
+  {
+   "id": "CP02",
+   "cls": "Component",
+   "label": "정책 설정(TOML)",
+   "desc": "배점·금칙어·광고 표시·재무 가정·단가·카테고리",
+   "status": null,
+   "props": {
+    "paths": "config/, config/*.toml"
+   }
+  },
+  {
+   "id": "CP03",
+   "cls": "Component",
+   "label": "공통 모듈",
+   "desc": "DB·HTTP 재시도·비용 상한·비밀값 마스킹·사실 해시",
+   "status": null,
+   "props": {
+    "paths": "services/common/"
+   }
+  },
+  {
+   "id": "CP04",
+   "cls": "Component",
+   "label": "네이버 어댑터",
+   "desc": "DataLab(개발자센터·API HUB) + mock",
+   "status": null,
+   "props": {
+    "paths": "adapters/naver/"
+   }
+  },
+  {
+   "id": "CP05",
+   "cls": "Component",
+   "label": "쿠팡 어댑터",
+   "desc": "Partners HMAC·카탈로그(mock·수동·검색)",
+   "status": null,
+   "props": {
+    "paths": "adapters/coupang/"
+   }
+  },
+  {
+   "id": "CP06",
+   "cls": "Component",
+   "label": "Instagram 어댑터",
+   "desc": "Reels 게시·인사이트",
+   "status": null,
+   "props": {
+    "paths": "adapters/instagram/"
+   }
+  },
+  {
+   "id": "CP07",
+   "cls": "Component",
+   "label": "YouTube 어댑터",
+   "desc": "업로드·공개 확인·Analytics",
+   "status": null,
+   "props": {
+    "paths": "adapters/youtube/"
+   }
+  },
+  {
+   "id": "CP08",
+   "cls": "Component",
+   "label": "Claude 클라이언트",
+   "desc": "구조화 출력·비용 기록·거절 대체",
+   "status": null,
+   "props": {
+    "paths": "adapters/llm/"
+   }
+  },
+  {
+   "id": "CP09",
+   "cls": "Component",
+   "label": "음성 공급",
+   "desc": "무음·사용자 녹음",
+   "status": null,
+   "props": {
+    "paths": "adapters/tts/"
+   }
+  },
+  {
+   "id": "CP10",
+   "cls": "Component",
+   "label": "트렌드 수집기",
+   "desc": "정규화·급상승·화제성 제외",
+   "status": null,
+   "props": {
+    "paths": "services/trend_collector/"
+   }
+  },
+  {
+   "id": "CP11",
+   "cls": "Component",
+   "label": "후보 발굴",
+   "desc": "중복 제거·DB 반영",
+   "status": null,
+   "props": {
+    "paths": "services/product_discovery/"
+   }
+  },
+  {
+   "id": "CP12",
+   "cls": "Component",
+   "label": "평가·선정 엔진",
+   "desc": "100점·필수 필터·상위 5·재검증",
+   "status": null,
+   "props": {
+    "paths": "services/product_scoring/"
+   }
+  },
+  {
+   "id": "CP13",
+   "cls": "Component",
+   "label": "구매심리 엔진",
+   "desc": "10문항·심리요소·프롬프트",
+   "status": null,
+   "props": {
+    "paths": "services/psychology_engine/"
+   }
+  },
+  {
+   "id": "CP14",
+   "cls": "Component",
+   "label": "대본·사실 검사",
+   "desc": "대본 A/B·캡션·fact_guard",
+   "status": null,
+   "props": {
+    "paths": "services/script_generator/"
+   }
+  },
+  {
+   "id": "CP15",
+   "cls": "Component",
+   "label": "이미지 생성",
+   "desc": "이미지 6종·원형 보존 검수",
+   "status": null,
+   "props": {
+    "paths": "services/image_generator/"
+   }
+  },
+  {
+   "id": "CP16",
+   "cls": "Component",
+   "label": "영상 렌더·QA",
+   "desc": "Pillow→FFmpeg·자막·자동 QA",
+   "status": null,
+   "props": {
+    "paths": "services/video_renderer/"
+   }
+  },
+  {
+   "id": "CP17",
+   "cls": "Component",
+   "label": "제휴 링크",
+   "desc": "형식 검증·수동 등록·고지 검사",
+   "status": null,
+   "props": {
+    "paths": "services/affiliate_links/"
+   }
+  },
+  {
+   "id": "CP18",
+   "cls": "Component",
+   "label": "게시·검수",
+   "desc": "게이트·중복 방지·승인·삭제",
+   "status": null,
+   "props": {
+    "paths": "services/social_publishers/"
+   }
+  },
+  {
+   "id": "CP19",
+   "cls": "Component",
+   "label": "분석·재무",
+   "desc": "퍼널·CSV 적재·학습·재무·시뮬레이션·보고서",
+   "status": null,
+   "props": {
+    "paths": "services/analytics/"
+   }
+  },
+  {
+   "id": "CP20",
+   "cls": "Component",
+   "label": "작업 큐",
+   "desc": "job_runs·재시도·상류 건너뜀·잠금",
+   "status": null,
+   "props": {
+    "paths": "workflows/pipeline.py"
+   }
+  },
+  {
+   "id": "CP21",
+   "cls": "Component",
+   "label": "스케줄러·cron·n8n",
+   "desc": "상시 루프·cron 예시·n8n JSON",
+   "status": null,
+   "props": {
+    "paths": "workflows/scheduler.py, workflows/"
+   }
+  },
+  {
+   "id": "CP22",
+   "cls": "Component",
+   "label": "랜딩 페이지",
+   "desc": "공개 상품 페이지·이벤트",
+   "status": null,
+   "props": {
+    "paths": "app/routes/public.py, app/templates/public/, app/static/js/"
+   }
+  },
+  {
+   "id": "CP23",
+   "cls": "Component",
+   "label": "관리자 화면",
+   "desc": "검수·링크·권리·성과·비용",
+   "status": null,
+   "props": {
+    "paths": "app/routes/admin.py, app/templates/admin/"
+   }
+  },
+  {
+   "id": "CP24",
+   "cls": "Component",
+   "label": "운영 API",
+   "desc": "/api/jobs/run · /api/health",
+   "status": null,
+   "props": {
+    "paths": "app/routes/api.py"
+   }
+  },
+  {
+   "id": "CP25",
+   "cls": "Component",
+   "label": "DB 스키마",
+   "desc": "18개 테이블(SQLAlchemy)",
+   "status": null,
+   "props": {
+    "paths": "app/models/"
+   }
+  },
+  {
+   "id": "CP26",
+   "cls": "Component",
+   "label": "CLI(scf.py)",
+   "desc": "실행·승인·게시·적재·시뮬레이션·삭제",
+   "status": null,
+   "props": {
+    "paths": "scf.py"
+   }
+  },
+  {
+   "id": "CP27",
+   "cls": "Component",
+   "label": "온톨로지 생성기",
+   "desc": "도메인 지도 HTML·md 자동 구간",
+   "status": null,
+   "props": {
+    "paths": "scripts/build_ontology.py, scripts/ontology_data.py, scripts/ontology_template.html"
+   }
+  },
+  {
+   "id": "CP28",
+   "cls": "Component",
+   "label": "가상 운영 시뮬레이터",
+   "desc": "N일 임시 운영·막힌 곳 기록",
+   "status": null,
+   "props": {
+    "paths": "scripts/simulate_operations.py"
+   }
+  },
+  {
+   "id": "CP29",
+   "cls": "Component",
+   "label": "브라우저 점검 스크립트",
+   "desc": "콘솔 오류·넘침·겹침",
+   "status": null,
+   "props": {
+    "paths": "scripts/e2e_check.mjs, scripts/check_ontology_html.mjs, scripts/check_knowledge_html.mjs"
+   }
+  },
+  {
+   "id": "CP30",
+   "cls": "Component",
+   "label": "배포 구성",
+   "desc": "gunicorn·compose(빌드 미검증)",
+   "status": null,
+   "props": {
+    "paths": "Dockerfile, docker-compose.yml, wsgi.py"
+   }
+  },
+  {
+   "id": "CP31",
+   "cls": "Component",
+   "label": "DEMO 데이터",
+   "desc": "가상 상품 24·트렌드 28",
+   "status": null,
+   "props": {
+    "paths": "data/mock/"
+   }
+  },
+  {
+   "id": "CP32",
+   "cls": "Component",
+   "label": "폰트",
+   "desc": "Pretendard(OFL)",
+   "status": null,
+   "props": {
+    "paths": "assets/fonts/"
+   }
+  },
+  {
+   "id": "CP33",
+   "cls": "Component",
+   "label": "지식체계 생성기",
+   "desc": "이 지식체계 HTML·md·RDF",
+   "status": null,
+   "props": {
+    "paths": "scripts/build_knowledge.py, scripts/knowledge_data.py, scripts/knowledge_template.html"
+   }
+  },
+  {
+   "id": "DL01",
+   "cls": "Deliverable",
+   "label": "실행 가능한 Python 소스코드",
+   "desc": "mock 기준 전 구간 실행",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL02",
+   "cls": "Deliverable",
+   "label": "Flask 관리자 대시보드",
+   "desc": "8개 화면 · 모바일 승인 점검 전",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL03",
+   "cls": "Deliverable",
+   "label": "상품 트렌드 수집기",
+   "desc": "mock 완료 · 실데이터 키 대기",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "DL04",
+   "cls": "Deliverable",
+   "label": "상품 점수화 엔진",
+   "desc": "가중치는 판단값(보정 전)",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL05",
+   "cls": "Deliverable",
+   "label": "구매심리 분석 프롬프트",
+   "desc": "Claude 실호출 미검증",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL06",
+   "cls": "Deliverable",
+   "label": "영상 대본 생성 엔진",
+   "desc": "규칙 기반 · LLM 경로 가짜 응답 테스트만",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL07",
+   "cls": "Deliverable",
+   "label": "이미지 제작 파이프라인",
+   "desc": "데모 완료 · 실상품은 범용 배경",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "DL08",
+   "cls": "Deliverable",
+   "label": "FFmpeg 영상 렌더러",
+   "desc": "1080×1920 28초 2종",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL09",
+   "cls": "Deliverable",
+   "label": "상품 랜딩페이지",
+   "desc": "호스팅 대기(D6)",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL10",
+   "cls": "Deliverable",
+   "label": "쿠팡파트너스 연동 모듈",
+   "desc": "수동 링크 완료 · API 실호출 0 · API 모드 후보 전부 보류",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "DL11",
+   "cls": "Deliverable",
+   "label": "Instagram·YouTube 게시 어댑터",
+   "desc": "코드 완료 · 실호출 0",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "DL12",
+   "cls": "Deliverable",
+   "label": "성과 분석 대시보드",
+   "desc": "실측 데이터 없음",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL13",
+   "cls": "Deliverable",
+   "label": "n8n 워크플로 또는 대체 스케줄러",
+   "desc": "동작함 · 실행 시각 코드 고정 · n8n 가져오기 미검증",
+   "status": "partial",
+   "props": {}
+  },
+  {
+   "id": "DL14",
+   "cls": "Deliverable",
+   "label": "환경변수 템플릿",
+   "desc": ".env.example",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL15",
+   "cls": "Deliverable",
+   "label": "설치·실행 매뉴얼",
+   "desc": "신규 환경 재현 확인",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL16",
+   "cls": "Deliverable",
+   "label": "자동화 장애 대응 매뉴얼",
+   "desc": "RUNBOOK REV03",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL17",
+   "cls": "Deliverable",
+   "label": "pytest 테스트",
+   "desc": "78개 통과(지식체계 4 포함)",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL18",
+   "cls": "Deliverable",
+   "label": "데모 콘텐츠 1개",
+   "desc": "C20261118-01",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL19",
+   "cls": "Deliverable",
+   "label": "12개월 수익 시뮬레이션",
+   "desc": "3 시나리오 + 손익분기",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "DL20",
+   "cls": "Deliverable",
+   "label": "운영 비용·ROI 리포트",
+   "desc": "COST_MODEL + ROI_REPORT",
+   "status": "done",
+   "props": {}
+  },
+  {
+   "id": "CR01",
+   "cls": "Criterion",
+   "label": "mock 상품 20개 이상 수집",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR02",
+   "cls": "Criterion",
+   "label": "100점 점수 계산",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR03",
+   "cls": "Criterion",
+   "label": "선정 과정 기록",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR04",
+   "cls": "Criterion",
+   "label": "사실과 다르면 게시 차단",
+   "desc": "숫자 없는 과장은 못 잡음 · 상품명 숫자 오탐 · 수동 모드 가격 만료 검사 무력화",
+   "status": "caveat",
+   "props": {}
+  },
+  {
+   "id": "CR05",
+   "cls": "Criterion",
+   "label": "권리 불확실 이미지 차단",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR06",
+   "cls": "Criterion",
+   "label": "대본·이미지 저장",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR07",
+   "cls": "Criterion",
+   "label": "실행 가능한 MP4",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR08",
+   "cls": "Criterion",
+   "label": "랜딩 상품정보 정상 표시",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR09",
+   "cls": "Criterion",
+   "label": "미승인 콘텐츠 게시 안 됨",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR10",
+   "cls": "Criterion",
+   "label": "중복 실행에도 중복 업로드 없음",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR11",
+   "cls": "Criterion",
+   "label": "클릭·매출 실측·추정 구분",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR12",
+   "cls": "Criterion",
+   "label": "금융 계산 단위테스트",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR13",
+   "cls": "Criterion",
+   "label": "API 비용·실패 로그",
+   "desc": "실패 '알림'은 없음(대시보드 확인만)",
+   "status": "caveat",
+   "props": {}
+  },
+  {
+   "id": "CR14",
+   "cls": "Criterion",
+   "label": "비밀키 미노출",
+   "desc": "",
+   "status": "pass",
+   "props": {}
+  },
+  {
+   "id": "CR15",
+   "cls": "Criterion",
+   "label": "README 로 신규 환경 실행",
+   "desc": "Docker 빌드는 미검증",
+   "status": "caveat",
+   "props": {}
+  },
+  {
+   "id": "V01",
+   "cls": "Verification",
+   "label": "test_trends_discovery",
+   "desc": "트렌드 수집·후보 20개·기준 키워드 재척도",
+   "status": null,
+   "props": {
+    "count": 5
+   }
+  },
+  {
+   "id": "V02",
+   "cls": "Verification",
+   "label": "test_scoring",
+   "desc": "100점·필수 필터·보수적 부여·선정 기록",
+   "status": null,
+   "props": {
+    "count": 6
+   }
+  },
+  {
+   "id": "V03",
+   "cls": "Verification",
+   "label": "test_fact_guard",
+   "desc": "사양 불일치·금칙어·광고 표시·사실 변경 차단",
+   "status": null,
+   "props": {
+    "count": 6
+   }
+  },
+  {
+   "id": "V04",
+   "cls": "Verification",
+   "label": "test_media",
+   "desc": "산출물·MP4 규격·원형 보존·권리 차단",
+   "status": null,
+   "props": {
+    "count": 7
+   }
+  },
+  {
+   "id": "V05",
+   "cls": "Verification",
+   "label": "test_publish_gate",
+   "desc": "미승인·링크·자격증명·중복·상태 분리",
+   "status": null,
+   "props": {
+    "count": 10
+   }
+  },
+  {
+   "id": "V06",
+   "cls": "Verification",
+   "label": "test_finance",
+   "desc": "산식 손계산 검산·시뮬레이션",
+   "status": null,
+   "props": {
+    "count": 6
+   }
+  },
+  {
+   "id": "V07",
+   "cls": "Verification",
+   "label": "test_analytics",
+   "desc": "실측·추정·미귀속·CSV 품질",
+   "status": null,
+   "props": {
+    "count": 5
+   }
+  },
+  {
+   "id": "V08",
+   "cls": "Verification",
+   "label": "test_landing_admin",
+   "desc": "랜딩·관리자·CSRF·삭제",
+   "status": null,
+   "props": {
+    "count": 11
+   }
+  },
+  {
+   "id": "V09",
+   "cls": "Verification",
+   "label": "test_security",
+   "desc": "로그 마스킹·하드코딩 키·.env",
+   "status": null,
+   "props": {
+    "count": 4
+   }
+  },
+  {
+   "id": "V10",
+   "cls": "Verification",
+   "label": "test_jobs",
+   "desc": "작업 큐·재시도·비용 상한·Claude 가짜 응답",
+   "status": null,
+   "props": {
+    "count": 7
+   }
+  },
+  {
+   "id": "V11",
+   "cls": "Verification",
+   "label": "test_adapters",
+   "desc": "재시도·HMAC·미설정·IG 상태 분리",
+   "status": null,
+   "props": {
+    "count": 7
+   }
+  },
+  {
+   "id": "V12",
+   "cls": "Verification",
+   "label": "브라우저 E2E 10화면",
+   "desc": "콘솔 오류·가로 넘침·필수 요소",
+   "status": null,
+   "props": {
+    "count": 10
+   }
+  },
+  {
+   "id": "V13",
+   "cls": "Verification",
+   "label": "온톨로지 HTML 점검",
+   "desc": "글자 넘침·겹침·라벨 겹침 0",
+   "status": null,
+   "props": {
+    "count": 1
+   }
+  },
+  {
+   "id": "V14",
+   "cls": "Verification",
+   "label": "가상 운영 30일",
+   "desc": "임시 DB 로 30일 운영",
+   "status": null,
+   "props": {
+    "count": 30
+   }
+  },
+  {
+   "id": "V15",
+   "cls": "Verification",
+   "label": "신규 환경 재현",
+   "desc": "새 폴더·새 venv 에서 README 절차",
+   "status": null,
+   "props": {
+    "count": 1
+   }
+  },
+  {
+   "id": "V16",
+   "cls": "Verification",
+   "label": "영상 프레임 육안 검토",
+   "desc": "줄바꿈·배경·썸네일",
+   "status": null,
+   "props": {
+    "count": 7
+   }
+  },
+  {
+   "id": "V17",
+   "cls": "Verification",
+   "label": "결함 재현 스크립트",
+   "desc": "running 고착·수동 가격 ①②",
+   "status": null,
+   "props": {
+    "count": 3
+   }
+  },
+  {
+   "id": "V18",
+   "cls": "Verification",
+   "label": "지식체계 HTML 점검",
+   "desc": "이 문서의 넘침·겹침·탐색",
+   "status": null,
+   "props": {
+    "count": 1
+   }
+  },
+  {
+   "id": "V19",
+   "cls": "Verification",
+   "label": "test_knowledge",
+   "desc": "지식체계 참조·정의역·치역·상태·요약",
+   "status": null,
+   "props": {
+    "count": 4
+   }
+  },
+  {
+   "id": "E01",
+   "cls": "Evidence",
+   "label": "데모 콘텐츠 C20261118-01",
+   "desc": "demo/C20261118-01 — 영상 2·이미지 8·대본·자막·매니페스트",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E02",
+   "cls": "Evidence",
+   "label": "화면 캡처 10장",
+   "desc": "demo/screenshots — 랜딩 390·1366, 관리자 6화면",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E03",
+   "cls": "Evidence",
+   "label": "pytest 78개 통과",
+   "desc": "2026-11-21 실행",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E04",
+   "cls": "Evidence",
+   "label": "신규 환경 실행 기록",
+   "desc": "설치 → run-daily 약 79초 → 74 통과 → 랜딩 표시",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E05",
+   "cls": "Evidence",
+   "label": "가상 운영 30일 결과",
+   "desc": "D1~D10 제작, D7 오탐 차단, D11 고갈 후 20일 미제작, 10개 중 9개 범용 배경",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E06",
+   "cls": "Evidence",
+   "label": "running 고착 재현",
+   "desc": "일반 실행·--force 모두 running_elsewhere → 수동 회수 후 복구",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E07",
+   "cls": "Evidence",
+   "label": "수동 가격 결함 재현",
+   "desc": "① 3일 전 확인 → 0.0시간 ② 25,000원 재확인 → 19,900원",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E08",
+   "cls": "Evidence",
+   "label": "온톨로지 HTML 점검 결과",
+   "desc": "REV02 — 넘침·겹침·라벨 겹침 0, 가로 넘침 0",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E09",
+   "cls": "Evidence",
+   "label": "외부 조사 보고 3건",
+   "desc": "공식 도메인 직접 열람 실패 → 검색 색인 발췌·공식 저장소 원문",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E12",
+   "cls": "Evidence",
+   "label": "RDF 검증",
+   "desc": "rdflib 파싱 2,648 트리플 · SPARQL 예시 2개 결과 확인",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E10",
+   "cls": "Evidence",
+   "label": "12개월 시뮬레이션 표",
+   "desc": "docs/ROI_REPORT.md — 기준 ROE −244%, 손익분기 콘텐츠당 약 12만 조회",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "E11",
+   "cls": "Evidence",
+   "label": "프레임 검토 후 수정",
+   "desc": "후킹 줄바꿈·사양 칩 비침·엔드카드 중복 상품·썸네일 배치 수정",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "DOC01",
+   "cls": "Document",
+   "label": "README.md",
+   "desc": "설치·실행·구조·완료 기준 매핑·알려진 결함",
+   "status": null,
+   "props": {
+    "path": "README.md"
+   }
+  },
+  {
+   "id": "DOC02",
+   "cls": "Document",
+   "label": "문서 지도",
+   "desc": "읽는 순서·갱신 규칙",
+   "status": null,
+   "props": {
+    "path": "docs/README.md"
+   }
+  },
+  {
+   "id": "DOC03",
+   "cls": "Document",
+   "label": "사업 리스크 분석",
+   "desc": "STEP 1 + 자체 검토·가상 운영 결함",
+   "status": null,
+   "props": {
+    "path": "docs/BUSINESS_RISK_ANALYSIS.md"
+   }
+  },
+  {
+   "id": "DOC04",
+   "cls": "Document",
+   "label": "실행 가능성 보고서",
+   "desc": "가능/승인 필요/불가·MVP 범위",
+   "status": null,
+   "props": {
+    "path": "docs/FEASIBILITY_REPORT.md"
+   }
+  },
+  {
+   "id": "DOC05",
+   "cls": "Document",
+   "label": "API 접근 매트릭스",
+   "desc": "외부 API 조건·확인 수준",
+   "status": null,
+   "props": {
+    "path": "docs/API_ACCESS_MATRIX.md"
+   }
+  },
+  {
+   "id": "DOC06",
+   "cls": "Document",
+   "label": "컴플라이언스 체크리스트",
+   "desc": "광고 표시·사실성·플랫폼·개인정보",
+   "status": null,
+   "props": {
+    "path": "docs/COMPLIANCE_CHECKLIST.md"
+   }
+  },
+  {
+   "id": "DOC07",
+   "cls": "Document",
+   "label": "비용 모델",
+   "desc": "콘텐츠당·월 비용·LLM 모델별",
+   "status": null,
+   "props": {
+    "path": "docs/COST_MODEL.md"
+   }
+  },
+  {
+   "id": "DOC08",
+   "cls": "Document",
+   "label": "ROI 리포트",
+   "desc": "12개월 3 시나리오·손익분기",
+   "status": null,
+   "props": {
+    "path": "docs/ROI_REPORT.md"
+   }
+  },
+  {
+   "id": "DOC09",
+   "cls": "Document",
+   "label": "DB 스키마",
+   "desc": "테이블·상태 전이",
+   "status": null,
+   "props": {
+    "path": "docs/DB_SCHEMA.md"
+   }
+  },
+  {
+   "id": "DOC10",
+   "cls": "Document",
+   "label": "구매심리 프롬프트",
+   "desc": "프롬프트·검증 규칙·예시",
+   "status": null,
+   "props": {
+    "path": "docs/PSYCHOLOGY_PROMPTS.md"
+   }
+  },
+  {
+   "id": "DOC11",
+   "cls": "Document",
+   "label": "장애 대응",
+   "desc": "상태별 조치·임시 복구",
+   "status": null,
+   "props": {
+    "path": "docs/RUNBOOK.md"
+   }
+  },
+  {
+   "id": "DOC12",
+   "cls": "Document",
+   "label": "결정 사항",
+   "desc": "결정 20건·결정 기록",
+   "status": null,
+   "props": {
+    "path": "docs/DECISIONS.md"
+   }
+  },
+  {
+   "id": "DOC13",
+   "cls": "Document",
+   "label": "자동화 재검토",
+   "desc": "착수 4문항·액션 지도·로드맵",
+   "status": null,
+   "props": {
+    "path": "docs/AUTOMATION_REVIEW.md"
+   }
+  },
+  {
+   "id": "DOC14",
+   "cls": "Document",
+   "label": "도메인 온톨로지",
+   "desc": "개념 36·관계 60",
+   "status": null,
+   "props": {
+    "path": "docs/ONTOLOGY.md"
+   }
+  },
+  {
+   "id": "DOC15",
+   "cls": "Document",
+   "label": "가상 운영 점검",
+   "desc": "30일 결과·방해 요소·필요한 도움",
+   "status": null,
+   "props": {
+    "path": "docs/VIRTUAL_OPERATION.md"
+   }
+  },
+  {
+   "id": "DOC16",
+   "cls": "Document",
+   "label": "도메인 지도 HTML",
+   "desc": "개념·자동화 지도(REV01 보존)",
+   "status": null,
+   "props": {
+    "path": "docs/SCF_온톨로지_REV02.html"
+   }
+  },
+  {
+   "id": "DOC17",
+   "cls": "Document",
+   "label": "지식체계",
+   "desc": "이 지식체계의 텍스트판",
+   "status": null,
+   "props": {
+    "path": "docs/KNOWLEDGE_BASE.md"
+   }
+  },
+  {
+   "id": "DOC18",
+   "cls": "Document",
+   "label": "진행 현황",
+   "desc": "단계·산출물·결정·결함·작업 기록",
+   "status": null,
+   "props": {
+    "path": "docs/PROGRESS.md"
+   }
+  },
+  {
+   "id": "DOC19",
+   "cls": "Document",
+   "label": "지식체계 HTML",
+   "desc": "진행·지식 지도·탐색기·추적표",
+   "status": null,
+   "props": {
+    "path": "docs/SCF_지식체계_REV01.html"
+   }
+  },
+  {
+   "id": "P_USER",
+   "cls": "Party",
+   "label": "운영자(사용자)",
+   "desc": "결정·승인·계정 명의·실촬영·결제",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_COUPANG",
+   "cls": "Party",
+   "label": "쿠팡파트너스",
+   "desc": "제휴 링크·수수료·API(최종 승인 후)·약관",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_NAVER",
+   "cls": "Party",
+   "label": "네이버(개발자센터·NCP API HUB)",
+   "desc": "DataLab 트렌드",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_GOOGLE",
+   "cls": "Party",
+   "label": "Google(Trends)",
+   "desc": "Trends API 알파",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_META",
+   "cls": "Party",
+   "label": "Meta·Instagram",
+   "desc": "Reels 게시·인사이트·브랜디드 콘텐츠·AI 라벨",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_YOUTUBE",
+   "cls": "Party",
+   "label": "YouTube",
+   "desc": "Shorts 업로드·Analytics·쇼핑 제휴·정책",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_ANTHROPIC",
+   "cls": "Party",
+   "label": "Anthropic",
+   "desc": "Claude API",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_OPENAI",
+   "cls": "Party",
+   "label": "OpenAI",
+   "desc": "이미지·TTS(채택 안 함)",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_HIGGS",
+   "cls": "Party",
+   "label": "Higgsfield",
+   "desc": "생성 이미지·영상(파일 가져오기 방식)",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_FTC",
+   "cls": "Party",
+   "label": "공정거래위원회",
+   "desc": "추천·보증 표시광고 심사지침",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_MSIT",
+   "cls": "Party",
+   "label": "과기정통부·방미통위",
+   "desc": "AI 기본법·AI 생성물 표시 제도",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_TAX",
+   "cls": "Party",
+   "label": "세무사",
+   "desc": "사업소득·사업자등록",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_LEGAL",
+   "cls": "Party",
+   "label": "법률 검토자",
+   "desc": "개인정보 처리방침·광고 고지",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_EMPLOYER",
+   "cls": "Party",
+   "label": "본업 회사",
+   "desc": "취업규칙(겸업·영리활동)",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "P_CONSUMER",
+   "cls": "Party",
+   "label": "시청자·구매자",
+   "desc": "조회·방문·클릭·구매",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "F01",
+   "cls": "Fact",
+   "label": "DataLab 쇼핑인사이트: 일 1,000회, 요청당 키워드 5개, 값은 구간 최댓값 100 상대지수",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F02",
+   "cls": "Fact",
+   "label": "DataLab 신규 신청 2026-07-30 종료 → NCP API HUB, 기존 키 2027-06-30까지",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F03",
+   "cls": "Fact",
+   "label": "네이버 쇼핑 검색 API 2026-07-31 종료",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F04",
+   "cls": "Fact",
+   "label": "네이버 검색 API 결과 저장·캐싱·가공·AI 입력 금지(약관)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F05",
+   "cls": "Fact",
+   "label": "API HUB DataLab 월 50,000회",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F06",
+   "cls": "Fact",
+   "label": "Google Trends API 는 알파 — 허용 계정만",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F07",
+   "cls": "Fact",
+   "label": "쿠팡 API 키는 최종 승인 후 — 누적 판매 15만 원 이상에서 심사 시작",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F08",
+   "cls": "Fact",
+   "label": "쿠팡 기본 수수료 3%, 삼성·애플 스마트폰 1%",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F09",
+   "cls": "Fact",
+   "label": "쿠팡 클릭 후 24시간 내 다른 상품 구매도 인정",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F10",
+   "cls": "Fact",
+   "label": "쿠팡 정산: 최종 승인 + 월 1만 원 이상, 2개월 뒤 15일, 개인은 사업소득",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F11",
+   "cls": "Fact",
+   "label": "쿠팡 고지 예시 '이 게시물은 쿠팡 파트너스 활동의 일환으로…', 반려 1위 사유는 고지 누락",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F12",
+   "cls": "Fact",
+   "label": "쿠팡 인증 HMAC 형식·subId 파라미터",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "C"
+   }
+  },
+  {
+   "id": "F13",
+   "cls": "Fact",
+   "label": "쿠팡 검색 시간당 10회",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "C"
+   }
+  },
+  {
+   "id": "F14",
+   "cls": "Fact",
+   "label": "공정위 지침(2024-12 개정): '수수료를 지급받을 수 있음' 같은 조건부 표현은 명확한 표시 아님",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F15",
+   "cls": "Fact",
+   "label": "영상은 시작·끝·반복 표시, SNS 는 첫 부분, '더보기' 뒤 부적절, 해시태그는 첫 번째",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F16",
+   "cls": "Fact",
+   "label": "2026-06-01 AI 가상인물 '가상인물' 표시 의무",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F17",
+   "cls": "Fact",
+   "label": "AI 기본법(2026-01-22 시행) 표시 의무 주체는 AI 사업자 — 도구로 쓰는 개인 창작자는 의무 없음(가이드)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F18",
+   "cls": "Fact",
+   "label": "정보통신망법 AI 생성물 표시 개정안 미통과(2026-10-29 보도)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "C"
+   }
+  },
+  {
+   "id": "F19",
+   "cls": "Fact",
+   "label": "Instagram Login 경로: 페이스북 페이지 불필요, 내 계정만 쓰면 Standard Access",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F20",
+   "cls": "Fact",
+   "label": "Instagram 은 공개 URL 의 영상을 가져가서 게시",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F21",
+   "cls": "Fact",
+   "label": "Instagram 게시 한도 24시간 50 또는 100건(문서 충돌)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F22",
+   "cls": "Fact",
+   "label": "Instagram is_ai_generated 라벨·trial_params 체험 릴스 지원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F23",
+   "cls": "Fact",
+   "label": "Meta: 제3자 제휴 수수료 게시물은 유료 파트너십 라벨 사용 안내",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F24",
+   "cls": "Fact",
+   "label": "YouTube 업로드 쿼터 하루 100회(2026-06~)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F25",
+   "cls": "Fact",
+   "label": "YouTube 미검증 프로젝트 비공개 고정 해제(2026-11-02)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F26",
+   "cls": "Fact",
+   "label": "YouTube hasPaidProductPlacement 기본값 false 아님(2026-11-16)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F27",
+   "cls": "Fact",
+   "label": "Shorts 설명란·댓글 링크 클릭 불가",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F28",
+   "cls": "Fact",
+   "label": "YouTube '진정성 없는 콘텐츠'(템플릿 대량생산) 정책(2025-07)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F29",
+   "cls": "Fact",
+   "label": "YouTube 쇼핑 제휴(쿠팡) 2024-06 출시, YPP + 구독자 500(2026-03-30~), Shorts 상품 태그",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F30",
+   "cls": "Fact",
+   "label": "네이버 쇼핑커넥트 2025-07 정식 — 판매자가 수수료율 설정",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F31",
+   "cls": "Fact",
+   "label": "YouTube Analytics 지연 48~72시간, Instagram 인사이트 최대 48시간",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "F32",
+   "cls": "Fact",
+   "label": "Claude Opus 5.5 $4 / $20 (100만 토큰)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F33",
+   "cls": "Fact",
+   "label": "OpenAI gpt-image-1 종료(2026-10-23), TTS 3종 종료 예정(2027-01-06)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "A"
+   }
+  },
+  {
+   "id": "F34",
+   "cls": "Fact",
+   "label": "Higgsfield REST API 선불 과금, 기본적으로 사용자 콘텐츠 학습 사용",
+   "desc": "",
+   "status": null,
+   "props": {
+    "confidence": "B"
+   }
+  },
+  {
+   "id": "G01",
+   "cls": "Regulation",
+   "label": "추천·보증 표시광고 심사지침",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G02",
+   "cls": "Regulation",
+   "label": "쿠팡파트너스 약관·운영정책",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G03",
+   "cls": "Regulation",
+   "label": "Meta 브랜디드 콘텐츠·AI 정보 라벨 정책",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G04",
+   "cls": "Regulation",
+   "label": "YouTube 유료 프로모션·합성 콘텐츠·진정성 정책",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G05",
+   "cls": "Regulation",
+   "label": "AI 기본법",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G06",
+   "cls": "Regulation",
+   "label": "정보통신망법 AI 생성물 표시 개정안(미통과)",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G07",
+   "cls": "Regulation",
+   "label": "개인정보 보호법",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G08",
+   "cls": "Regulation",
+   "label": "표시광고법(가격·효능 표시)",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G09",
+   "cls": "Regulation",
+   "label": "네이버 오픈 API 이용약관",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G10",
+   "cls": "Regulation",
+   "label": "소득세(사업소득)·사업자등록",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G11",
+   "cls": "Regulation",
+   "label": "본업 회사 취업규칙(겸업·영리활동)",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "G12",
+   "cls": "Regulation",
+   "label": "SIL OFL 폰트 라이선스",
+   "desc": "",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "S01",
+   "cls": "Assumption",
+   "label": "초기 자기자본 500만 원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S02",
+   "cls": "Assumption",
+   "label": "평균 인정 구매금액 65,000원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S03",
+   "cls": "Assumption",
+   "label": "실효 수수료율 3%",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S04",
+   "cls": "Assumption",
+   "label": "초기 현금 구축비 100만 원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S05",
+   "cls": "Assumption",
+   "label": "월 운영현금비 25만 원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S06",
+   "cls": "Assumption",
+   "label": "창업자 노동 30시간/월 × 25,000원",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "사용자"
+   }
+  },
+  {
+   "id": "S07",
+   "cls": "Assumption",
+   "label": "퍼널 3 시나리오(보수 0.5%×20%×3% ~ 낙관 2%×40%×8%)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "판단값"
+   }
+  },
+  {
+   "id": "S08",
+   "cls": "Assumption",
+   "label": "세율 6.6%",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "판단값"
+   }
+  },
+  {
+   "id": "S09",
+   "cls": "Assumption",
+   "label": "취소·반품 5%",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "판단값"
+   }
+  },
+  {
+   "id": "S10",
+   "cls": "Assumption",
+   "label": "100점 배점·임계값(근거 부족 30%, 최소 점수 55)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "판단값"
+   }
+  },
+  {
+   "id": "S11",
+   "cls": "Assumption",
+   "label": "중단 기준 '필요 조회수 > 실측 평균 3배'",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "판단값"
+   }
+  },
+  {
+   "id": "S12",
+   "cls": "Assumption",
+   "label": "선정 가능 비율 약 42%(24개 중 10개)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "mock"
+   }
+  },
+  {
+   "id": "S13",
+   "cls": "Assumption",
+   "label": "콘텐츠당 LLM 토큰 입력 8,500 / 출력 6,500",
+   "desc": "",
+   "status": null,
+   "props": {
+    "kind": "추정"
+   }
+  },
+  {
+   "id": "R01",
+   "cls": "Risk",
+   "label": "퍼널 병목 — 조회에서 랜딩까지",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R02",
+   "cls": "Risk",
+   "label": "노동 기회비용이 현금비의 3배",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R03",
+   "cls": "Risk",
+   "label": "주문당 수수료가 작음(2만 원 상품 약 600원)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R04",
+   "cls": "Risk",
+   "label": "계정 단위 정책 위험(쿠팡 승인 반려·플랫폼)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R05",
+   "cls": "Risk",
+   "label": "API 접근 일정(쿠팡 승인·DataLab 이관)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R06",
+   "cls": "Risk",
+   "label": "이미지 권리 불명",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R07",
+   "cls": "Risk",
+   "label": "AI 연출의 오인·고지 누락",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R08",
+   "cls": "Risk",
+   "label": "템플릿 대량생산으로 노출 억제",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R09",
+   "cls": "Risk",
+   "label": "A/B 판단 불가",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R10",
+   "cls": "Risk",
+   "label": "광고 고지 위반",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R11",
+   "cls": "Risk",
+   "label": "상품 후보 고갈",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R12",
+   "cls": "Risk",
+   "label": "표본 부족(30개로 전환율 판정 불가)",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R13",
+   "cls": "Risk",
+   "label": "콘텐츠별 매출 귀속 불가",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R14",
+   "cls": "Risk",
+   "label": "본업 회사 겸업 규정",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R15",
+   "cls": "Risk",
+   "label": "저장소 공개로 전략 노출",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "R16",
+   "cls": "Risk",
+   "label": "승인 시간이 본업과 충돌",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R17",
+   "cls": "Risk",
+   "label": "수동 모드 가격 만료 검사 무력화",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "상"
+   }
+  },
+  {
+   "id": "R18",
+   "cls": "Risk",
+   "label": "최종 승인·정산 지연",
+   "desc": "",
+   "status": null,
+   "props": {
+    "level": "중"
+   }
+  },
+  {
+   "id": "K01",
+   "cls": "Defect",
+   "label": "크래시 후 running 고착 — --force 로도 복구 불가",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K02",
+   "cls": "Defect",
+   "label": "웹 실행 버튼·API 가 단계를 동기 실행 → gunicorn 30초 시간초과",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K03",
+   "cls": "Defect",
+   "label": "수동 모드 가격 확인 시각이 매일 '방금'으로 자동 갱신",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K04",
+   "cls": "Defect",
+   "label": "관리자가 재확인한 가격이 JSON 옛값으로 덮어써짐",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K05",
+   "cls": "Defect",
+   "label": "사실 검사가 상품명 속 숫자('2단')를 오탐 차단",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K06",
+   "cls": "Defect",
+   "label": "쿠팡 API 모드에선 후보 전부 '보류'(사양·이미지 권리 없음)",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K07",
+   "cls": "Defect",
+   "label": "메인 → 상품 이동 시 유입경로(src) 유실",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K08",
+   "cls": "Defect",
+   "label": "로그인 시도 제한 없음·dev 고정 SECRET_KEY·프록시 공용 버킷",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K09",
+   "cls": "Defect",
+   "label": "쿠팡 검색을 키워드마다 호출(시간당 한도 초과 가능)",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "K10",
+   "cls": "Defect",
+   "label": "파이프라인 실행 시각이 코드에 고정(07:00~12:00)",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "설계 약점"
+   }
+  },
+  {
+   "id": "K11",
+   "cls": "Defect",
+   "label": "B 후킹은 만들기만 하고 게시 안 함",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "설계 약점"
+   }
+  },
+  {
+   "id": "K12",
+   "cls": "Defect",
+   "label": "실상품 영상은 범용 그라디언트 배경(10개 중 9개)",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "설계 약점"
+   }
+  },
+  {
+   "id": "K13",
+   "cls": "Defect",
+   "label": "DB·산출물 백업 없음",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "설계 약점"
+   }
+  },
+  {
+   "id": "K14",
+   "cls": "Defect",
+   "label": "실패 알림 없음(관측 Lv2)",
+   "desc": "",
+   "status": "open",
+   "props": {
+    "kind": "설계 약점"
+   }
+  },
+  {
+   "id": "K15",
+   "cls": "Defect",
+   "label": "RUNBOOK 의 running 복구 안내가 동작하지 않던 문제",
+   "desc": "",
+   "status": "fixed",
+   "props": {
+    "kind": "결함"
+   }
+  },
+  {
+   "id": "M01",
+   "cls": "Metric",
+   "label": "조회수",
+   "desc": "측정 전(연동·게시 전)",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M02",
+   "cls": "Metric",
+   "label": "랜딩 방문율",
+   "desc": "측정 전 — 30개 판정 지표",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M03",
+   "cls": "Metric",
+   "label": "링크 클릭률",
+   "desc": "측정 전 — 30개 판정 지표",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M04",
+   "cls": "Metric",
+   "label": "구매전환율",
+   "desc": "가정만 — 30개로 판정 불가",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M05",
+   "cls": "Metric",
+   "label": "귀속 수수료",
+   "desc": "측정 전 — sub_id 분리 미확인",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M06",
+   "cls": "Metric",
+   "label": "RPM(조회 1,000회당 수익)",
+   "desc": "실측 귀속 시만 계산",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M07",
+   "cls": "Metric",
+   "label": "조정이익",
+   "desc": "가정 시뮬레이션만",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M08",
+   "cls": "Metric",
+   "label": "조정 ROE",
+   "desc": "가정: 보수 −259% · 기준 −244% · 낙관 +295%",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M09",
+   "cls": "Metric",
+   "label": "사람 운영시간",
+   "desc": "실측 양식만 — 첫 주 측정",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M10",
+   "cls": "Metric",
+   "label": "후보 잔량(남은 일수)",
+   "desc": "가상 운영으로만 — 경보 미구현",
+   "status": null,
+   "props": {}
+  },
+  {
+   "id": "M11",
+   "cls": "Metric",
+   "label": "API 비용",
+   "desc": "측정 가능 — 지금 0원(mock)",
+   "status": null,
+   "props": {}
+  }
+ ],
+ "relations": [
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "keyword",
+   "note": "trend_snapshots",
+   "sub": null
+  },
+  {
+   "s": "CP10",
+   "p": "implements",
+   "o": "keyword",
+   "note": "services/trend_collector/collector.py",
+   "sub": null
+  },
+  {
+   "s": "CP04",
+   "p": "implements",
+   "o": "keyword",
+   "note": "adapters/naver/datalab.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "persona",
+   "note": "products.problem",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "problem",
+   "note": "products.problem",
+   "sub": null
+  },
+  {
+   "s": "CP13",
+   "p": "implements",
+   "o": "problem",
+   "note": "services/psychology_engine/engine.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "barrier",
+   "note": "products.problem.hesitation",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "lever",
+   "note": "psychology_profiles.levers",
+   "sub": null
+  },
+  {
+   "s": "CP02",
+   "p": "implements",
+   "o": "lever",
+   "note": "config/compliance.toml [psychology]",
+   "sub": null
+  },
+  {
+   "s": "CP02",
+   "p": "implements",
+   "o": "category",
+   "note": "config/categories.toml",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "product",
+   "note": "products",
+   "sub": null
+  },
+  {
+   "s": "CP11",
+   "p": "implements",
+   "o": "product",
+   "note": "services/product_discovery/discovery.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "spec",
+   "note": "products.verified_specs",
+   "sub": null
+  },
+  {
+   "s": "CP03",
+   "p": "implements",
+   "o": "spec",
+   "note": "services/common/facts.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "caution",
+   "note": "products.cautions",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "price",
+   "note": "products.price_checked_at",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "image",
+   "note": "product_images",
+   "sub": null
+  },
+  {
+   "s": "CP15",
+   "p": "implements",
+   "o": "image",
+   "note": "services/image_generator/composer.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "usage",
+   "note": "products.signals.own_usage_verified",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "score",
+   "note": "product_scores",
+   "sub": null
+  },
+  {
+   "s": "CP12",
+   "p": "implements",
+   "o": "score",
+   "note": "services/product_scoring/scoring.py",
+   "sub": null
+  },
+  {
+   "s": "CP02",
+   "p": "implements",
+   "o": "score",
+   "note": "config/scoring.toml",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "filter",
+   "note": "product_scores.filter_result",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "selection",
+   "note": "selection_logs",
+   "sub": null
+  },
+  {
+   "s": "CP12",
+   "p": "implements",
+   "o": "selection",
+   "note": "services/product_scoring/selection.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "content",
+   "note": "contents",
+   "sub": null
+  },
+  {
+   "s": "CP14",
+   "p": "implements",
+   "o": "script",
+   "note": "services/script_generator/generator.py",
+   "sub": null
+  },
+  {
+   "s": "CP13",
+   "p": "implements",
+   "o": "script",
+   "note": "services/psychology_engine/prompts.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "variant",
+   "note": "contents.script.variants",
+   "sub": null
+  },
+  {
+   "s": "CP02",
+   "p": "implements",
+   "o": "disclosure",
+   "note": "config/compliance.toml [disclosure]",
+   "sub": null
+  },
+  {
+   "s": "CP15",
+   "p": "implements",
+   "o": "media",
+   "note": "services/image_generator/",
+   "sub": null
+  },
+  {
+   "s": "CP16",
+   "p": "implements",
+   "o": "media",
+   "note": "services/video_renderer/renderer.py",
+   "sub": null
+  },
+  {
+   "s": "CP14",
+   "p": "implements",
+   "o": "check",
+   "note": "services/script_generator/fact_guard.py",
+   "sub": null
+  },
+  {
+   "s": "CP16",
+   "p": "implements",
+   "o": "check",
+   "note": "services/video_renderer/qa.py",
+   "sub": null
+  },
+  {
+   "s": "CP18",
+   "p": "implements",
+   "o": "approval",
+   "note": "services/social_publishers/review.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "approval",
+   "note": "audit_logs",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "link",
+   "note": "affiliate_links",
+   "sub": null
+  },
+  {
+   "s": "CP17",
+   "p": "implements",
+   "o": "link",
+   "note": "services/affiliate_links/links.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "publication",
+   "note": "publications",
+   "sub": null
+  },
+  {
+   "s": "CP18",
+   "p": "implements",
+   "o": "publication",
+   "note": "services/social_publishers/publisher.py",
+   "sub": null
+  },
+  {
+   "s": "CP06",
+   "p": "implements",
+   "o": "platform",
+   "note": "adapters/instagram/graph.py",
+   "sub": null
+  },
+  {
+   "s": "CP07",
+   "p": "implements",
+   "o": "platform",
+   "note": "adapters/youtube/data_api.py",
+   "sub": null
+  },
+  {
+   "s": "CP22",
+   "p": "implements",
+   "o": "landing",
+   "note": "app/routes/public.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "pmetric",
+   "note": "metric_observations",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "implements",
+   "o": "pmetric",
+   "note": "services/analytics/importers.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "event",
+   "note": "site_events",
+   "sub": null
+  },
+  {
+   "s": "CP22",
+   "p": "implements",
+   "o": "event",
+   "note": "app/static/js/track.js",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "report",
+   "note": "affiliate_reports",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "implements",
+   "o": "funnel",
+   "note": "services/analytics/funnel.py",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "implements",
+   "o": "learning",
+   "note": "services/analytics/learning.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "source",
+   "note": "data_sources",
+   "sub": null
+  },
+  {
+   "s": "CP02",
+   "p": "implements",
+   "o": "policy",
+   "note": "config/*.toml",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "job",
+   "note": "job_runs",
+   "sub": null
+  },
+  {
+   "s": "CP20",
+   "p": "implements",
+   "o": "job",
+   "note": "workflows/pipeline.py",
+   "sub": null
+  },
+  {
+   "s": "CP21",
+   "p": "implements",
+   "o": "job",
+   "note": "workflows/scheduler.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "cost",
+   "note": "api_usage",
+   "sub": null
+  },
+  {
+   "s": "CP03",
+   "p": "implements",
+   "o": "cost",
+   "note": "services/common/cost_guard.py",
+   "sub": null
+  },
+  {
+   "s": "CP25",
+   "p": "implements",
+   "o": "audit",
+   "note": "audit_logs",
+   "sub": null
+  },
+  {
+   "s": "source",
+   "p": "domain",
+   "o": "keyword",
+   "note": "data_sources.state",
+   "sub": "공급한다"
+  },
+  {
+   "s": "keyword",
+   "p": "domain",
+   "o": "problem",
+   "note": "키워드 의도 분류(문제·구매)",
+   "sub": "드러낸다"
+  },
+  {
+   "s": "keyword",
+   "p": "domain",
+   "o": "category",
+   "note": "trend_snapshots.category_key",
+   "sub": "속한다"
+  },
+  {
+   "s": "persona",
+   "p": "domain",
+   "o": "problem",
+   "note": "problem.persona",
+   "sub": "겪는다"
+  },
+  {
+   "s": "problem",
+   "p": "domain",
+   "o": "barrier",
+   "note": "problem.hesitation",
+   "sub": "가로막힌다"
+  },
+  {
+   "s": "problem",
+   "p": "domain",
+   "o": "lever",
+   "note": "손실 유형 → 심리 요소 매핑",
+   "sub": "자극한다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "problem",
+   "note": "products.problem",
+   "sub": "해결한다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "keyword",
+   "note": "products.keywords",
+   "sub": "연결된다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "category",
+   "note": "products.category_key",
+   "sub": "속한다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "spec",
+   "note": "verified_specs",
+   "sub": "가진다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "caution",
+   "note": "cautions",
+   "sub": "가진다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "price",
+   "note": "price_checked_at",
+   "sub": "확인된다"
+  },
+  {
+   "s": "product",
+   "p": "domain",
+   "o": "image",
+   "note": "product_images",
+   "sub": "가진다"
+  },
+  {
+   "s": "usage",
+   "p": "domain",
+   "o": "product",
+   "note": "own_usage_verified",
+   "sub": "뒷받침한다"
+  },
+  {
+   "s": "spec",
+   "p": "domain",
+   "o": "barrier",
+   "note": "decisive_info",
+   "sub": "해소한다"
+  },
+  {
+   "s": "score",
+   "p": "domain",
+   "o": "product",
+   "note": "product_scores",
+   "sub": "평가한다"
+  },
+  {
+   "s": "score",
+   "p": "domain",
+   "o": "keyword",
+   "note": "관심도·상승 속도",
+   "sub": "근거로 한다"
+  },
+  {
+   "s": "score",
+   "p": "domain",
+   "o": "problem",
+   "note": "문제 해결 강도",
+   "sub": "근거로 한다"
+  },
+  {
+   "s": "filter",
+   "p": "domain",
+   "o": "product",
+   "note": "filter_result",
+   "sub": "판정한다"
+  },
+  {
+   "s": "filter",
+   "p": "domain",
+   "o": "image",
+   "note": "권리 상태",
+   "sub": "확인한다"
+  },
+  {
+   "s": "filter",
+   "p": "domain",
+   "o": "price",
+   "note": "가격 유효시간·재고",
+   "sub": "확인한다"
+  },
+  {
+   "s": "selection",
+   "p": "domain",
+   "o": "score",
+   "note": "상위 5 → 최종 1",
+   "sub": "고른다"
+  },
+  {
+   "s": "selection",
+   "p": "domain",
+   "o": "content",
+   "note": "contents.run_date",
+   "sub": "만든다"
+  },
+  {
+   "s": "content",
+   "p": "domain",
+   "o": "product",
+   "note": "contents.product_id",
+   "sub": "다룬다"
+  },
+  {
+   "s": "content",
+   "p": "domain",
+   "o": "script",
+   "note": "contents.script",
+   "sub": "가진다"
+  },
+  {
+   "s": "script",
+   "p": "domain",
+   "o": "spec",
+   "note": "fact_refs",
+   "sub": "인용한다"
+  },
+  {
+   "s": "script",
+   "p": "domain",
+   "o": "caution",
+   "note": "pros_cautions 장면",
+   "sub": "보여준다"
+  },
+  {
+   "s": "script",
+   "p": "domain",
+   "o": "lever",
+   "note": "levers 1~2",
+   "sub": "사용한다"
+  },
+  {
+   "s": "variant",
+   "p": "domain",
+   "o": "script",
+   "note": "첫 장면만",
+   "sub": "바꾼다"
+  },
+  {
+   "s": "disclosure",
+   "p": "domain",
+   "o": "content",
+   "note": "표시 5곳",
+   "sub": "붙는다"
+  },
+  {
+   "s": "media",
+   "p": "domain",
+   "o": "script",
+   "note": "renderer",
+   "sub": "렌더된다"
+  },
+  {
+   "s": "media",
+   "p": "domain",
+   "o": "image",
+   "note": "원형 보존 검수",
+   "sub": "합성한다"
+  },
+  {
+   "s": "check",
+   "p": "domain",
+   "o": "script",
+   "note": "fact_guard",
+   "sub": "검사한다"
+  },
+  {
+   "s": "check",
+   "p": "domain",
+   "o": "media",
+   "note": "qa",
+   "sub": "검사한다"
+  },
+  {
+   "s": "approval",
+   "p": "domain",
+   "o": "content",
+   "note": "approved_by",
+   "sub": "허가한다"
+  },
+  {
+   "s": "publication",
+   "p": "domain",
+   "o": "media",
+   "note": "reel / shorts",
+   "sub": "올린다"
+  },
+  {
+   "s": "publication",
+   "p": "domain",
+   "o": "platform",
+   "note": "publications.platform",
+   "sub": "향한다"
+  },
+  {
+   "s": "publication",
+   "p": "domain",
+   "o": "approval",
+   "note": "게시 게이트",
+   "sub": "요구한다"
+  },
+  {
+   "s": "publication",
+   "p": "domain",
+   "o": "link",
+   "note": "링크 verified",
+   "sub": "요구한다"
+  },
+  {
+   "s": "publication",
+   "p": "domain",
+   "o": "price",
+   "note": "가격 유효·재고",
+   "sub": "요구한다"
+  },
+  {
+   "s": "link",
+   "p": "domain",
+   "o": "product",
+   "note": "affiliate_links.product_id",
+   "sub": "연결한다"
+  },
+  {
+   "s": "landing",
+   "p": "domain",
+   "o": "product",
+   "note": "/p/<slug>",
+   "sub": "보여준다"
+  },
+  {
+   "s": "landing",
+   "p": "domain",
+   "o": "link",
+   "note": "구매 버튼",
+   "sub": "포함한다"
+  },
+  {
+   "s": "platform",
+   "p": "domain",
+   "o": "landing",
+   "note": "프로필 링크 ?src=",
+   "sub": "유입시킨다"
+  },
+  {
+   "s": "pmetric",
+   "p": "domain",
+   "o": "publication",
+   "note": "platform_media_id",
+   "sub": "측정한다"
+  },
+  {
+   "s": "event",
+   "p": "domain",
+   "o": "landing",
+   "note": "track.js",
+   "sub": "발생한다"
+  },
+  {
+   "s": "event",
+   "p": "domain",
+   "o": "content",
+   "note": "?c=content_id",
+   "sub": "귀속된다"
+  },
+  {
+   "s": "report",
+   "p": "domain",
+   "o": "link",
+   "note": "sub_id",
+   "sub": "귀속된다"
+  },
+  {
+   "s": "funnel",
+   "p": "domain",
+   "o": "pmetric",
+   "note": "views",
+   "sub": "집계한다"
+  },
+  {
+   "s": "funnel",
+   "p": "domain",
+   "o": "event",
+   "note": "방문·클릭",
+   "sub": "집계한다"
+  },
+  {
+   "s": "funnel",
+   "p": "domain",
+   "o": "report",
+   "note": "귀속 수수료",
+   "sub": "집계한다"
+  },
+  {
+   "s": "learning",
+   "p": "domain",
+   "o": "funnel",
+   "note": "카테고리 RPM",
+   "sub": "읽는다"
+  },
+  {
+   "s": "learning",
+   "p": "domain",
+   "o": "score",
+   "note": "expected_profit ×0.7~1.3",
+   "sub": "보정한다"
+  },
+  {
+   "s": "policy",
+   "p": "domain",
+   "o": "filter",
+   "note": "scoring/compliance.toml",
+   "sub": "제약한다"
+  },
+  {
+   "s": "policy",
+   "p": "domain",
+   "o": "check",
+   "note": "금칙어·표시 규칙",
+   "sub": "제약한다"
+  },
+  {
+   "s": "policy",
+   "p": "domain",
+   "o": "disclosure",
+   "note": "[disclosure]",
+   "sub": "정의한다"
+  },
+  {
+   "s": "job",
+   "p": "domain",
+   "o": "selection",
+   "note": "07:20~07:35 단계",
+   "sub": "실행한다"
+  },
+  {
+   "s": "job",
+   "p": "domain",
+   "o": "publication",
+   "note": "12:00 단계",
+   "sub": "실행한다"
+  },
+  {
+   "s": "cost",
+   "p": "domain",
+   "o": "script",
+   "note": "LLM 호출 상한",
+   "sub": "제한한다"
+  },
+  {
+   "s": "audit",
+   "p": "domain",
+   "o": "approval",
+   "note": "audit_logs",
+   "sub": "기록한다"
+  },
+  {
+   "s": "D1",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D1",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "impacts",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "impacts",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "impacts",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "impacts",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D2",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "impacts",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "impacts",
+   "o": "learning",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "impacts",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "impacts",
+   "o": "score",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D3",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D4",
+   "p": "impacts",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D4",
+   "p": "impacts",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D4",
+   "p": "impacts",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D4",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D4",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D6",
+   "p": "impacts",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D6",
+   "p": "impacts",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D6",
+   "p": "impacts",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D6",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D6",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "impacts",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "impacts",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "impacts",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "impacts",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D18",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D19",
+   "p": "impacts",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D19",
+   "p": "gates",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D19",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D20",
+   "p": "impacts",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D20",
+   "p": "impacts",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D20",
+   "p": "impacts",
+   "o": "category",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D20",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D20",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D5",
+   "p": "impacts",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D5",
+   "p": "impacts",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D5",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D5",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D7",
+   "p": "impacts",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D7",
+   "p": "impacts",
+   "o": "usage",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D7",
+   "p": "impacts",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D7",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D7",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D8",
+   "p": "impacts",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D8",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D8",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "script",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "problem",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "persona",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "barrier",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "lever",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "impacts",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D9",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D10",
+   "p": "impacts",
+   "o": "category",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D10",
+   "p": "impacts",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D10",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D10",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "impacts",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "impacts",
+   "o": "spec",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "impacts",
+   "o": "caution",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "impacts",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D11",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D12",
+   "p": "impacts",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D12",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D12",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D17",
+   "p": "impacts",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D17",
+   "p": "impacts",
+   "o": "source",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D17",
+   "p": "gates",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D17",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D13",
+   "p": "impacts",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D13",
+   "p": "gates",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D13",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D14",
+   "p": "impacts",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D14",
+   "p": "impacts",
+   "o": "policy",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D14",
+   "p": "impacts",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D14",
+   "p": "gates",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D14",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D15",
+   "p": "impacts",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D15",
+   "p": "gates",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D15",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D16",
+   "p": "impacts",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D16",
+   "p": "impacts",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D16",
+   "p": "impacts",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D16",
+   "p": "gates",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "D16",
+   "p": "decidedBy",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A01",
+   "p": "targets",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A01",
+   "p": "dependsOn",
+   "o": "D10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A02",
+   "p": "targets",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A02",
+   "p": "dependsOn",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A03",
+   "p": "targets",
+   "o": "spec",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A03",
+   "p": "dependsOn",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A03",
+   "p": "dependsOn",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A04",
+   "p": "targets",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A04",
+   "p": "dependsOn",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A05",
+   "p": "targets",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A05",
+   "p": "dependsOn",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A06",
+   "p": "targets",
+   "o": "usage",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A06",
+   "p": "dependsOn",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A07",
+   "p": "targets",
+   "o": "problem",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A07",
+   "p": "dependsOn",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A08",
+   "p": "targets",
+   "o": "source",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A09",
+   "p": "targets",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A09",
+   "p": "dependsOn",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A10",
+   "p": "targets",
+   "o": "score",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A11",
+   "p": "targets",
+   "o": "script",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A11",
+   "p": "dependsOn",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A12",
+   "p": "targets",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A12",
+   "p": "dependsOn",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A12",
+   "p": "dependsOn",
+   "o": "D8",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A13",
+   "p": "targets",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A14",
+   "p": "targets",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A15",
+   "p": "targets",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A15",
+   "p": "dependsOn",
+   "o": "D13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A15",
+   "p": "dependsOn",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A16",
+   "p": "targets",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A17",
+   "p": "targets",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A17",
+   "p": "dependsOn",
+   "o": "D4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A17",
+   "p": "dependsOn",
+   "o": "D5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A18",
+   "p": "targets",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A18",
+   "p": "dependsOn",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A19",
+   "p": "targets",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A19",
+   "p": "dependsOn",
+   "o": "D4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A20",
+   "p": "targets",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A21",
+   "p": "targets",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A22",
+   "p": "targets",
+   "o": "learning",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A22",
+   "p": "dependsOn",
+   "o": "D3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A23",
+   "p": "targets",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A23",
+   "p": "dependsOn",
+   "o": "D17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A25",
+   "p": "targets",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A25",
+   "p": "dependsOn",
+   "o": "D20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A25",
+   "p": "dependsOn",
+   "o": "D17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A26",
+   "p": "targets",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A26",
+   "p": "dependsOn",
+   "o": "D4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A24",
+   "p": "targets",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "A24",
+   "p": "dependsOn",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC01",
+   "p": "dependsOn",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC02",
+   "p": "dependsOn",
+   "o": "D13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC03",
+   "p": "dependsOn",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC04",
+   "p": "dependsOn",
+   "o": "D4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC05",
+   "p": "dependsOn",
+   "o": "D12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC06",
+   "p": "dependsOn",
+   "o": "D10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC07",
+   "p": "dependsOn",
+   "o": "D3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC08",
+   "p": "dependsOn",
+   "o": "D20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC09",
+   "p": "dependsOn",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "PC09",
+   "p": "dependsOn",
+   "o": "D17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST1",
+   "p": "partOf",
+   "o": "PH1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST2",
+   "p": "partOf",
+   "o": "PH1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST3",
+   "p": "partOf",
+   "o": "PH1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST4",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST5",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST6",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST7",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST8",
+   "p": "partOf",
+   "o": "PH3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST9",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "ST10",
+   "p": "partOf",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "RM1",
+   "p": "partOf",
+   "o": "PH3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "RM2",
+   "p": "partOf",
+   "o": "PH4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "RM3",
+   "p": "partOf",
+   "o": "PH4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "RM4",
+   "p": "partOf",
+   "o": "PH3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "RM5",
+   "p": "partOf",
+   "o": "PH5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP26",
+   "p": "realizes",
+   "o": "DL01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP20",
+   "p": "realizes",
+   "o": "DL01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL01",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP23",
+   "p": "realizes",
+   "o": "DL02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL02",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP10",
+   "p": "realizes",
+   "o": "DL03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP04",
+   "p": "realizes",
+   "o": "DL03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL03",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP12",
+   "p": "realizes",
+   "o": "DL04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL04",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP13",
+   "p": "realizes",
+   "o": "DL05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL05",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP14",
+   "p": "realizes",
+   "o": "DL06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL06",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP15",
+   "p": "realizes",
+   "o": "DL07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL07",
+   "p": "deliveredIn",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP16",
+   "p": "realizes",
+   "o": "DL08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL08",
+   "p": "deliveredIn",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP22",
+   "p": "realizes",
+   "o": "DL09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL09",
+   "p": "deliveredIn",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP05",
+   "p": "realizes",
+   "o": "DL10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP17",
+   "p": "realizes",
+   "o": "DL10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL10",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP06",
+   "p": "realizes",
+   "o": "DL11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP07",
+   "p": "realizes",
+   "o": "DL11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP18",
+   "p": "realizes",
+   "o": "DL11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL11",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "realizes",
+   "o": "DL12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP23",
+   "p": "realizes",
+   "o": "DL12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL12",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP21",
+   "p": "realizes",
+   "o": "DL13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL13",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP01",
+   "p": "realizes",
+   "o": "DL14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL14",
+   "p": "deliveredIn",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP26",
+   "p": "realizes",
+   "o": "DL15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL15",
+   "p": "deliveredIn",
+   "o": "ST10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL16",
+   "p": "deliveredIn",
+   "o": "ST10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL17",
+   "p": "deliveredIn",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP15",
+   "p": "realizes",
+   "o": "DL18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP16",
+   "p": "realizes",
+   "o": "DL18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL18",
+   "p": "deliveredIn",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "realizes",
+   "o": "DL19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL19",
+   "p": "deliveredIn",
+   "o": "ST1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "CP19",
+   "p": "realizes",
+   "o": "DL20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DL20",
+   "p": "deliveredIn",
+   "o": "ST3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V01",
+   "p": "verifies",
+   "o": "CR01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V02",
+   "p": "verifies",
+   "o": "CR02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V02",
+   "p": "verifies",
+   "o": "CR03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V03",
+   "p": "verifies",
+   "o": "CR04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "verifies",
+   "o": "CR04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "verifies",
+   "o": "CR05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "verifies",
+   "o": "CR06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "verifies",
+   "o": "CR07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V16",
+   "p": "verifies",
+   "o": "CR07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "verifies",
+   "o": "CR08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V12",
+   "p": "verifies",
+   "o": "CR08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "verifies",
+   "o": "CR09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "verifies",
+   "o": "CR09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "verifies",
+   "o": "CR10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "verifies",
+   "o": "CR10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V07",
+   "p": "verifies",
+   "o": "CR11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V06",
+   "p": "verifies",
+   "o": "CR12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "verifies",
+   "o": "CR13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V09",
+   "p": "verifies",
+   "o": "CR13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V09",
+   "p": "verifies",
+   "o": "CR14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V15",
+   "p": "verifies",
+   "o": "CR15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V01",
+   "p": "verifies",
+   "o": "CP10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V01",
+   "p": "verifies",
+   "o": "CP11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V01",
+   "p": "verifies",
+   "o": "CP04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V02",
+   "p": "verifies",
+   "o": "CP12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V03",
+   "p": "verifies",
+   "o": "CP14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "verifies",
+   "o": "CP15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "verifies",
+   "o": "CP16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "verifies",
+   "o": "CP18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "verifies",
+   "o": "CP17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V06",
+   "p": "verifies",
+   "o": "CP19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V07",
+   "p": "verifies",
+   "o": "CP19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "verifies",
+   "o": "CP22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "verifies",
+   "o": "CP23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "verifies",
+   "o": "CP24",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V09",
+   "p": "verifies",
+   "o": "CP03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "verifies",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "verifies",
+   "o": "CP08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "verifies",
+   "o": "CP03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "verifies",
+   "o": "CP04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "verifies",
+   "o": "CP05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "verifies",
+   "o": "CP06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "verifies",
+   "o": "CP07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "verifies",
+   "o": "CP09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V12",
+   "p": "verifies",
+   "o": "CP22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V12",
+   "p": "verifies",
+   "o": "CP23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V13",
+   "p": "verifies",
+   "o": "CP27",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V14",
+   "p": "verifies",
+   "o": "CP28",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V14",
+   "p": "verifies",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V14",
+   "p": "verifies",
+   "o": "CP12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V15",
+   "p": "verifies",
+   "o": "CP26",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V16",
+   "p": "verifies",
+   "o": "CP16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V16",
+   "p": "verifies",
+   "o": "CP15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V17",
+   "p": "verifies",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V17",
+   "p": "verifies",
+   "o": "CP11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V18",
+   "p": "verifies",
+   "o": "CP33",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V19",
+   "p": "verifies",
+   "o": "CP33",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "produces",
+   "o": "E01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V16",
+   "p": "produces",
+   "o": "E01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V12",
+   "p": "produces",
+   "o": "E02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V01",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V02",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V03",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V04",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V05",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V06",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V07",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V08",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V09",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V10",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V11",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V19",
+   "p": "produces",
+   "o": "E03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V15",
+   "p": "produces",
+   "o": "E04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V14",
+   "p": "produces",
+   "o": "E05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V17",
+   "p": "produces",
+   "o": "E06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V17",
+   "p": "produces",
+   "o": "E07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V13",
+   "p": "produces",
+   "o": "E08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V18",
+   "p": "produces",
+   "o": "E12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "V16",
+   "p": "produces",
+   "o": "E11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F01",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F01",
+   "p": "supports",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F02",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F02",
+   "p": "supports",
+   "o": "R05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F02",
+   "p": "supports",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F03",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F03",
+   "p": "supports",
+   "o": "R05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F03",
+   "p": "supports",
+   "o": "PC01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F04",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F04",
+   "p": "supports",
+   "o": "G09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F04",
+   "p": "supports",
+   "o": "R06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F05",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F05",
+   "p": "supports",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F06",
+   "p": "sourcedFrom",
+   "o": "P_GOOGLE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F06",
+   "p": "supports",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F07",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F07",
+   "p": "supports",
+   "o": "R05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F07",
+   "p": "supports",
+   "o": "R18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F07",
+   "p": "supports",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F08",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F08",
+   "p": "supports",
+   "o": "R03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F08",
+   "p": "supports",
+   "o": "S03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F09",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F09",
+   "p": "supports",
+   "o": "R03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F09",
+   "p": "supports",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F10",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F10",
+   "p": "supports",
+   "o": "R18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F10",
+   "p": "supports",
+   "o": "D15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F11",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F11",
+   "p": "supports",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F11",
+   "p": "supports",
+   "o": "R04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F12",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F12",
+   "p": "supports",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F12",
+   "p": "supports",
+   "o": "R13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F13",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F13",
+   "p": "supports",
+   "o": "K09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F14",
+   "p": "sourcedFrom",
+   "o": "P_FTC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F14",
+   "p": "supports",
+   "o": "G01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F14",
+   "p": "supports",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F14",
+   "p": "supports",
+   "o": "R10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F15",
+   "p": "sourcedFrom",
+   "o": "P_FTC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F15",
+   "p": "supports",
+   "o": "G01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F15",
+   "p": "supports",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F16",
+   "p": "sourcedFrom",
+   "o": "P_FTC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F16",
+   "p": "supports",
+   "o": "G01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F17",
+   "p": "sourcedFrom",
+   "o": "P_MSIT",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F17",
+   "p": "supports",
+   "o": "G05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F18",
+   "p": "sourcedFrom",
+   "o": "P_MSIT",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F18",
+   "p": "supports",
+   "o": "G06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F19",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F19",
+   "p": "supports",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F20",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F20",
+   "p": "supports",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F20",
+   "p": "supports",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F21",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F21",
+   "p": "supports",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F22",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F22",
+   "p": "supports",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F22",
+   "p": "supports",
+   "o": "R07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F23",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F23",
+   "p": "supports",
+   "o": "G03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F23",
+   "p": "supports",
+   "o": "R10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F24",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F24",
+   "p": "supports",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F25",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F25",
+   "p": "supports",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F26",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F26",
+   "p": "supports",
+   "o": "G04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F26",
+   "p": "supports",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F27",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F27",
+   "p": "supports",
+   "o": "R01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F27",
+   "p": "supports",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F28",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F28",
+   "p": "supports",
+   "o": "G04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F28",
+   "p": "supports",
+   "o": "R08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F29",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F29",
+   "p": "supports",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F29",
+   "p": "supports",
+   "o": "R01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F30",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F30",
+   "p": "supports",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F31",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F31",
+   "p": "supports",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F32",
+   "p": "sourcedFrom",
+   "o": "P_ANTHROPIC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F32",
+   "p": "supports",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F32",
+   "p": "supports",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F33",
+   "p": "sourcedFrom",
+   "o": "P_OPENAI",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F33",
+   "p": "supports",
+   "o": "D8",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F34",
+   "p": "sourcedFrom",
+   "o": "P_HIGGS",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F34",
+   "p": "supports",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G01",
+   "p": "sourcedFrom",
+   "o": "P_FTC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G01",
+   "p": "constrains",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G01",
+   "p": "constrains",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G01",
+   "p": "constrains",
+   "o": "CP14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G02",
+   "p": "sourcedFrom",
+   "o": "P_COUPANG",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G02",
+   "p": "constrains",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G02",
+   "p": "constrains",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G02",
+   "p": "constrains",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G03",
+   "p": "sourcedFrom",
+   "o": "P_META",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G03",
+   "p": "constrains",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G03",
+   "p": "constrains",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G04",
+   "p": "sourcedFrom",
+   "o": "P_YOUTUBE",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G04",
+   "p": "constrains",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G04",
+   "p": "constrains",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G05",
+   "p": "sourcedFrom",
+   "o": "P_MSIT",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G05",
+   "p": "constrains",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G06",
+   "p": "sourcedFrom",
+   "o": "P_MSIT",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G06",
+   "p": "constrains",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G07",
+   "p": "sourcedFrom",
+   "o": "P_LEGAL",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G07",
+   "p": "constrains",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G07",
+   "p": "constrains",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G08",
+   "p": "sourcedFrom",
+   "o": "P_FTC",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G08",
+   "p": "constrains",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G08",
+   "p": "constrains",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G09",
+   "p": "sourcedFrom",
+   "o": "P_NAVER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G09",
+   "p": "constrains",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G10",
+   "p": "sourcedFrom",
+   "o": "P_TAX",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G10",
+   "p": "constrains",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G11",
+   "p": "sourcedFrom",
+   "o": "P_EMPLOYER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G11",
+   "p": "constrains",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G12",
+   "p": "sourcedFrom",
+   "o": "P_USER",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "G12",
+   "p": "constrains",
+   "o": "CP32",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S01",
+   "p": "feeds",
+   "o": "M08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S02",
+   "p": "feeds",
+   "o": "M05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S03",
+   "p": "feeds",
+   "o": "M05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S04",
+   "p": "feeds",
+   "o": "M07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S05",
+   "p": "feeds",
+   "o": "M07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S06",
+   "p": "feeds",
+   "o": "M07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S06",
+   "p": "feeds",
+   "o": "M09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S07",
+   "p": "feeds",
+   "o": "M02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S07",
+   "p": "feeds",
+   "o": "M03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S07",
+   "p": "feeds",
+   "o": "M04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S08",
+   "p": "feeds",
+   "o": "M08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S09",
+   "p": "feeds",
+   "o": "M05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S10",
+   "p": "feeds",
+   "o": "CP12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S11",
+   "p": "feeds",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S12",
+   "p": "feeds",
+   "o": "M10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S13",
+   "p": "feeds",
+   "o": "M11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R01",
+   "p": "threatens",
+   "o": "M02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R01",
+   "p": "mitigatedBy",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R01",
+   "p": "mitigatedBy",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R02",
+   "p": "threatens",
+   "o": "M07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R02",
+   "p": "threatens",
+   "o": "M09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R02",
+   "p": "mitigatedBy",
+   "o": "D14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R02",
+   "p": "mitigatedBy",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R02",
+   "p": "mitigatedBy",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R03",
+   "p": "threatens",
+   "o": "M05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R03",
+   "p": "mitigatedBy",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R04",
+   "p": "threatens",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R04",
+   "p": "threatens",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R04",
+   "p": "mitigatedBy",
+   "o": "CP14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R04",
+   "p": "mitigatedBy",
+   "o": "D1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R05",
+   "p": "threatens",
+   "o": "RM4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R05",
+   "p": "mitigatedBy",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R06",
+   "p": "threatens",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R06",
+   "p": "mitigatedBy",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R06",
+   "p": "mitigatedBy",
+   "o": "CP15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R07",
+   "p": "threatens",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R07",
+   "p": "mitigatedBy",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R07",
+   "p": "mitigatedBy",
+   "o": "CP16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R08",
+   "p": "threatens",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R08",
+   "p": "mitigatedBy",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R08",
+   "p": "mitigatedBy",
+   "o": "D8",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R09",
+   "p": "threatens",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R09",
+   "p": "mitigatedBy",
+   "o": "D12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R10",
+   "p": "threatens",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R10",
+   "p": "mitigatedBy",
+   "o": "CP14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R11",
+   "p": "threatens",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R11",
+   "p": "threatens",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R11",
+   "p": "mitigatedBy",
+   "o": "D20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R11",
+   "p": "mitigatedBy",
+   "o": "A25",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R12",
+   "p": "threatens",
+   "o": "M04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R12",
+   "p": "mitigatedBy",
+   "o": "D3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R13",
+   "p": "threatens",
+   "o": "M05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R13",
+   "p": "threatens",
+   "o": "learning",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R13",
+   "p": "mitigatedBy",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R14",
+   "p": "threatens",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R14",
+   "p": "mitigatedBy",
+   "o": "D19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R15",
+   "p": "threatens",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R15",
+   "p": "mitigatedBy",
+   "o": "D1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R16",
+   "p": "threatens",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R16",
+   "p": "mitigatedBy",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R17",
+   "p": "threatens",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R17",
+   "p": "mitigatedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R18",
+   "p": "threatens",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R18",
+   "p": "threatens",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "R18",
+   "p": "mitigatedBy",
+   "o": "D3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S06",
+   "p": "supports",
+   "o": "R02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F28",
+   "p": "supports",
+   "o": "R04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F17",
+   "p": "supports",
+   "o": "R07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "E05",
+   "p": "supports",
+   "o": "R08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "F15",
+   "p": "supports",
+   "o": "R10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "E05",
+   "p": "supports",
+   "o": "R11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S12",
+   "p": "supports",
+   "o": "R11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "S07",
+   "p": "supports",
+   "o": "R12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "E07",
+   "p": "supports",
+   "o": "R17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K01",
+   "p": "affects",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K01",
+   "p": "affects",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K01",
+   "p": "foundBy",
+   "o": "E06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K01",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K02",
+   "p": "affects",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K02",
+   "p": "affects",
+   "o": "CP23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K02",
+   "p": "affects",
+   "o": "CP24",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K02",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K02",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K03",
+   "p": "affects",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K03",
+   "p": "affects",
+   "o": "CP11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K03",
+   "p": "affects",
+   "o": "CR04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K03",
+   "p": "foundBy",
+   "o": "E07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K03",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K04",
+   "p": "affects",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K04",
+   "p": "affects",
+   "o": "CP11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K04",
+   "p": "foundBy",
+   "o": "E07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K04",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K05",
+   "p": "affects",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K05",
+   "p": "affects",
+   "o": "CP14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K05",
+   "p": "affects",
+   "o": "CR04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K05",
+   "p": "foundBy",
+   "o": "E05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K05",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K06",
+   "p": "affects",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K06",
+   "p": "affects",
+   "o": "CP05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K06",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K06",
+   "p": "resolvedBy",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K07",
+   "p": "affects",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K07",
+   "p": "affects",
+   "o": "CP22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K07",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K07",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K08",
+   "p": "affects",
+   "o": "CP23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K08",
+   "p": "affects",
+   "o": "CP22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K08",
+   "p": "affects",
+   "o": "CP01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K08",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K08",
+   "p": "resolvedBy",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K09",
+   "p": "affects",
+   "o": "CP05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K09",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K09",
+   "p": "resolvedBy",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K10",
+   "p": "affects",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K10",
+   "p": "affects",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K10",
+   "p": "foundBy",
+   "o": "E05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K10",
+   "p": "resolvedBy",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K11",
+   "p": "affects",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K11",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K11",
+   "p": "resolvedBy",
+   "o": "D12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K12",
+   "p": "affects",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K12",
+   "p": "affects",
+   "o": "CP15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K12",
+   "p": "foundBy",
+   "o": "E05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K12",
+   "p": "resolvedBy",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K13",
+   "p": "affects",
+   "o": "CP25",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K13",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K13",
+   "p": "resolvedBy",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K14",
+   "p": "affects",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K14",
+   "p": "affects",
+   "o": "CR13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K14",
+   "p": "foundBy",
+   "o": "V17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K14",
+   "p": "resolvedBy",
+   "o": "D17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K15",
+   "p": "affects",
+   "o": "CP20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K15",
+   "p": "foundBy",
+   "o": "E06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "K15",
+   "p": "resolvedBy",
+   "o": "DOC11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M01",
+   "p": "measures",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M02",
+   "p": "measures",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M02",
+   "p": "measures",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M03",
+   "p": "measures",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M04",
+   "p": "measures",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M05",
+   "p": "measures",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M05",
+   "p": "measures",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M06",
+   "p": "measures",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M07",
+   "p": "measures",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M08",
+   "p": "measures",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M09",
+   "p": "measures",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M10",
+   "p": "measures",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "M11",
+   "p": "measures",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_NAVER",
+   "p": "provides",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_COUPANG",
+   "p": "provides",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_COUPANG",
+   "p": "provides",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_COUPANG",
+   "p": "provides",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_META",
+   "p": "provides",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_META",
+   "p": "provides",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_YOUTUBE",
+   "p": "provides",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_YOUTUBE",
+   "p": "provides",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_ANTHROPIC",
+   "p": "provides",
+   "o": "script",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_CONSUMER",
+   "p": "provides",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_USER",
+   "p": "provides",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_USER",
+   "p": "provides",
+   "o": "spec",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_USER",
+   "p": "provides",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "P_USER",
+   "p": "provides",
+   "o": "usage",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "CR15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC01",
+   "p": "describes",
+   "o": "DL20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "R18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC03",
+   "p": "describes",
+   "o": "K15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "PH1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "PH3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "PH4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "PH5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "ST1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "ST2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC04",
+   "p": "describes",
+   "o": "ST3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F21",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F24",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F25",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F26",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F27",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F28",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F29",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F30",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F31",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F32",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F33",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC05",
+   "p": "describes",
+   "o": "F34",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC06",
+   "p": "describes",
+   "o": "G12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC07",
+   "p": "describes",
+   "o": "M11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC07",
+   "p": "describes",
+   "o": "S13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC07",
+   "p": "describes",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "S09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "M07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC08",
+   "p": "describes",
+   "o": "M08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC09",
+   "p": "describes",
+   "o": "CP25",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC10",
+   "p": "describes",
+   "o": "CP13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC10",
+   "p": "describes",
+   "o": "lever",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC11",
+   "p": "describes",
+   "o": "K01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC11",
+   "p": "describes",
+   "o": "K03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC11",
+   "p": "describes",
+   "o": "K04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC11",
+   "p": "describes",
+   "o": "K15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC11",
+   "p": "describes",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D8",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC12",
+   "p": "describes",
+   "o": "D16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A20",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A21",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A22",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A23",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A25",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A26",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "A24",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC13",
+   "p": "describes",
+   "o": "PC09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "persona",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "problem",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "barrier",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "lever",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "category",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "spec",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "caution",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "usage",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "score",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "filter",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "content",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "script",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "learning",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "source",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "policy",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC14",
+   "p": "describes",
+   "o": "audit",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "E05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "E07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "K03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "K04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "K05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "K12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "R11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC15",
+   "p": "describes",
+   "o": "M10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "keyword",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "persona",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "problem",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "barrier",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "lever",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "category",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "product",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "spec",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "caution",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "price",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "image",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "usage",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "score",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "filter",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "selection",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "content",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "script",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "variant",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "disclosure",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "media",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "check",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "approval",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "link",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "publication",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "platform",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "landing",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "pmetric",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "event",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "report",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "funnel",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "learning",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "source",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "policy",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "job",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "cost",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC16",
+   "p": "describes",
+   "o": "audit",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "PH1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "PH2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "PH3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "PH4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "PH5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST6",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST7",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST8",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST9",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "ST10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "RM1",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "RM2",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "RM3",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "RM4",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "RM5",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL01",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL02",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL03",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL04",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL05",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL06",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL07",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL08",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL09",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL10",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL11",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL12",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL13",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL14",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL15",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL16",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL17",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL18",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL19",
+   "note": "",
+   "sub": null
+  },
+  {
+   "s": "DOC18",
+   "p": "describes",
+   "o": "DL20",
+   "note": "",
+   "sub": null
+  }
+ ],
+ "summary": {
+  "deliverables": {
+   "total": 20,
+   "done": 15,
+   "partial": 5,
+   "todo": 0
+  },
+  "criteria": {
+   "total": 15,
+   "pass": 12,
+   "caveat": 3,
+   "fail": 0
+  },
+  "decisions": {
+   "total": 20,
+   "decided": 0,
+   "pending": 20
+  },
+  "defects": {
+   "total": 15,
+   "open": 14,
+   "fixed": 1,
+   "open_defect": 9,
+   "open_gap": 5
+  },
+  "facts": {
+   "A": 6,
+   "B": 25,
+   "C": 3
+  },
+  "phases": {
+   "PH1": "done",
+   "PH2": "done",
+   "PH3": "todo",
+   "PH4": "todo",
+   "PH5": "todo",
+   "ST1": "done",
+   "ST2": "done",
+   "ST3": "done",
+   "ST4": "done",
+   "ST5": "done",
+   "ST6": "done",
+   "ST7": "done",
+   "ST8": "todo",
+   "ST9": "partial",
+   "ST10": "done",
+   "RM1": "active",
+   "RM2": "todo",
+   "RM3": "todo",
+   "RM4": "todo",
+   "RM5": "todo"
+  },
+  "tests": 78,
+  "risks_high": 10,
+  "external_calls": 0
+ },
+ "phases": [
+  {
+   "id": "PH1",
+   "label": "PHASE 1 실행 가능성 검증",
+   "status": "done",
+   "desc": "API·권한·가격·정책 조사, 4개 보고서",
+   "parent": null
+  },
+  {
+   "id": "PH2",
+   "label": "PHASE 2 mock MVP",
+   "status": "done",
+   "desc": "외부 키 없이 전 구간 실행 — 결함 9건 미수정(7건은 D2 수정 묶음)",
+   "parent": null
+  },
+  {
+   "id": "PH3",
+   "label": "PHASE 3 실제 서비스 연결",
+   "status": "todo",
+   "desc": "권한 확보 순서대로 하나씩 — 실호출 0건",
+   "parent": null
+  },
+  {
+   "id": "PH4",
+   "label": "PHASE 4 사업성 검증(30개)",
+   "status": "todo",
+   "desc": "첫 30개 실측",
+   "parent": null
+  },
+  {
+   "id": "PH5",
+   "label": "PHASE 5 운영 자동화 확대",
+   "status": "todo",
+   "desc": "실측 수익 확인 후에만",
+   "parent": null
+  },
+  {
+   "id": "ST1",
+   "label": "STEP 1 사업 결점 분석",
+   "status": "done",
+   "desc": "BUSINESS_RISK_ANALYSIS",
+   "parent": "PH1"
+  },
+  {
+   "id": "ST2",
+   "label": "STEP 2 API·정책 조사",
+   "status": "done",
+   "desc": "B·C 등급 원문 재확인 6건 남음",
+   "parent": "PH1"
+  },
+  {
+   "id": "ST3",
+   "label": "STEP 3 MVP 범위 확정",
+   "status": "done",
+   "desc": "FEASIBILITY_REPORT 2절",
+   "parent": "PH1"
+  },
+  {
+   "id": "ST4",
+   "label": "STEP 4 구조·DB 스키마",
+   "status": "done",
+   "desc": "DB_SCHEMA",
+   "parent": "PH2"
+  },
+  {
+   "id": "ST5",
+   "label": "STEP 5 코드 작성",
+   "status": "done",
+   "desc": "약 8,500줄(파이썬)",
+   "parent": "PH2"
+  },
+  {
+   "id": "ST6",
+   "label": "STEP 6 mock 수직 통합",
+   "status": "done",
+   "desc": "트렌드 → 승인 대기까지",
+   "parent": "PH2"
+  },
+  {
+   "id": "ST7",
+   "label": "STEP 7 영상·랜딩 생성·테스트",
+   "status": "done",
+   "desc": "데모 C20261118-01",
+   "parent": "PH2"
+  },
+  {
+   "id": "ST8",
+   "label": "STEP 8 실제 API 연결",
+   "status": "todo",
+   "desc": "자격증명 없음",
+   "parent": "PH3"
+  },
+  {
+   "id": "ST9",
+   "label": "STEP 9 반복 실행·복구·검수 검증",
+   "status": "partial",
+   "desc": "가상 운영 30일 수행 → 결함 발견, 미수정",
+   "parent": "PH2"
+  },
+  {
+   "id": "ST10",
+   "label": "STEP 10 문서화",
+   "status": "done",
+   "desc": "문서 19종, 변경 이력 운영 중",
+   "parent": "PH2"
+  },
+  {
+   "id": "RM1",
+   "label": "P2.5 착수 준비",
+   "status": "active",
+   "desc": "이번 주 결정 7건 + 결함 수정 + 등록 화면",
+   "parent": "PH3"
+  },
+  {
+   "id": "RM2",
+   "label": "P3a 30개 실험",
+   "status": "todo",
+   "desc": "주 5개 × 6주 또는 1일 1개(D20)",
+   "parent": "PH4"
+  },
+  {
+   "id": "RM3",
+   "label": "G1 판정 게이트",
+   "status": "todo",
+   "desc": "확대 / 채널 전환 / 중단",
+   "parent": "PH4"
+  },
+  {
+   "id": "RM4",
+   "label": "P3b API 연동",
+   "status": "todo",
+   "desc": "YouTube → Instagram → 쿠팡 API",
+   "parent": "PH3"
+  },
+  {
+   "id": "RM5",
+   "label": "P4 이후 확대",
+   "status": "todo",
+   "desc": "조건부 승인 자동화·학습 보정·대체 채널",
+   "parent": "PH5"
+  }
+ ],
+ "worklog": [
+  [
+   "2026-11-18",
+   "MVP 구현 — 74 테스트, 데모 콘텐츠, 조사 보고 3건, 문서 9종"
+  ],
+  [
+   "2026-11-18",
+   "자체 검토 — 결함 확인(running 고착 재현), 저장소 공개 확인"
+  ],
+  [
+   "2026-11-18",
+   "결정 18건·자동화 재검토·도메인 온톨로지 REV01"
+  ],
+  [
+   "2026-11-19",
+   "가상 운영 30일 — 후보 고갈 D11, 수동 가격 결함 2건 재현, 오탐, 결정 20건, 온톨로지 REV02"
+  ],
+  [
+   "2026-11-21",
+   "지식체계(18 클래스) · 진행 현황 · RDF 내보내기"
+  ]
+ ],
+ "commits": [
+  [
+   "f7313d9",
+   "2026-11-19",
+   "Add virtual operation check: 30-day simulation, blockers and needed help"
+  ],
+  [
+   "9986c07",
+   "2026-11-18",
+   "Add decisions log, automation review and ontology map (REV01)"
+  ],
+  [
+   "2858b9f",
+   "2026-11-18",
+   "Add Shopping Content Factory MVP (affiliate short-form automation)"
+  ]
+ ],
+ "next": [
+  [
+   "운영자",
+   "D19 회사 겸업 규정 확인 · D1 저장소 비공개 이전"
+  ],
+  [
+   "운영자",
+   "D2 결함 수정 승인 → 수동 가격 결함 2건부터"
+  ],
+  [
+   "운영자",
+   "D3·D18·D6·D4 — 실험 설계·시간표·호스팅·게시 방식"
+  ],
+  [
+   "운영자",
+   "쿠팡·Meta·YouTube 고객센터 문의(VIRTUAL_OPERATION 5절)"
+  ],
+  [
+   "개발",
+   "D2 승인 시: 결함 7건(K01~K05·K07·K08) → 상품 등록 화면·사양 추출 → 후보 잔량 경보 → 시간표 설정화"
+  ]
+ ],
+ "statusLabel": {
+  "done": "완료",
+  "partial": "부분",
+  "todo": "미착수",
+  "active": "진행 중",
+  "pass": "통과",
+  "caveat": "통과(단서)",
+  "fail": "실패",
+  "open": "미해결",
+  "fixed": "해결",
+  "pending": "결정 대기",
+  "decided": "결정됨",
+  "now": "즉시",
+  "short": "단기",
+  "mid": "중기",
+  "out": "대상 외"
+ },
+ "whenLabel": {
+  "now": "지금 (착수 전, 이번 주)",
+  "before": "첫 실콘텐츠 전",
+  "later": "진행 중·30개 이후"
+ }
+}

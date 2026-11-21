@@ -1,9 +1,11 @@
 # 문서 지도
 
-기준일 2026-11-18. 처음이면 1 → 2 → 3 순서로.
+기준일 2026-11-21. 처음이면 0 → 1 → 2 → 3 순서로. 전체를 한 그래프로 보려면 지식체계 HTML.
 
 | 순서 | 문서 | 무엇을 답하나 | 갱신 시점 |
 |---|---|---|---|
+| 0 | [PROGRESS.md](PROGRESS.md) | **지금 어디까지 왔나** — 단계·산출물 20·완료 기준 15·결정·결함·작업 기록 (자동 생성) | `python scripts/build_knowledge.py --rev <번호>` |
+| 0-1 | [SCF_지식체계_REV01.html](SCF_지식체계_REV01.html) · [KNOWLEDGE_BASE.md](KNOWLEDGE_BASE.md) | **모든 내용을 하나의 온톨로지로** — 클래스 18·개체 347·관계 1,009, 탐색기·추적표, RDF 내보내기 | 데이터 수정 시 REV 올려 재생성 |
 | 1 | [DECISIONS.md](DECISIONS.md) | **내가 정해야 할 것** 20건, 이번 주 7건, 결정 기록 | 결정할 때마다 |
 | 1-1 | [VIRTUAL_OPERATION.md](VIRTUAL_OPERATION.md) | **가상 운영 30일** — 어디서 막히고 누구 도움이 필요한가 | 시뮬레이터 재실행 시 |
 | 2 | [AUTOMATION_REVIEW.md](AUTOMATION_REVIEW.md) | 기획안 재검토 — 무엇을 자동화하고 무엇을 사람이 계속하나, 로드맵 | 결정·실측 반영 시 |
@@ -22,7 +24,7 @@
 ## 갱신 규칙
 
 1. **새로 쓰지 말고 덧붙인다.** 기존 문단을 고칠 때도 맨 아래 `## 변경 이력` 에 `REVnn (날짜): 무엇을 왜` 한 줄.
-2. **자동 생성 구간은 손대지 않는다.** `<!-- AUTO:...:START/END -->` 사이는 `python scripts/build_ontology.py --rev <번호>` 가 덮어쓴다. 내용을 바꾸려면 `scripts/ontology_data.py` 를 고친다.
+2. **자동 생성 구간은 손대지 않는다.** `<!-- AUTO:...:START/END -->` 사이는 생성기가 덮어쓴다 — 도메인·결정·액션은 `scripts/ontology_data.py` → `build_ontology.py`, 진행·사실·결함·리스크 등은 `scripts/knowledge_data.py` → `build_knowledge.py`. 둘 다 고쳤으면 두 생성기를 모두 돌린다.
 3. **결정이 나면**: DECISIONS.md 결정 기록 1줄 → `ontology_data.py` 반영(결정 상태·노드 상태) → 재생성(REV +1) → 영향 문서 변경 이력 1줄.
 4. **HTML 은 REV 를 올려 새 파일로.** 이전 REV 는 지우지 않는다. 생성 후 `node scripts/check_ontology_html.mjs docs/SCF_온톨로지_REVnn.html <폴더>` 로 글자 넘침·겹침·콘솔 오류 확인.
 5. **숫자는 출처와 함께.** 가정이면 '가정', 미확인이면 '미확인', 실측이면 측정 기간을 적는다.

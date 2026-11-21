@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCF 지식체계 /*__REV__*/</title>
+<style>
+:root {
+  --navy: #0A1A2F; --card: #16263D; --card2: #1C3150; --line: #2A4566; --orange: #FF6B1A; --sub: #AAB7C4; --white: #FFFFFF;
+  --good: #2c8a5f; --warn: #c89010; --bad: #b3402a; --short: #FFA05C; --mid: #4C86C6; --out: #6C8299; --adj: #C8933A; --neutral: #3A4A63;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--navy); color: var(--white); font-size: 14px; line-height: 1.55;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+  word-break: keep-all; overflow-wrap: break-word; }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.3; }
+button { font-family: inherit; }
+button:focus-visible, input:focus-visible { outline: 2px solid #FFB27F; outline-offset: 2px; }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 18px 16px 48px; }
+header.top { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px; margin-bottom: 10px; }
+header.top h1 { font-size: 21px; }
+.rev { background: var(--orange); color: var(--navy); font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
+.meta { color: var(--sub); font-size: 12.5px; }
+.meta a { color: #FFB27F; }
+.lead { background: var(--card); border-left: 4px solid var(--orange); border-radius: 8px; padding: 12px 16px; margin: 6px 0 12px; }
+.lead b { font-size: 16px; display: block; }
+.lead span { color: var(--sub); }
+.limits { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.limits span { background: #2A1F1A; border: 1px solid #5A3A28; color: #FFD2B8; border-radius: 8px; padding: 6px 10px; font-size: 12.5px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+.tabs button { background: transparent; border: 0; color: var(--sub); padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; }
+.tabs button[aria-selected="true"] { color: var(--white); border-bottom-color: var(--orange); }
+section.panel { display: none; }
+section.panel.on { display: block; }
+.section-title { font-size: 17px; margin: 20px 0 8px; }
+.hint { color: var(--sub); font-size: 12.5px; }
+.kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-bottom: 8px; }
+.kpi { background: var(--card); border-radius: 10px; padding: 10px 14px; border-top: 3px solid var(--neutral); }
+.kpi b { display: block; font-size: 22px; }
+.kpi span { color: var(--sub); font-size: 12.5px; }
+.k-good { border-top-color: var(--good); } .k-warn { border-top-color: var(--warn); } .k-bad { border-top-color: var(--bad); } .k-acc { border-top-color: var(--orange); }
+.track { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.phase { background: var(--card); border-radius: 10px; padding: 10px 12px; border-left: 5px solid var(--neutral); }
+.phase h3 { font-size: 14.5px; margin-bottom: 4px; }
+.phase ul { list-style: none; margin: 6px 0 0; padding: 0; font-size: 12.5px; }
+.phase li { margin: 3px 0; display: flex; gap: 6px; align-items: baseline; }
+.s-done, .s-pass, .s-fixed, .s-decided { --c: var(--good); }
+.s-partial, .s-caveat { --c: var(--warn); }
+.s-active, .s-pending { --c: var(--orange); }
+.s-todo { --c: var(--out); }
+.s-open, .s-fail { --c: var(--bad); }
+.phase[class*="s-"] { border-left-color: var(--c); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--neutral)); display: inline-block; flex: 0 0 auto; }
+.badge { display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 1px 8px; background: var(--c, var(--neutral)); color: var(--white); white-space: nowrap; }
+.s-partial.badge, .s-caveat.badge, .s-active.badge, .s-pending.badge { color: var(--navy); }
+.grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.item { display: block; width: 100%; text-align: left; background: var(--card); color: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--neutral));
+  border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: 13px; }
+.item small { display: block; color: var(--sub); font-size: 12px; }
+.item:hover { border-color: var(--orange); }
+.tablewrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line); margin: 6px 0 16px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); font-size: 13px; }
+th, td { border-bottom: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
+th { color: var(--sub); font-weight: 700; font-size: 12.5px; white-space: nowrap; background: #13233A; }
+.lnk { background: none; border: 0; color: #FFB27F; padding: 0; cursor: pointer; font-size: inherit; text-align: left; text-decoration: underline; text-decoration-color: #6B4A33; }
+.lnk + .lnk::before { content: " · "; color: var(--sub); }
+/* 지식 지도 */
+.mapwrap { background: #0D2038; border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+.mapwrap svg { display: block; width: 100%; min-width: 980px; height: auto; }
+.rowbg { fill: #10243F; }
+.rowhead { fill: var(--sub); font-size: 14px; font-weight: 800; }
+.cedge { fill: none; stroke: #5D7A9E; stroke-width: 1.4; opacity: .35; }
+.cedge.hl { stroke: var(--orange); opacity: 1; stroke-width: 2.2; }
+.cedge.dim { opacity: .07; }
+.arrow { fill: #5D7A9E; } .arrow-hl { fill: var(--orange); }
+.cnode { cursor: pointer; }
+.cnode .box { fill: var(--card); stroke: var(--line); stroke-width: 1.2; }
+.cnode.sel .box { stroke: var(--orange); stroke-width: 2.4; }
+.cnode.dim { opacity: .28; }
+.cnode .bar { fill: var(--neutral); }
+.g-goal .bar { fill: var(--orange); } .g-system .bar { fill: var(--mid); } .g-judge .bar { fill: var(--adj); }
+.cnode .t { fill: var(--white); font-size: 15px; font-weight: 800; }
+.cnode .s { fill: var(--sub); font-size: 11.5px; }
+.elabel rect { fill: var(--navy); stroke: var(--orange); stroke-width: 1; }
+.elabel text { fill: #FFD2B8; font-size: 11.5px; font-weight: 700; }
+.elabel .leader { stroke: var(--orange); stroke-width: 1; stroke-dasharray: 3 2; }
+.elabel .leaderdot { fill: var(--orange); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--sub); margin: 6px 0 8px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.sw-goal { background: var(--orange); } .sw-system { background: var(--mid); } .sw-judge { background: var(--adj); }
+/* 탐색기 */
+.explorer { display: grid; gap: 12px; grid-template-columns: 250px 320px 1fr; align-items: start; }
+.pane { background: var(--card); border-radius: 10px; padding: 10px; min-width: 0; }
+.pane h3 { font-size: 13px; color: var(--sub); margin: 2px 0 8px; }
+#q { width: 100%; background: #0E2238; color: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+.clschips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.clschips button { background: var(--card2); color: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; }
+.clschips button[aria-pressed="true"] { background: var(--orange); color: var(--navy); border-color: var(--orange); }
+#elist { max-height: 70vh; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+#detail h2 { font-size: 19px; margin: 4px 0; }
+#detail .props { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; font-size: 13px; margin: 8px 0; }
+#detail .props dt { color: var(--sub); }
+#detail .props dd { margin: 0; }
+#detail h3 { font-size: 13px; color: var(--sub); margin: 14px 0 4px; }
+.relgroup { margin: 4px 0 8px; font-size: 13px; }
+.relgroup b { color: #FFD2B8; }
+.back { background: var(--card2); color: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 12.5px; }
+.empty { color: var(--sub); padding: 14px; text-align: center; }
+/* 드로어(지도 클래스 정보) */
+.drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(420px, 100vw); background: #0F2239; border-left: 2px solid var(--orange);
+  box-shadow: -8px 0 24px rgba(0,0,0,.45); transform: translateX(105%); transition: transform .2s ease; z-index: 20; overflow-y: auto; padding: 18px; }
+.drawer.open { transform: none; }
+.drawer .x { float: right; background: var(--card); color: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+.drawer h2 { font-size: 19px; margin: 4px 0; }
+.drawer h3 { font-size: 13px; color: var(--sub); margin: 14px 0 6px; }
+.drawer ul { margin: 0; padding-left: 18px; }
+.cta { background: var(--orange); color: var(--navy); border: 0; border-radius: 8px; padding: 7px 12px; font-weight: 800; cursor: pointer; margin-top: 12px; }
+footer.note { color: var(--sub); font-size: 12px; margin-top: 24px; }
+@media (max-width: 1100px) { .explorer { grid-template-columns: 1fr 1fr; } #detailPane { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .explorer { grid-template-columns: 1fr; } header.top h1 { font-size: 18px; } .tabs button { padding: 8px 10px; font-size: 13px; } }
+@media print {
+  body { background: #fff; color: #111; }
+  .tabs, .drawer, .clschips, #q, .back, .cta { display: none !important; }
+  section.panel { display: block !important; page-break-before: always; }
+  section.panel:first-of-type { page-break-before: auto; }
+  .lead, .kpi, .phase, .item, .pane, table, th { background: #fff !important; color: #111 !important; }
+  .lead span, .kpi span, .hint, .item small, .meta { color: #444 !important; }
+  .mapwrap { background: #fff; overflow: visible; } .mapwrap svg { min-width: 0; }
+  .rowbg { fill: #F2F4F7; } .rowhead { fill: #333; } .cnode .box { fill: #fff; stroke: #777; } .cnode .t { fill: #111; } .cnode .s { fill: #555; }
+  .cedge { stroke: #888; opacity: .5; } .arrow { fill: #888; } .lnk { color: #8A3A10; }
+  #elist { max-height: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Shopping Content Factory — 지식체계</h1>
+    <span class="rev">/*__REV__*/</span>
+    <span class="meta" id="asof"></span>
+  </header>
+  <div class="lead"><b id="h1"></b><span id="h2"></span></div>
+  <div class="limits" id="limits" aria-label="먼저 밝히는 한계"></div>
+
+  <nav class="tabs" role="tablist" aria-label="보기 전환">
+    <button role="tab" aria-selected="true" aria-controls="p-prog" id="t-prog">진행 현황</button>
+    <button role="tab" aria-selected="false" aria-controls="p-map" id="t-map">지식 지도</button>
+    <button role="tab" aria-selected="false" aria-controls="p-exp" id="t-exp">탐색기</button>
+    <button role="tab" aria-selected="false" aria-controls="p-trace" id="t-trace">추적표</button>
+  </nav>
+
+  <section class="panel on" id="p-prog" role="tabpanel" aria-labelledby="t-prog">
+    <div class="kpis" id="kpis"></div>
+    <h2 class="section-title">단계</h2>
+    <div class="track" id="track"></div>
+    <h2 class="section-title">산출물 20 <span class="hint">(요구서 16장 · 누르면 탐색기)</span></h2>
+    <div class="grid" id="deliverables"></div>
+    <h2 class="section-title">결정 대기</h2>
+    <div id="pendingDec"></div>
+    <h2 class="section-title">미해결 결함·약점</h2>
+    <div class="grid" id="openDef"></div>
+    <h2 class="section-title">다음 할 일</h2>
+    <div class="tablewrap"><table id="nextTbl"></table></div>
+    <h2 class="section-title">작업 기록</h2>
+    <div class="tablewrap"><table id="logTbl"></table></div>
+  </section>
+
+  <section class="panel" id="p-map" role="tabpanel" aria-labelledby="t-map">
+    <div class="legend"><span><i class="sw-goal"></i>목표·진행</span><span><i class="sw-system"></i>시스템</span><span><i class="sw-judge"></i>판단 근거</span></div>
+    <p class="hint">클래스(개념의 종류)와 그 사이 관계 유형. 상자 숫자 = 개체 수. 누르면 연결된 관계 이름과 개수가 뜨고, 상세 패널에서 탐색기로 넘어간다.</p>
+    <div class="mapwrap" id="mapwrap"></div>
+  </section>
+
+  <section class="panel" id="p-exp" role="tabpanel" aria-labelledby="t-exp">
+    <div class="explorer">
+      <div class="pane">
+        <h3>찾기</h3>
+        <input id="q" type="search" placeholder="ID·이름·설명 검색 (예: 가격, D2, 쿠팡)" aria-label="검색">
+        <div class="clschips" id="clschips" role="group" aria-label="클래스 필터"></div>
+      </div>
+      <div class="pane"><h3 id="listTitle">개체</h3><div id="elist"></div></div>
+      <div class="pane" id="detailPane"><div id="detail"><div class="empty">왼쪽에서 개체를 고르면 속성과 관계가 여기에 나온다. 관계 이름을 누르면 그 개체로 이동.</div></div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-trace" role="tabpanel" aria-labelledby="t-trace">
+    <h2 class="section-title">완료 기준 → 검증 → 증거</h2><div class="tablewrap"><table id="tr1"></table></div>
+    <h2 class="section-title">산출물 → 구현 요소 → 검증</h2><div class="tablewrap"><table id="tr2"></table></div>
+    <h2 class="section-title">결함·약점 → 영향 → 발견 → 해결</h2><div class="tablewrap"><table id="tr3"></table></div>
+    <h2 class="section-title">리스크 → 근거 → 위협 → 완화</h2><div class="tablewrap"><table id="tr4"></table></div>
+    <h2 class="section-title">결정 → 막고 있는 단계 → 영향 개념 → 해결하는 결함·완화하는 리스크</h2><div class="tablewrap"><table id="tr5"></table></div>
+  </section>
+
+  <footer class="note">생성: scripts/build_knowledge.py · 원본: scripts/knowledge_data.py + scripts/ontology_data.py · 내보내기: docs/knowledge/scf_knowledge.ttl(RDF), .json · 도메인 지도: SCF_온톨로지_REV02.html · 외부 의존 없음.</footer>
+</div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-labelledby="dTitle" tabindex="-1">
+  <button class="x" id="dClose" aria-label="닫기">닫기 ✕</button>
+  <div id="dBody"></div>
+</aside>
+
+<script>
+const D = /*__DATA__*/;
+const E = Object.fromEntries(D.entities.map((e) => [e.id, e]));
+const C = Object.fromEntries(D.classes.map((c) => [c.id, c]));
+const P = Object.fromEntries(D.props.map((p) => [p.id, p]));
+const SL = D.statusLabel;
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const OUT = {}, IN = {};
+D.relations.forEach((r) => { (OUT[r.s] ||= []).push(r); (IN[r.o] ||= []).push(r); });
+const relName = (r) => r.sub || P[r.p].label;
+const lnk = (id) => E[id] ? `<button class="lnk" data-go="${esc(id)}">${esc(E[id].label)}</button>` : esc(id);
+const badge = (st) => st ? `<span class="badge s-${esc(st)}">${esc(SL[st] || st)}</span>` : "";
+const outOf = (id, p) => (OUT[id] || []).filter((r) => r.p === p).map((r) => r.o);
+const inOf = (id, p) => (IN[id] || []).filter((r) => r.p === p).map((r) => r.s);
+
+// ---------- 헤더
+document.getElementById("asof").innerHTML = `기준일 ${esc(D.asOf)} · 개체 ${D.entities.length} · 관계 ${D.relations.length}`;
+document.getElementById("h1").textContent = D.headline;
+document.getElementById("h2").textContent = D.headline2;
+(function limits() {
+  const sm = D.summary;
+  const items = [`외부 API 실호출 ${sm.external_calls}건 — 실서비스 동작은 미검증`, `외부 사실 B·C 등급 ${sm.facts.B + sm.facts.C}건 — 원문 재확인 필요`,
+    "실적 데이터 0 — 수익 수치는 전부 가정", `결정 ${sm.decisions.decided}/${sm.decisions.total} — 다음 단계 시작 전`];
+  document.getElementById("limits").innerHTML = items.map((t) => `<span>${esc(t)}</span>`).join("");
+})();
+
+// ---------- 탭
+const TABS = ["prog", "map", "exp", "trace"];
+function showTab(t) {
+  TABS.forEach((x) => {
+    document.getElementById(`t-${x}`).setAttribute("aria-selected", String(x === t));
+    document.getElementById(`p-${x}`).classList.toggle("on", x === t);
+  });
+}
+TABS.forEach((t) => document.getElementById(`t-${t}`).addEventListener("click", () => showTab(t)));
+document.addEventListener("click", (ev) => {
+  const b = ev.target.closest("[data-go]");
+  if (b) { ev.preventDefault(); ev.stopPropagation(); showTab("exp"); select(b.dataset.go, true); closeDrawer(); }
+});
+
+// ---------- 진행 현황
+(function progress() {
+  const s = D.summary;
+  const k = [
+    ["k-good", `${s.deliverables.done} / ${s.deliverables.total}`, `산출물 완료 · 부분 ${s.deliverables.partial}`],
+    ["k-warn", `${s.criteria.pass + s.criteria.caveat} / ${s.criteria.total}`, `완료 기준 통과 · 단서 ${s.criteria.caveat}`],
+    ["k-good", `${s.tests}`, "pytest 통과(mock)"],
+    ["k-acc", `${s.decisions.decided} / ${s.decisions.total}`, "결정 완료"],
+    ["k-bad", `${s.defects.open}`, `미해결 결함 ${s.defects.open_defect} · 약점 ${s.defects.open_gap}`],
+    ["k-warn", `A${s.facts.A} · B${s.facts.B} · C${s.facts.C}`, "외부 사실 확인 수준"],
+  ];
+  document.getElementById("kpis").innerHTML = k.map(([c, v, l]) => `<div class="kpi ${c}"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join("");
+  const top = D.phases.filter((p) => !p.parent);
+  document.getElementById("track").innerHTML = top.map((p) => {
+    const kids = D.phases.filter((x) => x.parent === p.id);
+    return `<div class="phase s-${p.status}"><h3>${esc(p.label)} ${badge(p.status)}</h3><div class="hint">${esc(p.desc)}</div>
+      <ul>${kids.map((x) => `<li class="s-${x.status}"><span class="dot"></span><span>${lnk(x.id)} <span class="hint">${esc(SL[x.status])} · ${esc(x.desc)}</span></span></li>`).join("")}</ul></div>`;
+  }).join("");
+  const item = (e, sub) => `<button class="item s-${esc(e.status || "")}" data-go="${esc(e.id)}">${esc(e.id)} ${esc(e.label)}<small>${sub}</small></button>`;
+  document.getElementById("deliverables").innerHTML = D.entities.filter((e) => e.cls === "Deliverable")
+    .map((e) => item(e, `${esc(SL[e.status])} · ${esc(e.desc)}`)).join("");
+  document.getElementById("pendingDec").innerHTML = Object.entries(D.whenLabel).map(([w, label]) => {
+    const ds = D.entities.filter((e) => e.cls === "Decision" && e.status === "pending" && e.props.when === label);
+    return `<h3 class="hint">${esc(label)} — ${ds.length}건</h3><div class="grid">${ds.map((e) => item(e, `권장: ${esc(e.props.recommend)}`)).join("")}</div>`;
+  }).join("");
+  document.getElementById("openDef").innerHTML = D.entities.filter((e) => e.cls === "Defect" && e.status === "open")
+    .map((e) => item(e, `${esc(e.props.kind)} · 해결: ${outOf(e.id, "resolvedBy").map((x) => esc(x)).join(", ")}`)).join("");
+  document.getElementById("nextTbl").innerHTML = `<thead><tr><th>누가</th><th>할 일</th></tr></thead><tbody>${D.next.map(([w, t]) => `<tr><td>${esc(w)}</td><td>${esc(t)}</td></tr>`).join("")}</tbody>`;
+  document.getElementById("logTbl").innerHTML = `<thead><tr><th>날짜</th><th>내용</th></tr></thead><tbody>${D.worklog.map(([d, t]) => `<tr><td>${esc(d)}</td><td>${esc(t)}</td></tr>`).join("")}
+    ${D.commits.map(([h, d, m]) => `<tr><td>${esc(d)}</td><td class="hint">커밋 ${esc(h)} · ${esc(m)}</td></tr>`).join("")}</tbody>`;
+})();
+
+// ---------- 지식 지도 (클래스 수준)
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (parent) parent.appendChild(e); return e; }
+const VW = 1400, VH = 600, NW = 140, NH = 58;
+const ROWS = { goal: { y: 70, label: "목표·진행" }, system: { y: 270, label: "시스템" }, judge: { y: 470, label: "판단 근거" } };
+const pos = {};
+Object.entries(ROWS).forEach(([g, row]) => {
+  const cs = D.classes.filter((c) => c.group === g);
+  const left = 150, avail = VW - 30 - left;
+  const gap = cs.length > 1 ? Math.min(160, (avail - cs.length * NW) / (cs.length - 1)) : 0;
+  const x0 = left + (avail - (cs.length * NW + (cs.length - 1) * gap)) / 2;
+  cs.forEach((c, i) => { pos[c.id] = { x: x0 + i * (NW + gap), y: row.y }; });
+});
+const count = {}; D.entities.forEach((e) => { count[e.cls] = (count[e.cls] || 0) + 1; });
+const agg = {};
+D.relations.forEach((r) => {
+  const a = E[r.s].cls, b = E[r.o].cls, kname = r.p === "domain" ? "도메인 관계" : P[r.p].label;
+  const g = (agg[`${a}|${b}`] ||= { a, b, kinds: {} });
+  g.kinds[kname] = (g.kinds[kname] || 0) + 1;
+});
+const cedges = Object.values(agg).map((g) => ({ ...g, label: Object.entries(g.kinds).map(([k, n]) => `${k} ${n}`).join(" · ") }));
+const svg = el("svg", { viewBox: `0 0 ${VW} ${VH}`, role: "img", "aria-label": "지식체계 클래스 지도" });
+document.getElementById("mapwrap").appendChild(svg);
+const defs = el("defs", {}, svg);
+[["arr", "arrow"], ["arrH", "arrow-hl"]].forEach(([id, cls]) => { const m = el("marker", { id, viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto-start-reverse" }, defs); el("path", { d: "M0,0 L10,5 L0,10 z", class: cls }, m); });
+const gBg = el("g", {}, svg), gE = el("g", {}, svg), gN = el("g", {}, svg), gL = el("g", {}, svg);
+Object.entries(ROWS).forEach(([g, row]) => {
+  el("rect", { x: 14, y: row.y - 26, width: VW - 28, height: NH + 52, rx: 10, class: "rowbg" }, gBg);
+  const t = el("text", { x: 30, y: row.y + NH / 2 + 5, class: "rowhead" }, gBg); t.textContent = row.label;
+});
+function cpath(e, i) {
+  const a = pos[e.a], b = pos[e.b];
+  if (e.a === e.b) { const x = a.x + NW, y = a.y + 12; return `M${x},${y} C${x + 46},${y - 30} ${x + 46},${y + 48} ${x},${y + 30}`; }
+  if (a.y === b.y) {
+    const left = a.x < b.x ? a : b, right = a.x < b.x ? b : a, up = -(26 + (Math.abs(a.x - b.x) / VW) * 30 + (i % 3) * 6);
+    return { d: `M${left.x + NW / 2},${left.y} C${left.x + NW / 2},${left.y + up} ${right.x + NW / 2},${right.y + up} ${right.x + NW / 2},${right.y}`, rev: left !== a };
+  }
+  const top = a.y < b.y ? a : b, bot = a.y < b.y ? b : a, off = ((i % 5) - 2) * 9;
+  const sx = top.x + NW / 2 + off, ex = bot.x + NW / 2 - off, my = (top.y + NH + bot.y) / 2;
+  return { d: `M${sx},${top.y + NH} C${sx},${my} ${ex},${my} ${ex},${bot.y}`, rev: top !== a };
+}
+const cEls = cedges.map((e, i) => {
+  const p = cpath(e, i), d = typeof p === "string" ? p : p.d, rev = typeof p === "string" ? false : p.rev;
+  const path = el("path", { d, class: "cedge" }, gE);
+  path.setAttribute(rev ? "marker-start" : "marker-end", "url(#arr)"); e._rev = rev; return path;
+});
+const cNodes = {};
+D.classes.forEach((c) => {
+  const p = pos[c.id];
+  const g = el("g", { class: `cnode g-${c.group}`, tabindex: "0", role: "button", "aria-label": `${c.label} ${count[c.id] || 0}개`, "data-cls": c.id }, gN);
+  el("rect", { x: p.x, y: p.y, width: NW, height: NH, rx: 8, class: "box" }, g);
+  el("rect", { x: p.x, y: p.y, width: 7, height: NH, rx: 3, class: "bar" }, g);
+  const t = el("text", { x: p.x + 16, y: p.y + 25, class: "t" }, g); t.textContent = c.label;
+  const s = el("text", { x: p.x + 16, y: p.y + 44, class: "s" }, g); s.textContent = `${count[c.id] || 0}개 · ${c.id}`;
+  const act = (ev) => { ev.stopPropagation(); selectClass(c.id); };
+  g.addEventListener("click", act);
+  g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); act(ev); } });
+  cNodes[c.id] = g;
+});
+svg.addEventListener("click", () => { selectClass(null); closeDrawer(); });
+function placeLabels(idxs) {
+  while (gL.firstChild) gL.removeChild(gL.firstChild);
+  const boxes = D.classes.map((c) => ({ x: pos[c.id].x, y: pos[c.id].y, w: NW, h: NH })), placed = [];
+  const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  idxs.forEach((i) => {
+    const e = cedges[i], path = cEls[i], len = path.getTotalLength();
+    const g = el("g", { class: "elabel" }, gL), tx = el("text", { "text-anchor": "middle" }, g); tx.textContent = e.label;
+    const tw = tx.getComputedTextLength() + 12, th = 18;
+    let best = null, bestScore = Infinity, anchor = null;
+    outer: for (const dx of [0, -80, 80, -150, 150]) for (const f of [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8]) {
+      const pt = path.getPointAtLength(len * f);
+      for (const dy of [0, -14, 14, -26, 26, -38, 38]) {
+        const r = { x: clamp(pt.x - tw / 2 + dx, 2, VW - tw - 2), y: clamp(pt.y - th / 2 + dy, 2, VH - th - 2), w: tw, h: th };
+        const sc = 100 * placed.filter((q) => hit(r, q)).length + 30 * boxes.filter((q) => hit(r, q)).length + Math.abs(f - 0.5) * 6 + Math.abs(dy) / 10 + Math.abs(dx) / 12;
+        if (sc < bestScore) { bestScore = sc; best = r; anchor = pt; }
+        if (sc < 1) break outer;
+      }
+    }
+    placed.push(best);
+    const cx = best.x + best.w / 2, cy = best.y + best.h / 2;
+    if (Math.hypot(cx - anchor.x, cy - anchor.y) > 16) {
+      el("line", { x1: anchor.x, y1: anchor.y, x2: clamp(anchor.x, best.x, best.x + best.w), y2: clamp(anchor.y, best.y, best.y + best.h), class: "leader" }, g);
+      el("circle", { cx: anchor.x, cy: anchor.y, r: 2.5, class: "leaderdot" }, g);
+    }
+    el("rect", { x: best.x, y: best.y, width: best.w, height: best.h, rx: 4 }, g); g.appendChild(tx);
+    tx.setAttribute("x", best.x + best.w / 2); tx.setAttribute("y", best.y + 13);
+  });
+}
+function selectClass(cid) {
+  const hl = [];
+  cedges.forEach((e, i) => { if (cid && (e.a === cid || e.b === cid)) hl.push(i); });
+  const near = new Set(cid ? [cid] : []); hl.forEach((i) => { near.add(cedges[i].a); near.add(cedges[i].b); });
+  D.classes.forEach((c) => { cNodes[c.id].classList.toggle("sel", c.id === cid); cNodes[c.id].classList.toggle("dim", !!cid && !near.has(c.id)); });
+  cEls.forEach((p, i) => { const on = hl.includes(i); p.classList.toggle("hl", on); p.classList.toggle("dim", !!cid && !on);
+    p.setAttribute(cedges[i]._rev ? "marker-start" : "marker-end", on ? "url(#arrH)" : "url(#arr)"); });
+  if (cid) { placeLabels(hl); openClass(cid); } else placeLabels([]);
+}
+const drawer = document.getElementById("drawer"), dBody = document.getElementById("dBody");
+function closeDrawer() { drawer.classList.remove("open"); }
+document.getElementById("dClose").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+function openClass(cid) {
+  const c = C[cid];
+  const outs = cedges.filter((e) => e.a === cid).map((e) => `<li><b>${esc(e.label)}</b> → ${esc(C[e.b].label)}</li>`).join("");
+  const ins = cedges.filter((e) => e.b === cid && e.a !== cid).map((e) => `<li>${esc(C[e.a].label)} → <b>${esc(e.label)}</b></li>`).join("");
+  dBody.innerHTML = `<h2 id="dTitle">${esc(c.label)}</h2><div class="hint">${esc(c.id)} · ${count[cid] || 0}개</div><p>${esc(c.desc)}</p>
+    <h3>나가는 관계</h3><ul>${outs || "<li class='hint'>없음</li>"}</ul><h3>들어오는 관계</h3><ul>${ins || "<li class='hint'>없음</li>"}</ul>
+    <button class="cta" id="toExp">탐색기에서 ${esc(c.label)} 보기</button>`;
+  drawer.classList.add("open");
+  document.getElementById("toExp").addEventListener("click", () => { closeDrawer(); showTab("exp"); setFilter(cid); });
+}
+
+// ---------- 탐색기
+let filterCls = null, history = [];
+const chips = document.getElementById("clschips"), q = document.getElementById("q");
+chips.innerHTML = `<button aria-pressed="true" data-c="">전체 ${D.entities.length}</button>` + D.classes.map((c) => `<button aria-pressed="false" data-c="${c.id}">${esc(c.label)} ${count[c.id] || 0}</button>`).join("");
+chips.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.c || null)));
+function setFilter(cid) { filterCls = cid; chips.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.c || null) === cid))); renderList(); }
+q.addEventListener("input", renderList);
+function renderList() {
+  const term = q.value.trim().toLowerCase();
+  const list = D.entities.filter((e) => (!filterCls || e.cls === filterCls) &&
+    (!term || `${e.id} ${e.label} ${e.desc}`.toLowerCase().includes(term)));
+  document.getElementById("listTitle").textContent = `개체 ${list.length}개${filterCls ? " · " + C[filterCls].label : ""}`;
+  document.getElementById("elist").innerHTML = list.length ? list.map((e) =>
+    `<button class="item s-${esc(e.status || "")}" data-pick="${esc(e.id)}">${esc(e.id)} ${esc(e.label)}<small>${esc(C[e.cls].label)}${e.status ? " · " + esc(SL[e.status] || e.status) : ""}</small></button>`).join("")
+    : `<div class="empty">찾는 개체가 없다</div>`;
+  document.querySelectorAll("#elist [data-pick]").forEach((b) => b.addEventListener("click", () => select(b.dataset.pick, true)));
+}
+const PROP_LABEL = { area: "영역", input: "입력 유형", m: "성숙도", data_state: "데이터 상태", gap: "막힌 것", sub: "구현 표기", layer: "계층", pre: "선행 조건",
+  when: "시점", recommend: "권장안", options: "선택지", why: "이유", default: "안 정하면", decided: "결정 내용", before: "원 기획", paths: "경로",
+  count: "수", path: "파일", confidence: "확인 수준", kind: "종류", level: "수준" };
+const INPUT = { system: "시스템 데이터", field: "현장 실측", human: "사람 확정" };
+function select(id, push) {
+  const e = E[id]; if (!e) return;
+  if (push) history.push(id);
+  const props = Object.entries(e.props).filter(([, v]) => v !== "" && v != null).map(([k, v]) =>
+    `<dt>${esc(PROP_LABEL[k] || k)}</dt><dd>${esc(k === "input" ? INPUT[v] || v : v)}</dd>`).join("");
+  const group = (rels, dir) => {
+    const m = {}; rels.forEach((r) => { (m[relName(r)] ||= []).push(dir === "out" ? r.o : r.s); });
+    return Object.entries(m).map(([k, ids]) => `<div class="relgroup">${dir === "out" ? `<b>${esc(k)}</b> → ` : ""}${ids.map(lnk).join("")}${dir === "in" ? ` → <b>${esc(k)}</b>` : ""}</div>`).join("");
+  };
+  document.getElementById("detail").innerHTML = `${history.length > 1 ? `<button class="back" id="backBtn">← 이전</button>` : ""}
+    <h2>${esc(e.label)}</h2><div class="hint">${esc(C[e.cls].label)} · <code>${esc(e.id)}</code> ${badge(e.status)}</div>
+    ${e.desc ? `<p>${esc(e.desc)}</p>` : ""}${props ? `<dl class="props">${props}</dl>` : ""}
+    <h3>나가는 관계</h3>${group(OUT[id] || [], "out") || "<div class='hint'>없음</div>"}
+    <h3>들어오는 관계</h3>${group(IN[id] || [], "in") || "<div class='hint'>없음</div>"}`;
+  const bb = document.getElementById("backBtn");
+  if (bb) bb.addEventListener("click", () => { history.pop(); select(history[history.length - 1], false); });
+}
+renderList();
+
+// ---------- 추적표
+const cell = (ids) => ids.length ? ids.map(lnk).join("") : "<span class='hint'>—</span>";
+function table(id, head, rows) {
+  document.getElementById(id).innerHTML = `<thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody>`;
+}
+const ofCls = (cls) => D.entities.filter((e) => e.cls === cls);
+table("tr1", ["완료 기준", "상태", "단서", "검증", "증거"], ofCls("Criterion").map((e) => {
+  const vs = inOf(e.id, "verifies"); const ev = [...new Set(vs.flatMap((v) => outOf(v, "produces")))];
+  return `<tr><td>${lnk(e.id)}</td><td>${badge(e.status)}</td><td>${esc(e.desc) || "—"}</td><td>${cell(vs)}</td><td>${cell(ev)}</td></tr>`;
+}));
+table("tr2", ["산출물", "상태", "구현 요소", "검증", "메모"], ofCls("Deliverable").map((e) => {
+  const cs = inOf(e.id, "realizes"); const vs = [...new Set(cs.flatMap((c) => inOf(c, "verifies")))];
+  return `<tr><td>${lnk(e.id)}</td><td>${badge(e.status)}</td><td>${cell(cs)}</td><td>${cell(vs)}</td><td class="hint">${esc(e.desc)}</td></tr>`;
+}));
+table("tr3", ["결함·약점", "종류", "상태", "영향", "발견", "해결"], ofCls("Defect").map((e) =>
+  `<tr><td>${lnk(e.id)}</td><td>${esc(e.props.kind)}</td><td>${badge(e.status)}</td><td>${cell(outOf(e.id, "affects"))}</td><td>${cell(outOf(e.id, "foundBy"))}</td><td>${cell(outOf(e.id, "resolvedBy"))}</td></tr>`));
+table("tr4", ["리스크", "수준", "근거", "위협", "완화"], ofCls("Risk").map((e) =>
+  `<tr><td>${lnk(e.id)}</td><td>${esc(e.props.level)}</td><td>${cell(inOf(e.id, "supports"))}</td><td>${cell(outOf(e.id, "threatens"))}</td><td>${cell(outOf(e.id, "mitigatedBy"))}</td></tr>`));
+table("tr5", ["결정", "상태", "막고 있는 단계", "영향 개념", "해결하는 결함", "완화하는 리스크"], ofCls("Decision").map((e) =>
+  `<tr><td>${lnk(e.id)}</td><td>${badge(e.status)}</td><td>${cell(outOf(e.id, "gates"))}</td><td>${cell(outOf(e.id, "impacts"))}</td><td>${cell(inOf(e.id, "resolvedBy"))}</td><td>${cell(inOf(e.id, "mitigatedBy"))}</td></tr>`));
+</script>
+</body>
+</html>

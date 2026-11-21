@@ -1,0 +1,2463 @@
+@prefix scf: <https://example.invalid/scf/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<https://example.invalid/scf/ontology> a owl:Ontology ; rdfs:label "Shopping Content Factory 지식체계"@ko .
+
+scf:Deliverable a owl:Class ; rdfs:label "산출물"@ko ; rdfs:comment "요구서 16장 최종 산출물 20개"@ko .
+scf:Criterion a owl:Class ; rdfs:label "완료 기준"@ko ; rdfs:comment "요구서 17장 MVP 완료 판정 15개"@ko .
+scf:Phase a owl:Class ; rdfs:label "단계"@ko ; rdfs:comment "PHASE 1~5 · STEP 1~10 · 수정 로드맵"@ko .
+scf:PlanChange a owl:Class ; rdfs:label "기획 수정안"@ko ; rdfs:comment "원 기획 대비 수정"@ko .
+scf:Concept a owl:Class ; rdfs:label "도메인 개념"@ko ; rdfs:comment "시스템이 다루는 업무 개념(도메인 온톨로지)"@ko .
+scf:Component a owl:Class ; rdfs:label "구현 요소"@ko ; rdfs:comment "코드·설정·스크립트 모듈"@ko .
+scf:Verification a owl:Class ; rdfs:label "검증"@ko ; rdfs:comment "pytest·브라우저 점검·시뮬레이션·재현"@ko .
+scf:Evidence a owl:Class ; rdfs:label "증거"@ko ; rdfs:comment "실행 결과물·재현 기록"@ko .
+scf:Document a owl:Class ; rdfs:label "문서"@ko ; rdfs:comment "README 와 docs/"@ko .
+scf:Action a owl:Class ; rdfs:label "자동화 액션"@ko ; rdfs:comment "6계층 자동화 액션"@ko .
+scf:Party a owl:Class ; rdfs:label "외부 주체"@ko ; rdfs:comment "플랫폼·기관·전문가·고용주·운영자"@ko .
+scf:Fact a owl:Class ; rdfs:label "사실"@ko ; rdfs:comment "조사로 확인한 외부 사실(확인 수준 A/B/C)"@ko .
+scf:Regulation a owl:Class ; rdfs:label "정책·규정"@ko ; rdfs:comment "법·심사지침·플랫폼 정책·약관"@ko .
+scf:Assumption a owl:Class ; rdfs:label "가정"@ko ; rdfs:comment "재무·운영 가정과 판단값"@ko .
+scf:Risk a owl:Class ; rdfs:label "리스크"@ko ; rdfs:comment "사업·운영·정책 위험"@ko .
+scf:Defect a owl:Class ; rdfs:label "결함·약점"@ko ; rdfs:comment "확인된 결함과 설계상 약점"@ko .
+scf:Decision a owl:Class ; rdfs:label "결정"@ko ; rdfs:comment "사용자가 정할 것"@ko .
+scf:Metric a owl:Class ; rdfs:label "지표"@ko ; rdfs:comment "측정할 숫자"@ko .
+
+scf:realizes a owl:ObjectProperty ; rdfs:label "충족한다"@ko ; rdfs:domain scf:Component ; rdfs:range scf:Deliverable .
+scf:implements a owl:ObjectProperty ; rdfs:label "구현한다"@ko ; rdfs:domain scf:Component ; rdfs:range scf:Concept .
+scf:verifies a owl:ObjectProperty ; rdfs:label "검증한다"@ko ; rdfs:domain scf:Verification .
+scf:produces a owl:ObjectProperty ; rdfs:label "산출한다"@ko ; rdfs:range scf:Evidence .
+scf:describes a owl:ObjectProperty ; rdfs:label "기술한다"@ko ; rdfs:domain scf:Document .
+scf:sourcedFrom a owl:ObjectProperty ; rdfs:label "출처"@ko ; rdfs:range scf:Party .
+scf:supports a owl:ObjectProperty ; rdfs:label "근거가 된다"@ko .
+scf:constrains a owl:ObjectProperty ; rdfs:label "제약한다"@ko ; rdfs:domain scf:Regulation .
+scf:feeds a owl:ObjectProperty ; rdfs:label "입력된다"@ko ; rdfs:domain scf:Assumption .
+scf:threatens a owl:ObjectProperty ; rdfs:label "위협한다"@ko ; rdfs:domain scf:Risk .
+scf:mitigatedBy a owl:ObjectProperty ; rdfs:label "완화된다"@ko ; rdfs:domain scf:Risk .
+scf:affects a owl:ObjectProperty ; rdfs:label "영향을 준다"@ko ; rdfs:domain scf:Defect .
+scf:resolvedBy a owl:ObjectProperty ; rdfs:label "해결된다"@ko ; rdfs:domain scf:Defect .
+scf:foundBy a owl:ObjectProperty ; rdfs:label "발견됐다"@ko ; rdfs:domain scf:Defect .
+scf:impacts a owl:ObjectProperty ; rdfs:label "영향 범위"@ko ; rdfs:domain scf:Decision ; rdfs:range scf:Concept .
+scf:gates a owl:ObjectProperty ; rdfs:label "선행 조건이다"@ko ; rdfs:domain scf:Decision ; rdfs:range scf:Phase .
+scf:decidedBy a owl:ObjectProperty ; rdfs:label "결정 주체"@ko ; rdfs:domain scf:Decision ; rdfs:range scf:Party .
+scf:targets a owl:ObjectProperty ; rdfs:label "대상"@ko ; rdfs:domain scf:Action ; rdfs:range scf:Concept .
+scf:dependsOn a owl:ObjectProperty ; rdfs:label "필요로 한다"@ko ; rdfs:range scf:Decision .
+scf:partOf a owl:ObjectProperty ; rdfs:label "속한다"@ko ; rdfs:domain scf:Phase ; rdfs:range scf:Phase .
+scf:deliveredIn a owl:ObjectProperty ; rdfs:label "만든 단계"@ko ; rdfs:domain scf:Deliverable ; rdfs:range scf:Phase .
+scf:measures a owl:ObjectProperty ; rdfs:label "측정한다"@ko ; rdfs:domain scf:Metric ; rdfs:range scf:Concept .
+scf:provides a owl:ObjectProperty ; rdfs:label "제공한다"@ko ; rdfs:domain scf:Party ; rdfs:range scf:Concept .
+scf:domain a owl:ObjectProperty ; rdfs:label "도메인 관계"@ko ; rdfs:domain scf:Concept ; rdfs:range scf:Concept .
+scf:supplies a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "공급한다"@ko .
+scf:reveals a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "드러낸다"@ko .
+scf:belongsTo a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "속한다"@ko .
+scf:experiences a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "겪는다"@ko .
+scf:blockedBy a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "가로막힌다"@ko .
+scf:stimulates a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "자극한다"@ko .
+scf:solves a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "해결한다"@ko .
+scf:linkedTo a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "연결된다"@ko .
+scf:has a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "가진다"@ko .
+scf:checkedBy a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "확인된다"@ko .
+scf:backs a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "뒷받침한다"@ko .
+scf:relieves a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "해소한다"@ko .
+scf:evaluates a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "평가한다"@ko .
+scf:basedOn a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "근거로 한다"@ko .
+scf:judges a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "판정한다"@ko .
+scf:checks a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "확인한다"@ko .
+scf:selects a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "고른다"@ko .
+scf:creates a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "만든다"@ko .
+scf:covers a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "다룬다"@ko .
+scf:cites a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "인용한다"@ko .
+scf:shows a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "보여준다"@ko .
+scf:uses a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "사용한다"@ko .
+scf:varies a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "바꾼다"@ko .
+scf:attachedTo a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "붙는다"@ko .
+scf:renderedFrom a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "렌더된다"@ko .
+scf:composites a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "합성한다"@ko .
+scf:inspects a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "검사한다"@ko .
+scf:authorizes a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "허가한다"@ko .
+scf:uploads a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "올린다"@ko .
+scf:targetsPlatform a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "향한다"@ko .
+scf:requiresGate a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "요구한다"@ko .
+scf:connects a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "연결한다"@ko .
+scf:includes a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "포함한다"@ko .
+scf:drivesTrafficTo a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "유입시킨다"@ko .
+scf:measuresEvent a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "측정한다"@ko .
+scf:occursOn a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "발생한다"@ko .
+scf:attributedTo a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "귀속된다"@ko .
+scf:aggregates a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "집계한다"@ko .
+scf:reads a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "읽는다"@ko .
+scf:calibrates a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "보정한다"@ko .
+scf:constrainsRule a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "제약한다"@ko .
+scf:defines a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "정의한다"@ko .
+scf:executes a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "실행한다"@ko .
+scf:limits a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "제한한다"@ko .
+scf:records a owl:ObjectProperty ; rdfs:subPropertyOf scf:domain ; rdfs:label "기록한다"@ko .
+scf:status a owl:DatatypeProperty ; rdfs:label "상태"@ko .
+scf:description a owl:DatatypeProperty ; rdfs:label "설명"@ko .
+scf:confidence a owl:DatatypeProperty ; rdfs:label "확인 수준"@ko .
+scf:level a owl:DatatypeProperty ; rdfs:label "수준"@ko .
+scf:kind a owl:DatatypeProperty ; rdfs:label "종류"@ko .
+scf:path a owl:DatatypeProperty ; rdfs:label "경로"@ko .
+scf:area a owl:DatatypeProperty ; rdfs:label "영역"@ko .
+scf:maturity a owl:DatatypeProperty ; rdfs:label "성숙도"@ko .
+scf:inputType a owl:DatatypeProperty ; rdfs:label "입력 유형"@ko .
+
+scf:keyword a scf:Concept ;
+    rdfs:label "키워드"@ko ;
+    scf:description "트렌드 소스에서 온 쇼핑·검색 키워드. 값은 묶음마다 최댓값 100인 상대지수이며 검색량·판매량이 아니다."@ko ;
+    scf:status "now" ;
+    scf:area "① 수요"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:persona a scf:Concept ;
+    rdfs:label "고객 페르소나"@ko ;
+    scf:description "이 상품이 필요한 사람. 생활 맥락까지 구체적으로(예: 모니터 2대 쓰는 재택근무자)."@ko ;
+    scf:status "short" ;
+    scf:area "① 수요"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:problem a scf:Concept ;
+    rdfs:label "고객 문제"@ko ;
+    scf:description "표면 문제 뒤의 실제 불편. 반복 상황과 잃는 것(시간·공간·돈·노력), 상품이 해결 못 하는 것까지 포함."@ko ;
+    scf:status "short" ;
+    scf:area "① 수요"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:barrier a scf:Concept ;
+    rdfs:label "구매 장벽"@ko ;
+    scf:description "구매를 망설이게 하는 가장 큰 이유와, 그것을 푸는 결정적 정보(대개 사양 1~2개)."@ko ;
+    scf:status "short" ;
+    scf:area "① 수요"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:lever a scf:Concept ;
+    rdfs:label "심리 요소"@ko ;
+    scf:description "허용 목록 12개 중 상품에 맞는 1~2개만. 거짓 희소성·가짜 후기류는 목록에 없다."@ko ;
+    scf:status "done" ;
+    scf:area "① 수요"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:category a scf:Concept ;
+    rdfs:label "카테고리"@ko ;
+    scf:description "초기 타깃 5개(책상·케이블, 좁은 공간, 원룸 수납, 세탁·청소, 무타공). 카테고리마다 필수 사양이 다르다."@ko ;
+    scf:status "out" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:product a scf:Concept ;
+    rdfs:label "상품"@ko ;
+    scf:description "제휴 링크를 걸 수 있는 실제 상품. 이름·사양·장단점·주의사항을 묶은 '사실 해시'로 변경을 감지한다."@ko ;
+    scf:status "mid" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:spec a scf:Concept ;
+    rdfs:label "검증 사양"@ko ;
+    scf:description "판매 페이지에서 사람이 확인한 사양(key·값·단위·출처·확인 시각). 영상·캡션 속 숫자는 이것과 같아야 통과."@ko ;
+    scf:status "short" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:caution a scf:Concept ;
+    rdfs:label "주의사항·비추천"@ko ;
+    scf:description "설치 조건·하중·호환처럼 사기 전에 확인할 것과 맞지 않는 사람. 영상의 '확인할 점' 장면에 반드시 나온다."@ko ;
+    scf:status "short" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:price a scf:Concept ;
+    rdfs:label "가격·재고 확인"@ko ;
+    scf:description "가격과 재고는 확인 시각과 함께만 쓴다. 24시간이 지나면 랜딩에서 숨기고 게시를 막는다."@ko ;
+    scf:status "mid" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:image a scf:Concept ;
+    rdfs:label "상품 이미지"@ko ;
+    scf:description "상품 원본 이미지와 권리 상태. 권리가 불분명하면 영상에 쓰지 않고 콘텐츠를 멈춘다."@ko ;
+    scf:status "out" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:usage a scf:Concept ;
+    rdfs:label "실사용 확인"@ko ;
+    scf:description "직접 써 보고 찍은 기록. 있어야만 '써보니'류 경험 표현을 허용한다. 신뢰·원본성 정책 모두에 가장 유리."@ko ;
+    scf:status "out" ;
+    scf:area "② 상품"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "field"@ko .
+scf:score a scf:Concept ;
+    rdfs:label "평가"@ko ;
+    scf:description "8개 항목 100점. 근거 없는 항목은 만점의 30%까지만(mock 근거는 80%). 항목마다 근거 문장 저장."@ko ;
+    scf:status "done" ;
+    scf:area "③ 판단"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:filter a scf:Concept ;
+    rdfs:label "필터 판정"@ko ;
+    scf:description "점수와 별개인 필수 조건. 제외(품절·효과 주장·규제·중복)와 보류(권리·사양·가격 만료·판매자)를 나눈다."@ko ;
+    scf:status "done" ;
+    scf:area "③ 판단"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:selection a scf:Concept ;
+    rdfs:label "선정"@ko ;
+    scf:description "상위 5개를 순서대로 재검증해 처음 통과한 1개. 기준 점수 미달이면 그날은 만들지 않는다."@ko ;
+    scf:status "done" ;
+    scf:area "③ 판단"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:content a scf:Concept ;
+    rdfs:label "콘텐츠"@ko ;
+    scf:description "상품 1개 = 하루 1개. 생성 → 승인 대기 → 승인 → 게시, 또는 차단·수정 요청·거절."@ko ;
+    scf:status "done" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:script a scf:Concept ;
+    rdfs:label "대본"@ko ;
+    scf:description "5장면 28초(후킹·불편·사용법·장점과 주의·대상과 안내). 각 장면이 인용한 사양을 fact_refs 로 남긴다."@ko ;
+    scf:status "now" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:variant a scf:Concept ;
+    rdfs:label "후킹 변형"@ko ;
+    scf:description "A=문제 공감형, B=사용 결과 설명형. 첫 장면만 다르고 나머지는 같다(조건 통제)."@ko ;
+    scf:status "short" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "system"@ko .
+scf:disclosure a scf:Concept ;
+    rdfs:label "광고 표시"@ko ;
+    scf:description "전 장면 '광고' 배지, 첫·끝 장면 문구, 캡션 첫 줄, 첫 해시태그 #광고, 유튜브 제목 [광고]. 조건부 표현 금지."@ko ;
+    scf:status "done" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:media a scf:Concept ;
+    rdfs:label "미디어 산출물"@ko ;
+    scf:description "영상 2종(Reels·Shorts), 이미지 6종, 자막, 매니페스트. 상품 이미지는 원본 그대로 합성하고 보존을 검수."@ko ;
+    scf:status "short" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:check a scf:Concept ;
+    rdfs:label "사실 검사·QA"@ko ;
+    scf:description "숫자+단위는 검증 사양과 일치, 금액 표기·금칙어·경험 주장 차단, 광고 표시 5곳·주의사항 장면 확인, 영상 규격 검사."@ko ;
+    scf:status "done" ;
+    scf:area "④ 콘텐츠"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:approval a scf:Concept ;
+    rdfs:label "승인"@ko ;
+    scf:description "사람이 권리·사실성·광고 표시를 확인하고 승인. 승인 후 사실·영상이 바뀌면 효력이 없어진다."@ko ;
+    scf:status "out" ;
+    scf:area "⑤ 유통"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:link a scf:Concept ;
+    rdfs:label "제휴 링크"@ko ;
+    scf:description "쿠팡파트너스 링크. 임의 생성 금지, 자동으로 열어 확인하지 않음(클릭 오염) — 형식 검증 후 사람 확인."@ko ;
+    scf:status "mid" ;
+    scf:area "⑤ 유통"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:publication a scf:Concept ;
+    rdfs:label "게시"@ko ;
+    scf:description "플랫폼별 1회만. '플랫폼이 ID 반환'과 '공개 확인'을 다른 상태로 기록. 응답이 불확실하면 자동 재시도하지 않는다."@ko ;
+    scf:status "short" ;
+    scf:area "⑤ 유통"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:platform a scf:Concept ;
+    rdfs:label "플랫폼"@ko ;
+    scf:description "Reels·Shorts. 캡션·설명란 링크는 클릭되지 않는다 → 프로필 링크 경유. 유료 파트너십·유료 프로모션 표시 규정."@ko ;
+    scf:status "short" ;
+    scf:area "⑤ 유통"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "system"@ko .
+scf:landing a scf:Concept ;
+    rdfs:label "랜딩 페이지"@ko ;
+    scf:description "승인된 상품만 공개. 가격은 확인 시각과 함께, 장단점·주의사항·영상, 사용자가 직접 누르는 구매 버튼."@ko ;
+    scf:status "now" ;
+    scf:area "⑤ 유통"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:pmetric a scf:Concept ;
+    rdfs:label "플랫폼 지표"@ko ;
+    scf:description "조회·저장·공유·시청시간. 48~72시간 지연. 조회는 매출이 아니다."@ko ;
+    scf:status "short" ;
+    scf:area "⑥ 성과"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "human"@ko .
+scf:event a scf:Concept ;
+    rdfs:label "랜딩 이벤트"@ko ;
+    scf:description "페이지 조회·구매 버튼 클릭·영상 재생. IP·브라우저 정보·쿠키 저장 안 함. ?c= 로 콘텐츠에 귀속."@ko ;
+    scf:status "done" ;
+    scf:area "⑥ 성과"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:report a scf:Concept ;
+    rdfs:label "제휴 실적"@ko ;
+    scf:description "주문·구매액·수수료·취소. sub_id 로 연결된 것만 콘텐츠에 귀속, 나머지는 미귀속으로 따로 둔다."@ko ;
+    scf:status "mid" ;
+    scf:area "⑥ 성과"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "system"@ko .
+scf:funnel a scf:Concept ;
+    rdfs:label "퍼널"@ko ;
+    scf:description "조회 → 랜딩 방문 → 링크 클릭 → 구매·수수료. 실측과 추정(클릭 × 가정 전환율 범위)을 다른 칸에."@ko ;
+    scf:status "done" ;
+    scf:area "⑥ 성과"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:learning a scf:Concept ;
+    rdfs:label "학습 보정"@ko ;
+    scf:description "카테고리별 실측 RPM 으로 다음 날 수익성 점수를 0.7~1.3배 보정. 표본 조건 미달이면 가정값 유지."@ko ;
+    scf:status "mid" ;
+    scf:area "⑥ 성과"@ko ;
+    scf:maturity "M1"@ko ;
+    scf:inputType "system"@ko .
+scf:source a scf:Concept ;
+    rdfs:label "데이터 소스 상태"@ko ;
+    scf:description "각 외부 소스가 공식 연동인지, mock 인지, 수동 입력인지, 연동 대기인지. 화면·보고서 상단에 항상 표시."@ko ;
+    scf:status "done" ;
+    scf:area "통제·운영"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:policy a scf:Concept ;
+    rdfs:label "정책 규칙"@ko ;
+    scf:description "배점·필터·금칙어·광고 표시·제외 영역·재무 가정·단가. 사람이 관리하는 규칙이고 코드는 이것만 따른다."@ko ;
+    scf:status "out" ;
+    scf:area "통제·운영"@ko ;
+    scf:maturity "M0"@ko ;
+    scf:inputType "human"@ko .
+scf:job a scf:Concept ;
+    rdfs:label "작업 큐"@ko ;
+    scf:description "날짜·단계당 한 번 성공. 실패는 백오프 재시도, 정책 차단은 대기, 선행 실패면 후행 건너뜀."@ko ;
+    scf:status "now" ;
+    scf:area "통제·운영"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:cost a scf:Concept ;
+    rdfs:label "비용"@ko ;
+    scf:description "유료 호출 전 예상 비용으로 일·월 상한 확인, 호출 후 실제 토큰으로 기록. 단가 미확인이면 실행 안 함."@ko ;
+    scf:status "done" ;
+    scf:area "통제·운영"@ko ;
+    scf:maturity "M3"@ko ;
+    scf:inputType "system"@ko .
+scf:audit a scf:Concept ;
+    rdfs:label "감사 로그"@ko ;
+    scf:description "승인·거절·수정·게시·삭제·권리 변경을 누가 언제 했는지."@ko ;
+    scf:status "done" ;
+    scf:area "통제·운영"@ko ;
+    scf:maturity "M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A01 a scf:Action ;
+    rdfs:label "트렌드 키워드 수집"@ko ;
+    scf:description "코드 완료. 지금은 mock — 키만 넣으면 실데이터"@ko ;
+    scf:status "now" ;
+    scf:maturity "M2→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A02 a scf:Action ;
+    rdfs:label "상품 후보 등록"@ko ;
+    scf:description "승인 전엔 수동 입력이 유일한 합법 경로. 등록 화면 필요"@ko ;
+    scf:status "mid" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "human"@ko .
+scf:A03 a scf:Action ;
+    rdfs:label "사양·주의사항 확인"@ko ;
+    scf:description "판매 페이지 자동 수집은 하지 않음 → 최종 확인은 사람"@ko ;
+    scf:status "short" ;
+    scf:maturity "M0→M1"@ko ;
+    scf:inputType "human"@ko .
+scf:A04 a scf:Action ;
+    rdfs:label "가격·재고 재확인"@ko ;
+    scf:description "API 전엔 게시 24시간 이내에 사람이 확인"@ko ;
+    scf:status "mid" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "human"@ko .
+scf:A05 a scf:Action ;
+    rdfs:label "이미지 권리 판단"@ko ;
+    scf:description "법적 판단 — 사람이 계속"@ko ;
+    scf:status "out" ;
+    scf:maturity "M0→M0"@ko ;
+    scf:inputType "human"@ko .
+scf:A06 a scf:Action ;
+    rdfs:label "실물 촬영·사용 확인"@ko ;
+    scf:description "신뢰·원본성에 가장 유리, 비용 최대"@ko ;
+    scf:status "out" ;
+    scf:maturity "M0→M0"@ko ;
+    scf:inputType "field"@ko .
+scf:A07 a scf:Action ;
+    rdfs:label "고객 문제 리서치"@ko ;
+    scf:description "LLM 초안 + 사람 확정"@ko ;
+    scf:status "short" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "human"@ko .
+scf:A08 a scf:Action ;
+    rdfs:label "원본 응답·스냅샷 보관"@ko ;
+    scf:description "비밀값 마스킹 후 저장"@ko ;
+    scf:status "done" ;
+    scf:maturity "M2→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A09 a scf:Action ;
+    rdfs:label "DB·산출물 백업"@ko ;
+    scf:description "현재 백업 없음"@ko ;
+    scf:status "short" ;
+    scf:maturity "M0→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A10 a scf:Action ;
+    rdfs:label "100점 평가·필수 필터"@ko ;
+    scf:description "가중치는 실데이터로 보정 전"@ko ;
+    scf:status "done" ;
+    scf:maturity "M3→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A11 a scf:Action ;
+    rdfs:label "구매심리·대본·캡션"@ko ;
+    scf:description "규칙 기반은 완료, Claude 는 키만"@ko ;
+    scf:status "now" ;
+    scf:maturity "M2→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A12 a scf:Action ;
+    rdfs:label "이미지·영상 렌더"@ko ;
+    scf:description "데모는 완료. 실상품용 템플릿 보강 필요"@ko ;
+    scf:status "short" ;
+    scf:maturity "M2→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A13 a scf:Action ;
+    rdfs:label "최종 선정·재검증"@ko ;
+    scf:description "재검증은 DB 값 기준"@ko ;
+    scf:status "done" ;
+    scf:maturity "M3→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A14 a scf:Action ;
+    rdfs:label "사실·표시 검사 + QA"@ko ;
+    scf:description "숫자 없는 과장은 사람이 잡아야 함"@ko ;
+    scf:status "done" ;
+    scf:maturity "M3→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A15 a scf:Action ;
+    rdfs:label "콘텐츠 승인"@ko ;
+    scf:description "30개까지 전량 사람. 이후 조건부 검토"@ko ;
+    scf:status "out" ;
+    scf:maturity "M0→M0"@ko ;
+    scf:inputType "human"@ko .
+scf:A16 a scf:Action ;
+    rdfs:label "제휴 링크 생성·확인"@ko ;
+    scf:description "자동으로 링크를 열어 확인하지 않음"@ko ;
+    scf:status "mid" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "human"@ko .
+scf:A17 a scf:Action ;
+    rdfs:label "플랫폼 업로드"@ko ;
+    scf:description "코드 완료. 첫 30개는 앱 수동 업로드 권장"@ko ;
+    scf:status "short" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "human"@ko .
+scf:A18 a scf:Action ;
+    rdfs:label "랜딩 공개"@ko ;
+    scf:description "측정 장치 — 실험 전 필수"@ko ;
+    scf:status "now" ;
+    scf:maturity "M2→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A19 a scf:Action ;
+    rdfs:label "플랫폼 성과 수집"@ko ;
+    scf:description "API 전엔 CSV"@ko ;
+    scf:status "short" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A20 a scf:Action ;
+    rdfs:label "제휴 실적 수집"@ko ;
+    scf:description "API 전엔 대시보드 CSV"@ko ;
+    scf:status "mid" ;
+    scf:maturity "M1→M2"@ko ;
+    scf:inputType "system"@ko .
+scf:A21 a scf:Action ;
+    rdfs:label "퍼널·일일 보고서"@ko ;
+    scf:description "실측/추정 분리, 신선도 표시"@ko ;
+    scf:status "done" ;
+    scf:maturity "M3→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A22 a scf:Action ;
+    rdfs:label "학습 보정"@ko ;
+    scf:description "30개 이후"@ko ;
+    scf:status "mid" ;
+    scf:maturity "M1→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A23 a scf:Action ;
+    rdfs:label "실패 감지·알림"@ko ;
+    scf:description "Lv3 진입점 — 지금은 대시보드를 봐야만 앎"@ko ;
+    scf:status "now" ;
+    scf:maturity "M1→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A25 a scf:Action ;
+    rdfs:label "후보 잔량 경보"@ko ;
+    scf:description "가상 운영에서 D11 고갈을 아무도 미리 알지 못함 — '남은 일수 7일 미만'이면 알림"@ko ;
+    scf:status "now" ;
+    scf:maturity "M0→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:A26 a scf:Action ;
+    rdfs:label "성과 수치 입력(앱 → CSV)"@ko ;
+    scf:description "앱 수동 업로드를 고르면 생기는 사람 확정 지점"@ko ;
+    scf:status "short" ;
+    scf:maturity "M0→M1"@ko ;
+    scf:inputType "human"@ko .
+scf:A24 a scf:Action ;
+    rdfs:label "작업 자가 복구"@ko ;
+    scf:description "running 고착 회수 + 신선도 4신호"@ko ;
+    scf:status "now" ;
+    scf:maturity "M2→M3"@ko ;
+    scf:inputType "system"@ko .
+scf:D1 a scf:Decision ;
+    rdfs:label "저장소 공개 범위"@ko ;
+    scf:description "사업 리스크 분석·수익 시뮬레이션·관리자 화면 캡처가 공개 저장소(stock-dashboard)에 올라가 있다. 어떻게 할까?"@ko ;
+    scf:status "pending" .
+scf:D2 a scf:Decision ;
+    rdfs:label "결함 수정 묶음 승인"@ko ;
+    scf:description "확인된 결함 7건(running 고착, 웹 실행 30초 시간초과, src 유실, 로그인·SECRET_KEY·프록시 + 가상 운영에서 찾은 수동 가격 시각 자동 갱신, 관리자 가격 덮어쓰기, 상품명 숫자 오탐)을 지금 고칠까?"@ko ;
+    scf:status "pending" .
+scf:D3 a scf:Decision ;
+    rdfs:label "첫 30개 실험 설계"@ko ;
+    scf:description "기간·판정 지표·중단 기준·현금 예산 상한을 정한다."@ko ;
+    scf:status "pending" .
+scf:D4 a scf:Decision ;
+    rdfs:label "초기 게시 방식"@ko ;
+    scf:description "첫 30개를 플랫폼 앱으로 직접 올릴까, API 를 먼저 연동할까?"@ko ;
+    scf:status "pending" .
+scf:D6 a scf:Decision ;
+    rdfs:label "랜딩 호스팅·도메인"@ko ;
+    scf:description "랜딩(측정 장치)을 어디에 띄울까?"@ko ;
+    scf:status "pending" .
+scf:D18 a scf:Decision ;
+    rdfs:label "운영 시간표"@ko ;
+    scf:description "승인은 언제 할 수 있나? 지금 일정은 09:00 승인 대기 → 12:00 게시로 본업 시간과 겹친다."@ko ;
+    scf:status "pending" .
+scf:D19 a scf:Decision ;
+    rdfs:label "회사 겸업 규정·장비 사용"@ko ;
+    scf:description "본업 회사의 취업규칙에 겸업·영리활동 신고(허가) 조항이 있는지, 회사 장비·사내망·사내 AI 를 쓰지 않는지 확인했나?"@ko ;
+    scf:status "pending" .
+scf:D20 a scf:Decision ;
+    rdfs:label "후보 공급 목표·게시 빈도"@ko ;
+    scf:description "가상 운영 30일에서 후보 24개로는 D11에 바닥났다. 후보를 얼마나 공급하고 얼마나 자주 올릴까?"@ko ;
+    scf:status "pending" .
+scf:D5 a scf:Decision ;
+    rdfs:label "채널 우선순위"@ko ;
+    scf:description "Reels 와 Shorts 중 어디에 먼저, 혹은 동시에?"@ko ;
+    scf:status "pending" .
+scf:D7 a scf:Decision ;
+    rdfs:label "영상 소재"@ko ;
+    scf:description "실상품 영상에 무엇을 쓸까?"@ko ;
+    scf:status "pending" .
+scf:D8 a scf:Decision ;
+    rdfs:label "음성"@ko ;
+    scf:description "내레이션을 어떻게 할까?"@ko ;
+    scf:status "pending" .
+scf:D9 a scf:Decision ;
+    rdfs:label "LLM 사용·모델"@ko ;
+    scf:description "구매심리·대본을 규칙 기반으로 둘까, Claude 를 켤까? 켠다면 어떤 모델?"@ko ;
+    scf:status "pending" .
+scf:D10 a scf:Decision ;
+    rdfs:label "카테고리 범위"@ko ;
+    scf:description "5개 카테고리를 유지할까, 1~2개로 좁힐까?"@ko ;
+    scf:status "pending" .
+scf:D11 a scf:Decision ;
+    rdfs:label "상품 입력 방식"@ko ;
+    scf:description "쿠팡 API 전 상품을 어떻게 넣을까?"@ko ;
+    scf:status "pending" .
+scf:D12 a scf:Decision ;
+    rdfs:label "A/B 운영"@ko ;
+    scf:description "후킹 A/B 를 실제로 돌릴까?"@ko ;
+    scf:status "pending" .
+scf:D17 a scf:Decision ;
+    rdfs:label "실패 알림 채널"@ko ;
+    scf:description "파이프라인이 멈추거나 차단되면 어디로 알릴까?"@ko ;
+    scf:status "pending" .
+scf:D13 a scf:Decision ;
+    rdfs:label "승인 자동화 범위"@ko ;
+    scf:description "30개 이후 사람 승인을 줄일까?"@ko ;
+    scf:status "pending" .
+scf:D14 a scf:Decision ;
+    rdfs:label "재무 가정 갱신"@ko ;
+    scf:description "노동 단가·시간, 운영비, ROE 목표·노동비 포함 여부를 실측으로 바꿀까?"@ko ;
+    scf:status "pending" .
+scf:D15 a scf:Decision ;
+    rdfs:label "사업자·세무"@ko ;
+    scf:description "사업자등록·세무 처리를 언제 할까?"@ko ;
+    scf:status "pending" .
+scf:D16 a scf:Decision ;
+    rdfs:label "대체 제휴 채널"@ko ;
+    scf:description "30개 후 YouTube 쇼핑 제휴·네이버 쇼핑커넥트를 검토할까?"@ko ;
+    scf:status "pending" .
+scf:PC01 a scf:PlanChange ;
+    rdfs:label "쿠팡 승인 전: 사람이 후보 등록 + 자동 평가 / 승인 후: API 후보 + 사양 확인 대기열"@ko ;
+    scf:description "API 는 최종 승인 후 발급, 응답에 사양 없음, 판매 페이지 무단 수집 금지"@ko .
+scf:PC02 a scf:PlanChange ;
+    rdfs:label "사람은 확인·승인 6곳만, 나머지 자동"@ko ;
+    scf:description "사양 최종 확인·권리·광고 적법성은 사람이 판단해야 한다"@ko .
+scf:PC03 a scf:PlanChange ;
+    rdfs:label "전날 밤 생성 → 승인 가능한 시간에 승인 → 다음 날 정해진 시각 게시"@ko ;
+    scf:description "승인 시간이 본업과 겹치고, 가격 확인 유효 24시간과 맞물린다"@ko .
+scf:PC04 a scf:PlanChange ;
+    rdfs:label "첫 30개는 앱 수동 업로드, 판정 후 API 연동"@ko ;
+    scf:description "하루 1개 업로드는 짧고, API 는 토큰·공개 영상 호스팅이 선행된다"@ko .
+scf:PC05 a scf:PlanChange ;
+    rdfs:label "홀짝일 교대 게시 + 교란요인 기록, 30개에선 방향성만"@ko ;
+    scf:description "지금은 B 를 만들기만 하고 게시하지 않아 비교 데이터가 없다"@ko .
+scf:PC06 a scf:PlanChange ;
+    rdfs:label "1~2개 카테고리 집중"@ko ;
+    scf:description "30개 표본을 5개로 나누면 카테고리당 6개 — 비교 불가"@ko .
+scf:PC07 a scf:PlanChange ;
+    rdfs:label "30개까지는 측정만, 학습은 콘텐츠별 귀속 데이터 확보 후"@ko ;
+    scf:description "귀속 수수료가 없으면 학습 신호가 조회수뿐 — 조회는 매출이 아니다"@ko .
+scf:PC08 a scf:PlanChange ;
+    rdfs:label "30개는 유지하되 주 5개 × 6주, 후보는 주말 일괄 등록 + 후보 잔량 경보"@ko ;
+    scf:description "가상 운영에서 후보 24개가 D11에 바닥나 20일 연속 미제작"@ko .
+scf:PC09 a scf:PlanChange ;
+    rdfs:label "실패 알림 + 작업 자가 복구 + 신선도 4신호(Lv3)"@ko ;
+    scf:description "지금은 화면을 열어야만 실패를 알고, 크래시 후 running 고착은 사람이 DB 를 고쳐야 풀린다"@ko .
+scf:PH1 a scf:Phase ;
+    rdfs:label "PHASE 1 실행 가능성 검증"@ko ;
+    scf:description "API·권한·가격·정책 조사, 4개 보고서"@ko ;
+    scf:status "done" .
+scf:PH2 a scf:Phase ;
+    rdfs:label "PHASE 2 mock MVP"@ko ;
+    scf:description "외부 키 없이 전 구간 실행 — 결함 9건 미수정(7건은 D2 수정 묶음)"@ko ;
+    scf:status "done" .
+scf:PH3 a scf:Phase ;
+    rdfs:label "PHASE 3 실제 서비스 연결"@ko ;
+    scf:description "권한 확보 순서대로 하나씩 — 실호출 0건"@ko ;
+    scf:status "todo" .
+scf:PH4 a scf:Phase ;
+    rdfs:label "PHASE 4 사업성 검증(30개)"@ko ;
+    scf:description "첫 30개 실측"@ko ;
+    scf:status "todo" .
+scf:PH5 a scf:Phase ;
+    rdfs:label "PHASE 5 운영 자동화 확대"@ko ;
+    scf:description "실측 수익 확인 후에만"@ko ;
+    scf:status "todo" .
+scf:ST1 a scf:Phase ;
+    rdfs:label "STEP 1 사업 결점 분석"@ko ;
+    scf:description "BUSINESS_RISK_ANALYSIS"@ko ;
+    scf:status "done" .
+scf:ST2 a scf:Phase ;
+    rdfs:label "STEP 2 API·정책 조사"@ko ;
+    scf:description "B·C 등급 원문 재확인 6건 남음"@ko ;
+    scf:status "done" .
+scf:ST3 a scf:Phase ;
+    rdfs:label "STEP 3 MVP 범위 확정"@ko ;
+    scf:description "FEASIBILITY_REPORT 2절"@ko ;
+    scf:status "done" .
+scf:ST4 a scf:Phase ;
+    rdfs:label "STEP 4 구조·DB 스키마"@ko ;
+    scf:description "DB_SCHEMA"@ko ;
+    scf:status "done" .
+scf:ST5 a scf:Phase ;
+    rdfs:label "STEP 5 코드 작성"@ko ;
+    scf:description "약 8,500줄(파이썬)"@ko ;
+    scf:status "done" .
+scf:ST6 a scf:Phase ;
+    rdfs:label "STEP 6 mock 수직 통합"@ko ;
+    scf:description "트렌드 → 승인 대기까지"@ko ;
+    scf:status "done" .
+scf:ST7 a scf:Phase ;
+    rdfs:label "STEP 7 영상·랜딩 생성·테스트"@ko ;
+    scf:description "데모 C20261118-01"@ko ;
+    scf:status "done" .
+scf:ST8 a scf:Phase ;
+    rdfs:label "STEP 8 실제 API 연결"@ko ;
+    scf:description "자격증명 없음"@ko ;
+    scf:status "todo" .
+scf:ST9 a scf:Phase ;
+    rdfs:label "STEP 9 반복 실행·복구·검수 검증"@ko ;
+    scf:description "가상 운영 30일 수행 → 결함 발견, 미수정"@ko ;
+    scf:status "partial" .
+scf:ST10 a scf:Phase ;
+    rdfs:label "STEP 10 문서화"@ko ;
+    scf:description "문서 19종, 변경 이력 운영 중"@ko ;
+    scf:status "done" .
+scf:RM1 a scf:Phase ;
+    rdfs:label "P2.5 착수 준비"@ko ;
+    scf:description "이번 주 결정 7건 + 결함 수정 + 등록 화면"@ko ;
+    scf:status "active" .
+scf:RM2 a scf:Phase ;
+    rdfs:label "P3a 30개 실험"@ko ;
+    scf:description "주 5개 × 6주 또는 1일 1개(D20)"@ko ;
+    scf:status "todo" .
+scf:RM3 a scf:Phase ;
+    rdfs:label "G1 판정 게이트"@ko ;
+    scf:description "확대 / 채널 전환 / 중단"@ko ;
+    scf:status "todo" .
+scf:RM4 a scf:Phase ;
+    rdfs:label "P3b API 연동"@ko ;
+    scf:description "YouTube → Instagram → 쿠팡 API"@ko ;
+    scf:status "todo" .
+scf:RM5 a scf:Phase ;
+    rdfs:label "P4 이후 확대"@ko ;
+    scf:description "조건부 승인 자동화·학습 보정·대체 채널"@ko ;
+    scf:status "todo" .
+scf:CP01 a scf:Component ;
+    rdfs:label "설정 진입점"@ko ;
+    scf:description "환경변수·경로·안전장치 기본값"@ko .
+scf:CP02 a scf:Component ;
+    rdfs:label "정책 설정(TOML)"@ko ;
+    scf:description "배점·금칙어·광고 표시·재무 가정·단가·카테고리"@ko .
+scf:CP03 a scf:Component ;
+    rdfs:label "공통 모듈"@ko ;
+    scf:description "DB·HTTP 재시도·비용 상한·비밀값 마스킹·사실 해시"@ko .
+scf:CP04 a scf:Component ;
+    rdfs:label "네이버 어댑터"@ko ;
+    scf:description "DataLab(개발자센터·API HUB) + mock"@ko .
+scf:CP05 a scf:Component ;
+    rdfs:label "쿠팡 어댑터"@ko ;
+    scf:description "Partners HMAC·카탈로그(mock·수동·검색)"@ko .
+scf:CP06 a scf:Component ;
+    rdfs:label "Instagram 어댑터"@ko ;
+    scf:description "Reels 게시·인사이트"@ko .
+scf:CP07 a scf:Component ;
+    rdfs:label "YouTube 어댑터"@ko ;
+    scf:description "업로드·공개 확인·Analytics"@ko .
+scf:CP08 a scf:Component ;
+    rdfs:label "Claude 클라이언트"@ko ;
+    scf:description "구조화 출력·비용 기록·거절 대체"@ko .
+scf:CP09 a scf:Component ;
+    rdfs:label "음성 공급"@ko ;
+    scf:description "무음·사용자 녹음"@ko .
+scf:CP10 a scf:Component ;
+    rdfs:label "트렌드 수집기"@ko ;
+    scf:description "정규화·급상승·화제성 제외"@ko .
+scf:CP11 a scf:Component ;
+    rdfs:label "후보 발굴"@ko ;
+    scf:description "중복 제거·DB 반영"@ko .
+scf:CP12 a scf:Component ;
+    rdfs:label "평가·선정 엔진"@ko ;
+    scf:description "100점·필수 필터·상위 5·재검증"@ko .
+scf:CP13 a scf:Component ;
+    rdfs:label "구매심리 엔진"@ko ;
+    scf:description "10문항·심리요소·프롬프트"@ko .
+scf:CP14 a scf:Component ;
+    rdfs:label "대본·사실 검사"@ko ;
+    scf:description "대본 A/B·캡션·fact_guard"@ko .
+scf:CP15 a scf:Component ;
+    rdfs:label "이미지 생성"@ko ;
+    scf:description "이미지 6종·원형 보존 검수"@ko .
+scf:CP16 a scf:Component ;
+    rdfs:label "영상 렌더·QA"@ko ;
+    scf:description "Pillow→FFmpeg·자막·자동 QA"@ko .
+scf:CP17 a scf:Component ;
+    rdfs:label "제휴 링크"@ko ;
+    scf:description "형식 검증·수동 등록·고지 검사"@ko .
+scf:CP18 a scf:Component ;
+    rdfs:label "게시·검수"@ko ;
+    scf:description "게이트·중복 방지·승인·삭제"@ko .
+scf:CP19 a scf:Component ;
+    rdfs:label "분석·재무"@ko ;
+    scf:description "퍼널·CSV 적재·학습·재무·시뮬레이션·보고서"@ko .
+scf:CP20 a scf:Component ;
+    rdfs:label "작업 큐"@ko ;
+    scf:description "job_runs·재시도·상류 건너뜀·잠금"@ko .
+scf:CP21 a scf:Component ;
+    rdfs:label "스케줄러·cron·n8n"@ko ;
+    scf:description "상시 루프·cron 예시·n8n JSON"@ko .
+scf:CP22 a scf:Component ;
+    rdfs:label "랜딩 페이지"@ko ;
+    scf:description "공개 상품 페이지·이벤트"@ko .
+scf:CP23 a scf:Component ;
+    rdfs:label "관리자 화면"@ko ;
+    scf:description "검수·링크·권리·성과·비용"@ko .
+scf:CP24 a scf:Component ;
+    rdfs:label "운영 API"@ko ;
+    scf:description "/api/jobs/run · /api/health"@ko .
+scf:CP25 a scf:Component ;
+    rdfs:label "DB 스키마"@ko ;
+    scf:description "18개 테이블(SQLAlchemy)"@ko .
+scf:CP26 a scf:Component ;
+    rdfs:label "CLI(scf.py)"@ko ;
+    scf:description "실행·승인·게시·적재·시뮬레이션·삭제"@ko .
+scf:CP27 a scf:Component ;
+    rdfs:label "온톨로지 생성기"@ko ;
+    scf:description "도메인 지도 HTML·md 자동 구간"@ko .
+scf:CP28 a scf:Component ;
+    rdfs:label "가상 운영 시뮬레이터"@ko ;
+    scf:description "N일 임시 운영·막힌 곳 기록"@ko .
+scf:CP29 a scf:Component ;
+    rdfs:label "브라우저 점검 스크립트"@ko ;
+    scf:description "콘솔 오류·넘침·겹침"@ko .
+scf:CP30 a scf:Component ;
+    rdfs:label "배포 구성"@ko ;
+    scf:description "gunicorn·compose(빌드 미검증)"@ko .
+scf:CP31 a scf:Component ;
+    rdfs:label "DEMO 데이터"@ko ;
+    scf:description "가상 상품 24·트렌드 28"@ko .
+scf:CP32 a scf:Component ;
+    rdfs:label "폰트"@ko ;
+    scf:description "Pretendard(OFL)"@ko .
+scf:CP33 a scf:Component ;
+    rdfs:label "지식체계 생성기"@ko ;
+    scf:description "이 지식체계 HTML·md·RDF"@ko .
+scf:DL01 a scf:Deliverable ;
+    rdfs:label "실행 가능한 Python 소스코드"@ko ;
+    scf:description "mock 기준 전 구간 실행"@ko ;
+    scf:status "done" .
+scf:DL02 a scf:Deliverable ;
+    rdfs:label "Flask 관리자 대시보드"@ko ;
+    scf:description "8개 화면 · 모바일 승인 점검 전"@ko ;
+    scf:status "done" .
+scf:DL03 a scf:Deliverable ;
+    rdfs:label "상품 트렌드 수집기"@ko ;
+    scf:description "mock 완료 · 실데이터 키 대기"@ko ;
+    scf:status "partial" .
+scf:DL04 a scf:Deliverable ;
+    rdfs:label "상품 점수화 엔진"@ko ;
+    scf:description "가중치는 판단값(보정 전)"@ko ;
+    scf:status "done" .
+scf:DL05 a scf:Deliverable ;
+    rdfs:label "구매심리 분석 프롬프트"@ko ;
+    scf:description "Claude 실호출 미검증"@ko ;
+    scf:status "done" .
+scf:DL06 a scf:Deliverable ;
+    rdfs:label "영상 대본 생성 엔진"@ko ;
+    scf:description "규칙 기반 · LLM 경로 가짜 응답 테스트만"@ko ;
+    scf:status "done" .
+scf:DL07 a scf:Deliverable ;
+    rdfs:label "이미지 제작 파이프라인"@ko ;
+    scf:description "데모 완료 · 실상품은 범용 배경"@ko ;
+    scf:status "partial" .
+scf:DL08 a scf:Deliverable ;
+    rdfs:label "FFmpeg 영상 렌더러"@ko ;
+    scf:description "1080×1920 28초 2종"@ko ;
+    scf:status "done" .
+scf:DL09 a scf:Deliverable ;
+    rdfs:label "상품 랜딩페이지"@ko ;
+    scf:description "호스팅 대기(D6)"@ko ;
+    scf:status "done" .
+scf:DL10 a scf:Deliverable ;
+    rdfs:label "쿠팡파트너스 연동 모듈"@ko ;
+    scf:description "수동 링크 완료 · API 실호출 0 · API 모드 후보 전부 보류"@ko ;
+    scf:status "partial" .
+scf:DL11 a scf:Deliverable ;
+    rdfs:label "Instagram·YouTube 게시 어댑터"@ko ;
+    scf:description "코드 완료 · 실호출 0"@ko ;
+    scf:status "partial" .
+scf:DL12 a scf:Deliverable ;
+    rdfs:label "성과 분석 대시보드"@ko ;
+    scf:description "실측 데이터 없음"@ko ;
+    scf:status "done" .
+scf:DL13 a scf:Deliverable ;
+    rdfs:label "n8n 워크플로 또는 대체 스케줄러"@ko ;
+    scf:description "동작함 · 실행 시각 코드 고정 · n8n 가져오기 미검증"@ko ;
+    scf:status "partial" .
+scf:DL14 a scf:Deliverable ;
+    rdfs:label "환경변수 템플릿"@ko ;
+    scf:description ".env.example"@ko ;
+    scf:status "done" .
+scf:DL15 a scf:Deliverable ;
+    rdfs:label "설치·실행 매뉴얼"@ko ;
+    scf:description "신규 환경 재현 확인"@ko ;
+    scf:status "done" .
+scf:DL16 a scf:Deliverable ;
+    rdfs:label "자동화 장애 대응 매뉴얼"@ko ;
+    scf:description "RUNBOOK REV03"@ko ;
+    scf:status "done" .
+scf:DL17 a scf:Deliverable ;
+    rdfs:label "pytest 테스트"@ko ;
+    scf:description "78개 통과(지식체계 4 포함)"@ko ;
+    scf:status "done" .
+scf:DL18 a scf:Deliverable ;
+    rdfs:label "데모 콘텐츠 1개"@ko ;
+    scf:description "C20261118-01"@ko ;
+    scf:status "done" .
+scf:DL19 a scf:Deliverable ;
+    rdfs:label "12개월 수익 시뮬레이션"@ko ;
+    scf:description "3 시나리오 + 손익분기"@ko ;
+    scf:status "done" .
+scf:DL20 a scf:Deliverable ;
+    rdfs:label "운영 비용·ROI 리포트"@ko ;
+    scf:description "COST_MODEL + ROI_REPORT"@ko ;
+    scf:status "done" .
+scf:CR01 a scf:Criterion ;
+    rdfs:label "mock 상품 20개 이상 수집"@ko ;
+    scf:status "pass" .
+scf:CR02 a scf:Criterion ;
+    rdfs:label "100점 점수 계산"@ko ;
+    scf:status "pass" .
+scf:CR03 a scf:Criterion ;
+    rdfs:label "선정 과정 기록"@ko ;
+    scf:status "pass" .
+scf:CR04 a scf:Criterion ;
+    rdfs:label "사실과 다르면 게시 차단"@ko ;
+    scf:description "숫자 없는 과장은 못 잡음 · 상품명 숫자 오탐 · 수동 모드 가격 만료 검사 무력화"@ko ;
+    scf:status "caveat" .
+scf:CR05 a scf:Criterion ;
+    rdfs:label "권리 불확실 이미지 차단"@ko ;
+    scf:status "pass" .
+scf:CR06 a scf:Criterion ;
+    rdfs:label "대본·이미지 저장"@ko ;
+    scf:status "pass" .
+scf:CR07 a scf:Criterion ;
+    rdfs:label "실행 가능한 MP4"@ko ;
+    scf:status "pass" .
+scf:CR08 a scf:Criterion ;
+    rdfs:label "랜딩 상품정보 정상 표시"@ko ;
+    scf:status "pass" .
+scf:CR09 a scf:Criterion ;
+    rdfs:label "미승인 콘텐츠 게시 안 됨"@ko ;
+    scf:status "pass" .
+scf:CR10 a scf:Criterion ;
+    rdfs:label "중복 실행에도 중복 업로드 없음"@ko ;
+    scf:status "pass" .
+scf:CR11 a scf:Criterion ;
+    rdfs:label "클릭·매출 실측·추정 구분"@ko ;
+    scf:status "pass" .
+scf:CR12 a scf:Criterion ;
+    rdfs:label "금융 계산 단위테스트"@ko ;
+    scf:status "pass" .
+scf:CR13 a scf:Criterion ;
+    rdfs:label "API 비용·실패 로그"@ko ;
+    scf:description "실패 '알림'은 없음(대시보드 확인만)"@ko ;
+    scf:status "caveat" .
+scf:CR14 a scf:Criterion ;
+    rdfs:label "비밀키 미노출"@ko ;
+    scf:status "pass" .
+scf:CR15 a scf:Criterion ;
+    rdfs:label "README 로 신규 환경 실행"@ko ;
+    scf:description "Docker 빌드는 미검증"@ko ;
+    scf:status "caveat" .
+scf:V01 a scf:Verification ;
+    rdfs:label "test_trends_discovery"@ko ;
+    scf:description "트렌드 수집·후보 20개·기준 키워드 재척도"@ko .
+scf:V02 a scf:Verification ;
+    rdfs:label "test_scoring"@ko ;
+    scf:description "100점·필수 필터·보수적 부여·선정 기록"@ko .
+scf:V03 a scf:Verification ;
+    rdfs:label "test_fact_guard"@ko ;
+    scf:description "사양 불일치·금칙어·광고 표시·사실 변경 차단"@ko .
+scf:V04 a scf:Verification ;
+    rdfs:label "test_media"@ko ;
+    scf:description "산출물·MP4 규격·원형 보존·권리 차단"@ko .
+scf:V05 a scf:Verification ;
+    rdfs:label "test_publish_gate"@ko ;
+    scf:description "미승인·링크·자격증명·중복·상태 분리"@ko .
+scf:V06 a scf:Verification ;
+    rdfs:label "test_finance"@ko ;
+    scf:description "산식 손계산 검산·시뮬레이션"@ko .
+scf:V07 a scf:Verification ;
+    rdfs:label "test_analytics"@ko ;
+    scf:description "실측·추정·미귀속·CSV 품질"@ko .
+scf:V08 a scf:Verification ;
+    rdfs:label "test_landing_admin"@ko ;
+    scf:description "랜딩·관리자·CSRF·삭제"@ko .
+scf:V09 a scf:Verification ;
+    rdfs:label "test_security"@ko ;
+    scf:description "로그 마스킹·하드코딩 키·.env"@ko .
+scf:V10 a scf:Verification ;
+    rdfs:label "test_jobs"@ko ;
+    scf:description "작업 큐·재시도·비용 상한·Claude 가짜 응답"@ko .
+scf:V11 a scf:Verification ;
+    rdfs:label "test_adapters"@ko ;
+    scf:description "재시도·HMAC·미설정·IG 상태 분리"@ko .
+scf:V12 a scf:Verification ;
+    rdfs:label "브라우저 E2E 10화면"@ko ;
+    scf:description "콘솔 오류·가로 넘침·필수 요소"@ko .
+scf:V13 a scf:Verification ;
+    rdfs:label "온톨로지 HTML 점검"@ko ;
+    scf:description "글자 넘침·겹침·라벨 겹침 0"@ko .
+scf:V14 a scf:Verification ;
+    rdfs:label "가상 운영 30일"@ko ;
+    scf:description "임시 DB 로 30일 운영"@ko .
+scf:V15 a scf:Verification ;
+    rdfs:label "신규 환경 재현"@ko ;
+    scf:description "새 폴더·새 venv 에서 README 절차"@ko .
+scf:V16 a scf:Verification ;
+    rdfs:label "영상 프레임 육안 검토"@ko ;
+    scf:description "줄바꿈·배경·썸네일"@ko .
+scf:V17 a scf:Verification ;
+    rdfs:label "결함 재현 스크립트"@ko ;
+    scf:description "running 고착·수동 가격 ①②"@ko .
+scf:V18 a scf:Verification ;
+    rdfs:label "지식체계 HTML 점검"@ko ;
+    scf:description "이 문서의 넘침·겹침·탐색"@ko .
+scf:V19 a scf:Verification ;
+    rdfs:label "test_knowledge"@ko ;
+    scf:description "지식체계 참조·정의역·치역·상태·요약"@ko .
+scf:E01 a scf:Evidence ;
+    rdfs:label "데모 콘텐츠 C20261118-01"@ko ;
+    scf:description "demo/C20261118-01 — 영상 2·이미지 8·대본·자막·매니페스트"@ko .
+scf:E02 a scf:Evidence ;
+    rdfs:label "화면 캡처 10장"@ko ;
+    scf:description "demo/screenshots — 랜딩 390·1366, 관리자 6화면"@ko .
+scf:E03 a scf:Evidence ;
+    rdfs:label "pytest 78개 통과"@ko ;
+    scf:description "2026-11-21 실행"@ko .
+scf:E04 a scf:Evidence ;
+    rdfs:label "신규 환경 실행 기록"@ko ;
+    scf:description "설치 → run-daily 약 79초 → 74 통과 → 랜딩 표시"@ko .
+scf:E05 a scf:Evidence ;
+    rdfs:label "가상 운영 30일 결과"@ko ;
+    scf:description "D1~D10 제작, D7 오탐 차단, D11 고갈 후 20일 미제작, 10개 중 9개 범용 배경"@ko .
+scf:E06 a scf:Evidence ;
+    rdfs:label "running 고착 재현"@ko ;
+    scf:description "일반 실행·--force 모두 running_elsewhere → 수동 회수 후 복구"@ko .
+scf:E07 a scf:Evidence ;
+    rdfs:label "수동 가격 결함 재현"@ko ;
+    scf:description "① 3일 전 확인 → 0.0시간 ② 25,000원 재확인 → 19,900원"@ko .
+scf:E08 a scf:Evidence ;
+    rdfs:label "온톨로지 HTML 점검 결과"@ko ;
+    scf:description "REV02 — 넘침·겹침·라벨 겹침 0, 가로 넘침 0"@ko .
+scf:E09 a scf:Evidence ;
+    rdfs:label "외부 조사 보고 3건"@ko ;
+    scf:description "공식 도메인 직접 열람 실패 → 검색 색인 발췌·공식 저장소 원문"@ko .
+scf:E12 a scf:Evidence ;
+    rdfs:label "RDF 검증"@ko ;
+    scf:description "rdflib 파싱 2,648 트리플 · SPARQL 예시 2개 결과 확인"@ko .
+scf:E10 a scf:Evidence ;
+    rdfs:label "12개월 시뮬레이션 표"@ko ;
+    scf:description "docs/ROI_REPORT.md — 기준 ROE −244%, 손익분기 콘텐츠당 약 12만 조회"@ko .
+scf:E11 a scf:Evidence ;
+    rdfs:label "프레임 검토 후 수정"@ko ;
+    scf:description "후킹 줄바꿈·사양 칩 비침·엔드카드 중복 상품·썸네일 배치 수정"@ko .
+scf:DOC01 a scf:Document ;
+    rdfs:label "README.md"@ko ;
+    scf:description "설치·실행·구조·완료 기준 매핑·알려진 결함"@ko ;
+    scf:path "README.md"@ko .
+scf:DOC02 a scf:Document ;
+    rdfs:label "문서 지도"@ko ;
+    scf:description "읽는 순서·갱신 규칙"@ko ;
+    scf:path "docs/README.md"@ko .
+scf:DOC03 a scf:Document ;
+    rdfs:label "사업 리스크 분석"@ko ;
+    scf:description "STEP 1 + 자체 검토·가상 운영 결함"@ko ;
+    scf:path "docs/BUSINESS_RISK_ANALYSIS.md"@ko .
+scf:DOC04 a scf:Document ;
+    rdfs:label "실행 가능성 보고서"@ko ;
+    scf:description "가능/승인 필요/불가·MVP 범위"@ko ;
+    scf:path "docs/FEASIBILITY_REPORT.md"@ko .
+scf:DOC05 a scf:Document ;
+    rdfs:label "API 접근 매트릭스"@ko ;
+    scf:description "외부 API 조건·확인 수준"@ko ;
+    scf:path "docs/API_ACCESS_MATRIX.md"@ko .
+scf:DOC06 a scf:Document ;
+    rdfs:label "컴플라이언스 체크리스트"@ko ;
+    scf:description "광고 표시·사실성·플랫폼·개인정보"@ko ;
+    scf:path "docs/COMPLIANCE_CHECKLIST.md"@ko .
+scf:DOC07 a scf:Document ;
+    rdfs:label "비용 모델"@ko ;
+    scf:description "콘텐츠당·월 비용·LLM 모델별"@ko ;
+    scf:path "docs/COST_MODEL.md"@ko .
+scf:DOC08 a scf:Document ;
+    rdfs:label "ROI 리포트"@ko ;
+    scf:description "12개월 3 시나리오·손익분기"@ko ;
+    scf:path "docs/ROI_REPORT.md"@ko .
+scf:DOC09 a scf:Document ;
+    rdfs:label "DB 스키마"@ko ;
+    scf:description "테이블·상태 전이"@ko ;
+    scf:path "docs/DB_SCHEMA.md"@ko .
+scf:DOC10 a scf:Document ;
+    rdfs:label "구매심리 프롬프트"@ko ;
+    scf:description "프롬프트·검증 규칙·예시"@ko ;
+    scf:path "docs/PSYCHOLOGY_PROMPTS.md"@ko .
+scf:DOC11 a scf:Document ;
+    rdfs:label "장애 대응"@ko ;
+    scf:description "상태별 조치·임시 복구"@ko ;
+    scf:path "docs/RUNBOOK.md"@ko .
+scf:DOC12 a scf:Document ;
+    rdfs:label "결정 사항"@ko ;
+    scf:description "결정 20건·결정 기록"@ko ;
+    scf:path "docs/DECISIONS.md"@ko .
+scf:DOC13 a scf:Document ;
+    rdfs:label "자동화 재검토"@ko ;
+    scf:description "착수 4문항·액션 지도·로드맵"@ko ;
+    scf:path "docs/AUTOMATION_REVIEW.md"@ko .
+scf:DOC14 a scf:Document ;
+    rdfs:label "도메인 온톨로지"@ko ;
+    scf:description "개념 36·관계 60"@ko ;
+    scf:path "docs/ONTOLOGY.md"@ko .
+scf:DOC15 a scf:Document ;
+    rdfs:label "가상 운영 점검"@ko ;
+    scf:description "30일 결과·방해 요소·필요한 도움"@ko ;
+    scf:path "docs/VIRTUAL_OPERATION.md"@ko .
+scf:DOC16 a scf:Document ;
+    rdfs:label "도메인 지도 HTML"@ko ;
+    scf:description "개념·자동화 지도(REV01 보존)"@ko ;
+    scf:path "docs/SCF_온톨로지_REV02.html"@ko .
+scf:DOC17 a scf:Document ;
+    rdfs:label "지식체계"@ko ;
+    scf:description "이 지식체계의 텍스트판"@ko ;
+    scf:path "docs/KNOWLEDGE_BASE.md"@ko .
+scf:DOC18 a scf:Document ;
+    rdfs:label "진행 현황"@ko ;
+    scf:description "단계·산출물·결정·결함·작업 기록"@ko ;
+    scf:path "docs/PROGRESS.md"@ko .
+scf:DOC19 a scf:Document ;
+    rdfs:label "지식체계 HTML"@ko ;
+    scf:description "진행·지식 지도·탐색기·추적표"@ko ;
+    scf:path "docs/SCF_지식체계_REV01.html"@ko .
+scf:P_USER a scf:Party ;
+    rdfs:label "운영자(사용자)"@ko ;
+    scf:description "결정·승인·계정 명의·실촬영·결제"@ko .
+scf:P_COUPANG a scf:Party ;
+    rdfs:label "쿠팡파트너스"@ko ;
+    scf:description "제휴 링크·수수료·API(최종 승인 후)·약관"@ko .
+scf:P_NAVER a scf:Party ;
+    rdfs:label "네이버(개발자센터·NCP API HUB)"@ko ;
+    scf:description "DataLab 트렌드"@ko .
+scf:P_GOOGLE a scf:Party ;
+    rdfs:label "Google(Trends)"@ko ;
+    scf:description "Trends API 알파"@ko .
+scf:P_META a scf:Party ;
+    rdfs:label "Meta·Instagram"@ko ;
+    scf:description "Reels 게시·인사이트·브랜디드 콘텐츠·AI 라벨"@ko .
+scf:P_YOUTUBE a scf:Party ;
+    rdfs:label "YouTube"@ko ;
+    scf:description "Shorts 업로드·Analytics·쇼핑 제휴·정책"@ko .
+scf:P_ANTHROPIC a scf:Party ;
+    rdfs:label "Anthropic"@ko ;
+    scf:description "Claude API"@ko .
+scf:P_OPENAI a scf:Party ;
+    rdfs:label "OpenAI"@ko ;
+    scf:description "이미지·TTS(채택 안 함)"@ko .
+scf:P_HIGGS a scf:Party ;
+    rdfs:label "Higgsfield"@ko ;
+    scf:description "생성 이미지·영상(파일 가져오기 방식)"@ko .
+scf:P_FTC a scf:Party ;
+    rdfs:label "공정거래위원회"@ko ;
+    scf:description "추천·보증 표시광고 심사지침"@ko .
+scf:P_MSIT a scf:Party ;
+    rdfs:label "과기정통부·방미통위"@ko ;
+    scf:description "AI 기본법·AI 생성물 표시 제도"@ko .
+scf:P_TAX a scf:Party ;
+    rdfs:label "세무사"@ko ;
+    scf:description "사업소득·사업자등록"@ko .
+scf:P_LEGAL a scf:Party ;
+    rdfs:label "법률 검토자"@ko ;
+    scf:description "개인정보 처리방침·광고 고지"@ko .
+scf:P_EMPLOYER a scf:Party ;
+    rdfs:label "본업 회사"@ko ;
+    scf:description "취업규칙(겸업·영리활동)"@ko .
+scf:P_CONSUMER a scf:Party ;
+    rdfs:label "시청자·구매자"@ko ;
+    scf:description "조회·방문·클릭·구매"@ko .
+scf:F01 a scf:Fact ;
+    rdfs:label "DataLab 쇼핑인사이트: 일 1,000회, 요청당 키워드 5개, 값은 구간 최댓값 100 상대지수"@ko ;
+    scf:confidence "A"@ko .
+scf:F02 a scf:Fact ;
+    rdfs:label "DataLab 신규 신청 2026-07-30 종료 → NCP API HUB, 기존 키 2027-06-30까지"@ko ;
+    scf:confidence "A"@ko .
+scf:F03 a scf:Fact ;
+    rdfs:label "네이버 쇼핑 검색 API 2026-07-31 종료"@ko ;
+    scf:confidence "A"@ko .
+scf:F04 a scf:Fact ;
+    rdfs:label "네이버 검색 API 결과 저장·캐싱·가공·AI 입력 금지(약관)"@ko ;
+    scf:confidence "A"@ko .
+scf:F05 a scf:Fact ;
+    rdfs:label "API HUB DataLab 월 50,000회"@ko ;
+    scf:confidence "B"@ko .
+scf:F06 a scf:Fact ;
+    rdfs:label "Google Trends API 는 알파 — 허용 계정만"@ko ;
+    scf:confidence "B"@ko .
+scf:F07 a scf:Fact ;
+    rdfs:label "쿠팡 API 키는 최종 승인 후 — 누적 판매 15만 원 이상에서 심사 시작"@ko ;
+    scf:confidence "B"@ko .
+scf:F08 a scf:Fact ;
+    rdfs:label "쿠팡 기본 수수료 3%, 삼성·애플 스마트폰 1%"@ko ;
+    scf:confidence "B"@ko .
+scf:F09 a scf:Fact ;
+    rdfs:label "쿠팡 클릭 후 24시간 내 다른 상품 구매도 인정"@ko ;
+    scf:confidence "B"@ko .
+scf:F10 a scf:Fact ;
+    rdfs:label "쿠팡 정산: 최종 승인 + 월 1만 원 이상, 2개월 뒤 15일, 개인은 사업소득"@ko ;
+    scf:confidence "B"@ko .
+scf:F11 a scf:Fact ;
+    rdfs:label "쿠팡 고지 예시 '이 게시물은 쿠팡 파트너스 활동의 일환으로…', 반려 1위 사유는 고지 누락"@ko ;
+    scf:confidence "B"@ko .
+scf:F12 a scf:Fact ;
+    rdfs:label "쿠팡 인증 HMAC 형식·subId 파라미터"@ko ;
+    scf:confidence "C"@ko .
+scf:F13 a scf:Fact ;
+    rdfs:label "쿠팡 검색 시간당 10회"@ko ;
+    scf:confidence "C"@ko .
+scf:F14 a scf:Fact ;
+    rdfs:label "공정위 지침(2024-12 개정): '수수료를 지급받을 수 있음' 같은 조건부 표현은 명확한 표시 아님"@ko ;
+    scf:confidence "B"@ko .
+scf:F15 a scf:Fact ;
+    rdfs:label "영상은 시작·끝·반복 표시, SNS 는 첫 부분, '더보기' 뒤 부적절, 해시태그는 첫 번째"@ko ;
+    scf:confidence "B"@ko .
+scf:F16 a scf:Fact ;
+    rdfs:label "2026-06-01 AI 가상인물 '가상인물' 표시 의무"@ko ;
+    scf:confidence "B"@ko .
+scf:F17 a scf:Fact ;
+    rdfs:label "AI 기본법(2026-01-22 시행) 표시 의무 주체는 AI 사업자 — 도구로 쓰는 개인 창작자는 의무 없음(가이드)"@ko ;
+    scf:confidence "B"@ko .
+scf:F18 a scf:Fact ;
+    rdfs:label "정보통신망법 AI 생성물 표시 개정안 미통과(2026-10-29 보도)"@ko ;
+    scf:confidence "C"@ko .
+scf:F19 a scf:Fact ;
+    rdfs:label "Instagram Login 경로: 페이스북 페이지 불필요, 내 계정만 쓰면 Standard Access"@ko ;
+    scf:confidence "B"@ko .
+scf:F20 a scf:Fact ;
+    rdfs:label "Instagram 은 공개 URL 의 영상을 가져가서 게시"@ko ;
+    scf:confidence "B"@ko .
+scf:F21 a scf:Fact ;
+    rdfs:label "Instagram 게시 한도 24시간 50 또는 100건(문서 충돌)"@ko ;
+    scf:confidence "B"@ko .
+scf:F22 a scf:Fact ;
+    rdfs:label "Instagram is_ai_generated 라벨·trial_params 체험 릴스 지원"@ko ;
+    scf:confidence "B"@ko .
+scf:F23 a scf:Fact ;
+    rdfs:label "Meta: 제3자 제휴 수수료 게시물은 유료 파트너십 라벨 사용 안내"@ko ;
+    scf:confidence "B"@ko .
+scf:F24 a scf:Fact ;
+    rdfs:label "YouTube 업로드 쿼터 하루 100회(2026-06~)"@ko ;
+    scf:confidence "B"@ko .
+scf:F25 a scf:Fact ;
+    rdfs:label "YouTube 미검증 프로젝트 비공개 고정 해제(2026-11-02)"@ko ;
+    scf:confidence "B"@ko .
+scf:F26 a scf:Fact ;
+    rdfs:label "YouTube hasPaidProductPlacement 기본값 false 아님(2026-11-16)"@ko ;
+    scf:confidence "B"@ko .
+scf:F27 a scf:Fact ;
+    rdfs:label "Shorts 설명란·댓글 링크 클릭 불가"@ko ;
+    scf:confidence "B"@ko .
+scf:F28 a scf:Fact ;
+    rdfs:label "YouTube '진정성 없는 콘텐츠'(템플릿 대량생산) 정책(2025-07)"@ko ;
+    scf:confidence "B"@ko .
+scf:F29 a scf:Fact ;
+    rdfs:label "YouTube 쇼핑 제휴(쿠팡) 2024-06 출시, YPP + 구독자 500(2026-03-30~), Shorts 상품 태그"@ko ;
+    scf:confidence "B"@ko .
+scf:F30 a scf:Fact ;
+    rdfs:label "네이버 쇼핑커넥트 2025-07 정식 — 판매자가 수수료율 설정"@ko ;
+    scf:confidence "B"@ko .
+scf:F31 a scf:Fact ;
+    rdfs:label "YouTube Analytics 지연 48~72시간, Instagram 인사이트 최대 48시간"@ko ;
+    scf:confidence "B"@ko .
+scf:F32 a scf:Fact ;
+    rdfs:label "Claude Opus 5.5 $4 / $20 (100만 토큰)"@ko ;
+    scf:confidence "A"@ko .
+scf:F33 a scf:Fact ;
+    rdfs:label "OpenAI gpt-image-1 종료(2026-10-23), TTS 3종 종료 예정(2027-01-06)"@ko ;
+    scf:confidence "A"@ko .
+scf:F34 a scf:Fact ;
+    rdfs:label "Higgsfield REST API 선불 과금, 기본적으로 사용자 콘텐츠 학습 사용"@ko ;
+    scf:confidence "B"@ko .
+scf:G01 a scf:Regulation ;
+    rdfs:label "추천·보증 표시광고 심사지침"@ko .
+scf:G02 a scf:Regulation ;
+    rdfs:label "쿠팡파트너스 약관·운영정책"@ko .
+scf:G03 a scf:Regulation ;
+    rdfs:label "Meta 브랜디드 콘텐츠·AI 정보 라벨 정책"@ko .
+scf:G04 a scf:Regulation ;
+    rdfs:label "YouTube 유료 프로모션·합성 콘텐츠·진정성 정책"@ko .
+scf:G05 a scf:Regulation ;
+    rdfs:label "AI 기본법"@ko .
+scf:G06 a scf:Regulation ;
+    rdfs:label "정보통신망법 AI 생성물 표시 개정안(미통과)"@ko .
+scf:G07 a scf:Regulation ;
+    rdfs:label "개인정보 보호법"@ko .
+scf:G08 a scf:Regulation ;
+    rdfs:label "표시광고법(가격·효능 표시)"@ko .
+scf:G09 a scf:Regulation ;
+    rdfs:label "네이버 오픈 API 이용약관"@ko .
+scf:G10 a scf:Regulation ;
+    rdfs:label "소득세(사업소득)·사업자등록"@ko .
+scf:G11 a scf:Regulation ;
+    rdfs:label "본업 회사 취업규칙(겸업·영리활동)"@ko .
+scf:G12 a scf:Regulation ;
+    rdfs:label "SIL OFL 폰트 라이선스"@ko .
+scf:S01 a scf:Assumption ;
+    rdfs:label "초기 자기자본 500만 원"@ko ;
+    scf:kind "사용자"@ko .
+scf:S02 a scf:Assumption ;
+    rdfs:label "평균 인정 구매금액 65,000원"@ko ;
+    scf:kind "사용자"@ko .
+scf:S03 a scf:Assumption ;
+    rdfs:label "실효 수수료율 3%"@ko ;
+    scf:kind "사용자"@ko .
+scf:S04 a scf:Assumption ;
+    rdfs:label "초기 현금 구축비 100만 원"@ko ;
+    scf:kind "사용자"@ko .
+scf:S05 a scf:Assumption ;
+    rdfs:label "월 운영현금비 25만 원"@ko ;
+    scf:kind "사용자"@ko .
+scf:S06 a scf:Assumption ;
+    rdfs:label "창업자 노동 30시간/월 × 25,000원"@ko ;
+    scf:kind "사용자"@ko .
+scf:S07 a scf:Assumption ;
+    rdfs:label "퍼널 3 시나리오(보수 0.5%×20%×3% ~ 낙관 2%×40%×8%)"@ko ;
+    scf:kind "판단값"@ko .
+scf:S08 a scf:Assumption ;
+    rdfs:label "세율 6.6%"@ko ;
+    scf:kind "판단값"@ko .
+scf:S09 a scf:Assumption ;
+    rdfs:label "취소·반품 5%"@ko ;
+    scf:kind "판단값"@ko .
+scf:S10 a scf:Assumption ;
+    rdfs:label "100점 배점·임계값(근거 부족 30%, 최소 점수 55)"@ko ;
+    scf:kind "판단값"@ko .
+scf:S11 a scf:Assumption ;
+    rdfs:label "중단 기준 '필요 조회수 > 실측 평균 3배'"@ko ;
+    scf:kind "판단값"@ko .
+scf:S12 a scf:Assumption ;
+    rdfs:label "선정 가능 비율 약 42%(24개 중 10개)"@ko ;
+    scf:kind "mock"@ko .
+scf:S13 a scf:Assumption ;
+    rdfs:label "콘텐츠당 LLM 토큰 입력 8,500 / 출력 6,500"@ko ;
+    scf:kind "추정"@ko .
+scf:R01 a scf:Risk ;
+    rdfs:label "퍼널 병목 — 조회에서 랜딩까지"@ko ;
+    scf:level "상"@ko .
+scf:R02 a scf:Risk ;
+    rdfs:label "노동 기회비용이 현금비의 3배"@ko ;
+    scf:level "상"@ko .
+scf:R03 a scf:Risk ;
+    rdfs:label "주문당 수수료가 작음(2만 원 상품 약 600원)"@ko ;
+    scf:level "중"@ko .
+scf:R04 a scf:Risk ;
+    rdfs:label "계정 단위 정책 위험(쿠팡 승인 반려·플랫폼)"@ko ;
+    scf:level "상"@ko .
+scf:R05 a scf:Risk ;
+    rdfs:label "API 접근 일정(쿠팡 승인·DataLab 이관)"@ko ;
+    scf:level "중"@ko .
+scf:R06 a scf:Risk ;
+    rdfs:label "이미지 권리 불명"@ko ;
+    scf:level "상"@ko .
+scf:R07 a scf:Risk ;
+    rdfs:label "AI 연출의 오인·고지 누락"@ko ;
+    scf:level "중"@ko .
+scf:R08 a scf:Risk ;
+    rdfs:label "템플릿 대량생산으로 노출 억제"@ko ;
+    scf:level "상"@ko .
+scf:R09 a scf:Risk ;
+    rdfs:label "A/B 판단 불가"@ko ;
+    scf:level "중"@ko .
+scf:R10 a scf:Risk ;
+    rdfs:label "광고 고지 위반"@ko ;
+    scf:level "상"@ko .
+scf:R11 a scf:Risk ;
+    rdfs:label "상품 후보 고갈"@ko ;
+    scf:level "상"@ko .
+scf:R12 a scf:Risk ;
+    rdfs:label "표본 부족(30개로 전환율 판정 불가)"@ko ;
+    scf:level "중"@ko .
+scf:R13 a scf:Risk ;
+    rdfs:label "콘텐츠별 매출 귀속 불가"@ko ;
+    scf:level "중"@ko .
+scf:R14 a scf:Risk ;
+    rdfs:label "본업 회사 겸업 규정"@ko ;
+    scf:level "상"@ko .
+scf:R15 a scf:Risk ;
+    rdfs:label "저장소 공개로 전략 노출"@ko ;
+    scf:level "중"@ko .
+scf:R16 a scf:Risk ;
+    rdfs:label "승인 시간이 본업과 충돌"@ko ;
+    scf:level "상"@ko .
+scf:R17 a scf:Risk ;
+    rdfs:label "수동 모드 가격 만료 검사 무력화"@ko ;
+    scf:level "상"@ko .
+scf:R18 a scf:Risk ;
+    rdfs:label "최종 승인·정산 지연"@ko ;
+    scf:level "중"@ko .
+scf:K01 a scf:Defect ;
+    rdfs:label "크래시 후 running 고착 — --force 로도 복구 불가"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K02 a scf:Defect ;
+    rdfs:label "웹 실행 버튼·API 가 단계를 동기 실행 → gunicorn 30초 시간초과"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K03 a scf:Defect ;
+    rdfs:label "수동 모드 가격 확인 시각이 매일 '방금'으로 자동 갱신"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K04 a scf:Defect ;
+    rdfs:label "관리자가 재확인한 가격이 JSON 옛값으로 덮어써짐"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K05 a scf:Defect ;
+    rdfs:label "사실 검사가 상품명 속 숫자('2단')를 오탐 차단"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K06 a scf:Defect ;
+    rdfs:label "쿠팡 API 모드에선 후보 전부 '보류'(사양·이미지 권리 없음)"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K07 a scf:Defect ;
+    rdfs:label "메인 → 상품 이동 시 유입경로(src) 유실"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K08 a scf:Defect ;
+    rdfs:label "로그인 시도 제한 없음·dev 고정 SECRET_KEY·프록시 공용 버킷"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K09 a scf:Defect ;
+    rdfs:label "쿠팡 검색을 키워드마다 호출(시간당 한도 초과 가능)"@ko ;
+    scf:status "open" ;
+    scf:kind "결함"@ko .
+scf:K10 a scf:Defect ;
+    rdfs:label "파이프라인 실행 시각이 코드에 고정(07:00~12:00)"@ko ;
+    scf:status "open" ;
+    scf:kind "설계 약점"@ko .
+scf:K11 a scf:Defect ;
+    rdfs:label "B 후킹은 만들기만 하고 게시 안 함"@ko ;
+    scf:status "open" ;
+    scf:kind "설계 약점"@ko .
+scf:K12 a scf:Defect ;
+    rdfs:label "실상품 영상은 범용 그라디언트 배경(10개 중 9개)"@ko ;
+    scf:status "open" ;
+    scf:kind "설계 약점"@ko .
+scf:K13 a scf:Defect ;
+    rdfs:label "DB·산출물 백업 없음"@ko ;
+    scf:status "open" ;
+    scf:kind "설계 약점"@ko .
+scf:K14 a scf:Defect ;
+    rdfs:label "실패 알림 없음(관측 Lv2)"@ko ;
+    scf:status "open" ;
+    scf:kind "설계 약점"@ko .
+scf:K15 a scf:Defect ;
+    rdfs:label "RUNBOOK 의 running 복구 안내가 동작하지 않던 문제"@ko ;
+    scf:status "fixed" ;
+    scf:kind "결함"@ko .
+scf:M01 a scf:Metric ;
+    rdfs:label "조회수"@ko ;
+    scf:description "측정 전(연동·게시 전)"@ko .
+scf:M02 a scf:Metric ;
+    rdfs:label "랜딩 방문율"@ko ;
+    scf:description "측정 전 — 30개 판정 지표"@ko .
+scf:M03 a scf:Metric ;
+    rdfs:label "링크 클릭률"@ko ;
+    scf:description "측정 전 — 30개 판정 지표"@ko .
+scf:M04 a scf:Metric ;
+    rdfs:label "구매전환율"@ko ;
+    scf:description "가정만 — 30개로 판정 불가"@ko .
+scf:M05 a scf:Metric ;
+    rdfs:label "귀속 수수료"@ko ;
+    scf:description "측정 전 — sub_id 분리 미확인"@ko .
+scf:M06 a scf:Metric ;
+    rdfs:label "RPM(조회 1,000회당 수익)"@ko ;
+    scf:description "실측 귀속 시만 계산"@ko .
+scf:M07 a scf:Metric ;
+    rdfs:label "조정이익"@ko ;
+    scf:description "가정 시뮬레이션만"@ko .
+scf:M08 a scf:Metric ;
+    rdfs:label "조정 ROE"@ko ;
+    scf:description "가정: 보수 −259% · 기준 −244% · 낙관 +295%"@ko .
+scf:M09 a scf:Metric ;
+    rdfs:label "사람 운영시간"@ko ;
+    scf:description "실측 양식만 — 첫 주 측정"@ko .
+scf:M10 a scf:Metric ;
+    rdfs:label "후보 잔량(남은 일수)"@ko ;
+    scf:description "가상 운영으로만 — 경보 미구현"@ko .
+scf:M11 a scf:Metric ;
+    rdfs:label "API 비용"@ko ;
+    scf:description "측정 가능 — 지금 0원(mock)"@ko .
+
+scf:CP25 scf:implements scf:keyword .
+scf:CP10 scf:implements scf:keyword .
+scf:CP04 scf:implements scf:keyword .
+scf:CP25 scf:implements scf:persona .
+scf:CP25 scf:implements scf:problem .
+scf:CP13 scf:implements scf:problem .
+scf:CP25 scf:implements scf:barrier .
+scf:CP25 scf:implements scf:lever .
+scf:CP02 scf:implements scf:lever .
+scf:CP02 scf:implements scf:category .
+scf:CP25 scf:implements scf:product .
+scf:CP11 scf:implements scf:product .
+scf:CP25 scf:implements scf:spec .
+scf:CP03 scf:implements scf:spec .
+scf:CP25 scf:implements scf:caution .
+scf:CP25 scf:implements scf:price .
+scf:CP25 scf:implements scf:image .
+scf:CP15 scf:implements scf:image .
+scf:CP25 scf:implements scf:usage .
+scf:CP25 scf:implements scf:score .
+scf:CP12 scf:implements scf:score .
+scf:CP02 scf:implements scf:score .
+scf:CP25 scf:implements scf:filter .
+scf:CP25 scf:implements scf:selection .
+scf:CP12 scf:implements scf:selection .
+scf:CP25 scf:implements scf:content .
+scf:CP14 scf:implements scf:script .
+scf:CP13 scf:implements scf:script .
+scf:CP25 scf:implements scf:variant .
+scf:CP02 scf:implements scf:disclosure .
+scf:CP15 scf:implements scf:media .
+scf:CP16 scf:implements scf:media .
+scf:CP14 scf:implements scf:check .
+scf:CP16 scf:implements scf:check .
+scf:CP18 scf:implements scf:approval .
+scf:CP25 scf:implements scf:approval .
+scf:CP25 scf:implements scf:link .
+scf:CP17 scf:implements scf:link .
+scf:CP25 scf:implements scf:publication .
+scf:CP18 scf:implements scf:publication .
+scf:CP06 scf:implements scf:platform .
+scf:CP07 scf:implements scf:platform .
+scf:CP22 scf:implements scf:landing .
+scf:CP25 scf:implements scf:pmetric .
+scf:CP19 scf:implements scf:pmetric .
+scf:CP25 scf:implements scf:event .
+scf:CP22 scf:implements scf:event .
+scf:CP25 scf:implements scf:report .
+scf:CP19 scf:implements scf:funnel .
+scf:CP19 scf:implements scf:learning .
+scf:CP25 scf:implements scf:source .
+scf:CP02 scf:implements scf:policy .
+scf:CP25 scf:implements scf:job .
+scf:CP20 scf:implements scf:job .
+scf:CP21 scf:implements scf:job .
+scf:CP25 scf:implements scf:cost .
+scf:CP03 scf:implements scf:cost .
+scf:CP25 scf:implements scf:audit .
+scf:source scf:supplies scf:keyword .
+scf:keyword scf:reveals scf:problem .
+scf:keyword scf:belongsTo scf:category .
+scf:persona scf:experiences scf:problem .
+scf:problem scf:blockedBy scf:barrier .
+scf:problem scf:stimulates scf:lever .
+scf:product scf:solves scf:problem .
+scf:product scf:linkedTo scf:keyword .
+scf:product scf:belongsTo scf:category .
+scf:product scf:has scf:spec .
+scf:product scf:has scf:caution .
+scf:product scf:checkedBy scf:price .
+scf:product scf:has scf:image .
+scf:usage scf:backs scf:product .
+scf:spec scf:relieves scf:barrier .
+scf:score scf:evaluates scf:product .
+scf:score scf:basedOn scf:keyword .
+scf:score scf:basedOn scf:problem .
+scf:filter scf:judges scf:product .
+scf:filter scf:checks scf:image .
+scf:filter scf:checks scf:price .
+scf:selection scf:selects scf:score .
+scf:selection scf:creates scf:content .
+scf:content scf:covers scf:product .
+scf:content scf:has scf:script .
+scf:script scf:cites scf:spec .
+scf:script scf:shows scf:caution .
+scf:script scf:uses scf:lever .
+scf:variant scf:varies scf:script .
+scf:disclosure scf:attachedTo scf:content .
+scf:media scf:renderedFrom scf:script .
+scf:media scf:composites scf:image .
+scf:check scf:inspects scf:script .
+scf:check scf:inspects scf:media .
+scf:approval scf:authorizes scf:content .
+scf:publication scf:uploads scf:media .
+scf:publication scf:targetsPlatform scf:platform .
+scf:publication scf:requiresGate scf:approval .
+scf:publication scf:requiresGate scf:link .
+scf:publication scf:requiresGate scf:price .
+scf:link scf:connects scf:product .
+scf:landing scf:shows scf:product .
+scf:landing scf:includes scf:link .
+scf:platform scf:drivesTrafficTo scf:landing .
+scf:pmetric scf:measuresEvent scf:publication .
+scf:event scf:occursOn scf:landing .
+scf:event scf:attributedTo scf:content .
+scf:report scf:attributedTo scf:link .
+scf:funnel scf:aggregates scf:pmetric .
+scf:funnel scf:aggregates scf:event .
+scf:funnel scf:aggregates scf:report .
+scf:learning scf:reads scf:funnel .
+scf:learning scf:calibrates scf:score .
+scf:policy scf:constrainsRule scf:filter .
+scf:policy scf:constrainsRule scf:check .
+scf:policy scf:defines scf:disclosure .
+scf:job scf:executes scf:selection .
+scf:job scf:executes scf:publication .
+scf:cost scf:limits scf:script .
+scf:audit scf:records scf:approval .
+scf:D1 scf:gates scf:RM1 .
+scf:D1 scf:decidedBy scf:P_USER .
+scf:D2 scf:impacts scf:job .
+scf:D2 scf:impacts scf:event .
+scf:D2 scf:impacts scf:price .
+scf:D2 scf:impacts scf:check .
+scf:D2 scf:gates scf:RM1 .
+scf:D2 scf:decidedBy scf:P_USER .
+scf:D3 scf:impacts scf:funnel .
+scf:D3 scf:impacts scf:learning .
+scf:D3 scf:impacts scf:pmetric .
+scf:D3 scf:impacts scf:score .
+scf:D3 scf:gates scf:RM1 .
+scf:D3 scf:decidedBy scf:P_USER .
+scf:D4 scf:impacts scf:publication .
+scf:D4 scf:impacts scf:platform .
+scf:D4 scf:impacts scf:pmetric .
+scf:D4 scf:gates scf:RM1 .
+scf:D4 scf:decidedBy scf:P_USER .
+scf:D6 scf:impacts scf:landing .
+scf:D6 scf:impacts scf:event .
+scf:D6 scf:impacts scf:job .
+scf:D6 scf:gates scf:RM1 .
+scf:D6 scf:decidedBy scf:P_USER .
+scf:D18 scf:impacts scf:approval .
+scf:D18 scf:impacts scf:price .
+scf:D18 scf:impacts scf:job .
+scf:D18 scf:impacts scf:publication .
+scf:D18 scf:gates scf:RM1 .
+scf:D18 scf:decidedBy scf:P_USER .
+scf:D19 scf:impacts scf:approval .
+scf:D19 scf:gates scf:RM1 .
+scf:D19 scf:decidedBy scf:P_USER .
+scf:D20 scf:impacts scf:product .
+scf:D20 scf:impacts scf:selection .
+scf:D20 scf:impacts scf:category .
+scf:D20 scf:gates scf:RM2 .
+scf:D20 scf:decidedBy scf:P_USER .
+scf:D5 scf:impacts scf:platform .
+scf:D5 scf:impacts scf:publication .
+scf:D5 scf:gates scf:RM2 .
+scf:D5 scf:decidedBy scf:P_USER .
+scf:D7 scf:impacts scf:image .
+scf:D7 scf:impacts scf:usage .
+scf:D7 scf:impacts scf:media .
+scf:D7 scf:gates scf:RM2 .
+scf:D7 scf:decidedBy scf:P_USER .
+scf:D8 scf:impacts scf:media .
+scf:D8 scf:gates scf:RM2 .
+scf:D8 scf:decidedBy scf:P_USER .
+scf:D9 scf:impacts scf:script .
+scf:D9 scf:impacts scf:problem .
+scf:D9 scf:impacts scf:persona .
+scf:D9 scf:impacts scf:barrier .
+scf:D9 scf:impacts scf:lever .
+scf:D9 scf:impacts scf:cost .
+scf:D9 scf:gates scf:RM2 .
+scf:D9 scf:decidedBy scf:P_USER .
+scf:D10 scf:impacts scf:category .
+scf:D10 scf:impacts scf:keyword .
+scf:D10 scf:gates scf:RM2 .
+scf:D10 scf:decidedBy scf:P_USER .
+scf:D11 scf:impacts scf:product .
+scf:D11 scf:impacts scf:spec .
+scf:D11 scf:impacts scf:caution .
+scf:D11 scf:impacts scf:price .
+scf:D11 scf:gates scf:RM2 .
+scf:D11 scf:decidedBy scf:P_USER .
+scf:D12 scf:impacts scf:variant .
+scf:D12 scf:gates scf:RM2 .
+scf:D12 scf:decidedBy scf:P_USER .
+scf:D17 scf:impacts scf:job .
+scf:D17 scf:impacts scf:source .
+scf:D17 scf:gates scf:RM2 .
+scf:D17 scf:decidedBy scf:P_USER .
+scf:D13 scf:impacts scf:approval .
+scf:D13 scf:gates scf:RM3 .
+scf:D13 scf:decidedBy scf:P_USER .
+scf:D14 scf:impacts scf:funnel .
+scf:D14 scf:impacts scf:policy .
+scf:D14 scf:impacts scf:cost .
+scf:D14 scf:gates scf:RM3 .
+scf:D14 scf:decidedBy scf:P_USER .
+scf:D15 scf:impacts scf:report .
+scf:D15 scf:gates scf:RM3 .
+scf:D15 scf:decidedBy scf:P_USER .
+scf:D16 scf:impacts scf:link .
+scf:D16 scf:impacts scf:platform .
+scf:D16 scf:impacts scf:report .
+scf:D16 scf:gates scf:RM3 .
+scf:D16 scf:decidedBy scf:P_USER .
+scf:A01 scf:targets scf:keyword .
+scf:A01 scf:dependsOn scf:D10 .
+scf:A02 scf:targets scf:product .
+scf:A02 scf:dependsOn scf:D11 .
+scf:A03 scf:targets scf:spec .
+scf:A03 scf:dependsOn scf:D11 .
+scf:A03 scf:dependsOn scf:D9 .
+scf:A04 scf:targets scf:price .
+scf:A04 scf:dependsOn scf:D18 .
+scf:A05 scf:targets scf:image .
+scf:A05 scf:dependsOn scf:D7 .
+scf:A06 scf:targets scf:usage .
+scf:A06 scf:dependsOn scf:D7 .
+scf:A07 scf:targets scf:problem .
+scf:A07 scf:dependsOn scf:D9 .
+scf:A08 scf:targets scf:source .
+scf:A09 scf:targets scf:job .
+scf:A09 scf:dependsOn scf:D6 .
+scf:A10 scf:targets scf:score .
+scf:A11 scf:targets scf:script .
+scf:A11 scf:dependsOn scf:D9 .
+scf:A12 scf:targets scf:media .
+scf:A12 scf:dependsOn scf:D7 .
+scf:A12 scf:dependsOn scf:D8 .
+scf:A13 scf:targets scf:selection .
+scf:A14 scf:targets scf:check .
+scf:A15 scf:targets scf:approval .
+scf:A15 scf:dependsOn scf:D13 .
+scf:A15 scf:dependsOn scf:D18 .
+scf:A16 scf:targets scf:link .
+scf:A17 scf:targets scf:publication .
+scf:A17 scf:dependsOn scf:D4 .
+scf:A17 scf:dependsOn scf:D5 .
+scf:A18 scf:targets scf:landing .
+scf:A18 scf:dependsOn scf:D6 .
+scf:A19 scf:targets scf:pmetric .
+scf:A19 scf:dependsOn scf:D4 .
+scf:A20 scf:targets scf:report .
+scf:A21 scf:targets scf:funnel .
+scf:A22 scf:targets scf:learning .
+scf:A22 scf:dependsOn scf:D3 .
+scf:A23 scf:targets scf:job .
+scf:A23 scf:dependsOn scf:D17 .
+scf:A25 scf:targets scf:selection .
+scf:A25 scf:dependsOn scf:D20 .
+scf:A25 scf:dependsOn scf:D17 .
+scf:A26 scf:targets scf:pmetric .
+scf:A26 scf:dependsOn scf:D4 .
+scf:A24 scf:targets scf:job .
+scf:A24 scf:dependsOn scf:D2 .
+scf:PC01 scf:dependsOn scf:D11 .
+scf:PC02 scf:dependsOn scf:D13 .
+scf:PC03 scf:dependsOn scf:D18 .
+scf:PC04 scf:dependsOn scf:D4 .
+scf:PC05 scf:dependsOn scf:D12 .
+scf:PC06 scf:dependsOn scf:D10 .
+scf:PC07 scf:dependsOn scf:D3 .
+scf:PC08 scf:dependsOn scf:D20 .
+scf:PC09 scf:dependsOn scf:D2 .
+scf:PC09 scf:dependsOn scf:D17 .
+scf:ST1 scf:partOf scf:PH1 .
+scf:ST2 scf:partOf scf:PH1 .
+scf:ST3 scf:partOf scf:PH1 .
+scf:ST4 scf:partOf scf:PH2 .
+scf:ST5 scf:partOf scf:PH2 .
+scf:ST6 scf:partOf scf:PH2 .
+scf:ST7 scf:partOf scf:PH2 .
+scf:ST8 scf:partOf scf:PH3 .
+scf:ST9 scf:partOf scf:PH2 .
+scf:ST10 scf:partOf scf:PH2 .
+scf:RM1 scf:partOf scf:PH3 .
+scf:RM2 scf:partOf scf:PH4 .
+scf:RM3 scf:partOf scf:PH4 .
+scf:RM4 scf:partOf scf:PH3 .
+scf:RM5 scf:partOf scf:PH5 .
+scf:CP26 scf:realizes scf:DL01 .
+scf:CP20 scf:realizes scf:DL01 .
+scf:DL01 scf:deliveredIn scf:ST5 .
+scf:CP23 scf:realizes scf:DL02 .
+scf:DL02 scf:deliveredIn scf:ST5 .
+scf:CP10 scf:realizes scf:DL03 .
+scf:CP04 scf:realizes scf:DL03 .
+scf:DL03 scf:deliveredIn scf:ST5 .
+scf:CP12 scf:realizes scf:DL04 .
+scf:DL04 scf:deliveredIn scf:ST5 .
+scf:CP13 scf:realizes scf:DL05 .
+scf:DL05 scf:deliveredIn scf:ST5 .
+scf:CP14 scf:realizes scf:DL06 .
+scf:DL06 scf:deliveredIn scf:ST5 .
+scf:CP15 scf:realizes scf:DL07 .
+scf:DL07 scf:deliveredIn scf:ST7 .
+scf:CP16 scf:realizes scf:DL08 .
+scf:DL08 scf:deliveredIn scf:ST7 .
+scf:CP22 scf:realizes scf:DL09 .
+scf:DL09 scf:deliveredIn scf:ST7 .
+scf:CP05 scf:realizes scf:DL10 .
+scf:CP17 scf:realizes scf:DL10 .
+scf:DL10 scf:deliveredIn scf:ST5 .
+scf:CP06 scf:realizes scf:DL11 .
+scf:CP07 scf:realizes scf:DL11 .
+scf:CP18 scf:realizes scf:DL11 .
+scf:DL11 scf:deliveredIn scf:ST5 .
+scf:CP19 scf:realizes scf:DL12 .
+scf:CP23 scf:realizes scf:DL12 .
+scf:DL12 scf:deliveredIn scf:ST5 .
+scf:CP21 scf:realizes scf:DL13 .
+scf:DL13 scf:deliveredIn scf:ST5 .
+scf:CP01 scf:realizes scf:DL14 .
+scf:DL14 scf:deliveredIn scf:ST5 .
+scf:CP26 scf:realizes scf:DL15 .
+scf:DL15 scf:deliveredIn scf:ST10 .
+scf:DL16 scf:deliveredIn scf:ST10 .
+scf:DL17 scf:deliveredIn scf:ST7 .
+scf:CP15 scf:realizes scf:DL18 .
+scf:CP16 scf:realizes scf:DL18 .
+scf:DL18 scf:deliveredIn scf:ST7 .
+scf:CP19 scf:realizes scf:DL19 .
+scf:DL19 scf:deliveredIn scf:ST1 .
+scf:CP19 scf:realizes scf:DL20 .
+scf:DL20 scf:deliveredIn scf:ST3 .
+scf:V01 scf:verifies scf:CR01 .
+scf:V02 scf:verifies scf:CR02 .
+scf:V02 scf:verifies scf:CR03 .
+scf:V03 scf:verifies scf:CR04 .
+scf:V05 scf:verifies scf:CR04 .
+scf:V04 scf:verifies scf:CR05 .
+scf:V04 scf:verifies scf:CR06 .
+scf:V04 scf:verifies scf:CR07 .
+scf:V16 scf:verifies scf:CR07 .
+scf:V08 scf:verifies scf:CR08 .
+scf:V12 scf:verifies scf:CR08 .
+scf:V05 scf:verifies scf:CR09 .
+scf:V08 scf:verifies scf:CR09 .
+scf:V05 scf:verifies scf:CR10 .
+scf:V10 scf:verifies scf:CR10 .
+scf:V07 scf:verifies scf:CR11 .
+scf:V06 scf:verifies scf:CR12 .
+scf:V10 scf:verifies scf:CR13 .
+scf:V09 scf:verifies scf:CR13 .
+scf:V09 scf:verifies scf:CR14 .
+scf:V15 scf:verifies scf:CR15 .
+scf:V01 scf:verifies scf:CP10 .
+scf:V01 scf:verifies scf:CP11 .
+scf:V01 scf:verifies scf:CP04 .
+scf:V02 scf:verifies scf:CP12 .
+scf:V03 scf:verifies scf:CP14 .
+scf:V04 scf:verifies scf:CP15 .
+scf:V04 scf:verifies scf:CP16 .
+scf:V05 scf:verifies scf:CP18 .
+scf:V05 scf:verifies scf:CP17 .
+scf:V06 scf:verifies scf:CP19 .
+scf:V07 scf:verifies scf:CP19 .
+scf:V08 scf:verifies scf:CP22 .
+scf:V08 scf:verifies scf:CP23 .
+scf:V08 scf:verifies scf:CP24 .
+scf:V09 scf:verifies scf:CP03 .
+scf:V10 scf:verifies scf:CP20 .
+scf:V10 scf:verifies scf:CP08 .
+scf:V10 scf:verifies scf:CP03 .
+scf:V11 scf:verifies scf:CP04 .
+scf:V11 scf:verifies scf:CP05 .
+scf:V11 scf:verifies scf:CP06 .
+scf:V11 scf:verifies scf:CP07 .
+scf:V11 scf:verifies scf:CP09 .
+scf:V12 scf:verifies scf:CP22 .
+scf:V12 scf:verifies scf:CP23 .
+scf:V13 scf:verifies scf:CP27 .
+scf:V14 scf:verifies scf:CP28 .
+scf:V14 scf:verifies scf:CP20 .
+scf:V14 scf:verifies scf:CP12 .
+scf:V15 scf:verifies scf:CP26 .
+scf:V16 scf:verifies scf:CP16 .
+scf:V16 scf:verifies scf:CP15 .
+scf:V17 scf:verifies scf:CP20 .
+scf:V17 scf:verifies scf:CP11 .
+scf:V18 scf:verifies scf:CP33 .
+scf:V19 scf:verifies scf:CP33 .
+scf:V04 scf:produces scf:E01 .
+scf:V16 scf:produces scf:E01 .
+scf:V12 scf:produces scf:E02 .
+scf:V01 scf:produces scf:E03 .
+scf:V02 scf:produces scf:E03 .
+scf:V03 scf:produces scf:E03 .
+scf:V04 scf:produces scf:E03 .
+scf:V05 scf:produces scf:E03 .
+scf:V06 scf:produces scf:E03 .
+scf:V07 scf:produces scf:E03 .
+scf:V08 scf:produces scf:E03 .
+scf:V09 scf:produces scf:E03 .
+scf:V10 scf:produces scf:E03 .
+scf:V11 scf:produces scf:E03 .
+scf:V19 scf:produces scf:E03 .
+scf:V15 scf:produces scf:E04 .
+scf:V14 scf:produces scf:E05 .
+scf:V17 scf:produces scf:E06 .
+scf:V17 scf:produces scf:E07 .
+scf:V13 scf:produces scf:E08 .
+scf:V18 scf:produces scf:E12 .
+scf:V16 scf:produces scf:E11 .
+scf:F01 scf:sourcedFrom scf:P_NAVER .
+scf:F01 scf:supports scf:keyword .
+scf:F02 scf:sourcedFrom scf:P_NAVER .
+scf:F02 scf:supports scf:R05 .
+scf:F02 scf:supports scf:keyword .
+scf:F03 scf:sourcedFrom scf:P_NAVER .
+scf:F03 scf:supports scf:R05 .
+scf:F03 scf:supports scf:PC01 .
+scf:F04 scf:sourcedFrom scf:P_NAVER .
+scf:F04 scf:supports scf:G09 .
+scf:F04 scf:supports scf:R06 .
+scf:F05 scf:sourcedFrom scf:P_NAVER .
+scf:F05 scf:supports scf:keyword .
+scf:F06 scf:sourcedFrom scf:P_GOOGLE .
+scf:F06 scf:supports scf:keyword .
+scf:F07 scf:sourcedFrom scf:P_COUPANG .
+scf:F07 scf:supports scf:R05 .
+scf:F07 scf:supports scf:R18 .
+scf:F07 scf:supports scf:D11 .
+scf:F08 scf:sourcedFrom scf:P_COUPANG .
+scf:F08 scf:supports scf:R03 .
+scf:F08 scf:supports scf:S03 .
+scf:F09 scf:sourcedFrom scf:P_COUPANG .
+scf:F09 scf:supports scf:R03 .
+scf:F09 scf:supports scf:report .
+scf:F10 scf:sourcedFrom scf:P_COUPANG .
+scf:F10 scf:supports scf:R18 .
+scf:F10 scf:supports scf:D15 .
+scf:F11 scf:sourcedFrom scf:P_COUPANG .
+scf:F11 scf:supports scf:disclosure .
+scf:F11 scf:supports scf:R04 .
+scf:F12 scf:sourcedFrom scf:P_COUPANG .
+scf:F12 scf:supports scf:link .
+scf:F12 scf:supports scf:R13 .
+scf:F13 scf:sourcedFrom scf:P_COUPANG .
+scf:F13 scf:supports scf:K09 .
+scf:F14 scf:sourcedFrom scf:P_FTC .
+scf:F14 scf:supports scf:G01 .
+scf:F14 scf:supports scf:disclosure .
+scf:F14 scf:supports scf:R10 .
+scf:F15 scf:sourcedFrom scf:P_FTC .
+scf:F15 scf:supports scf:G01 .
+scf:F15 scf:supports scf:disclosure .
+scf:F16 scf:sourcedFrom scf:P_FTC .
+scf:F16 scf:supports scf:G01 .
+scf:F17 scf:sourcedFrom scf:P_MSIT .
+scf:F17 scf:supports scf:G05 .
+scf:F18 scf:sourcedFrom scf:P_MSIT .
+scf:F18 scf:supports scf:G06 .
+scf:F19 scf:sourcedFrom scf:P_META .
+scf:F19 scf:supports scf:platform .
+scf:F20 scf:sourcedFrom scf:P_META .
+scf:F20 scf:supports scf:landing .
+scf:F20 scf:supports scf:D6 .
+scf:F21 scf:sourcedFrom scf:P_META .
+scf:F21 scf:supports scf:publication .
+scf:F22 scf:sourcedFrom scf:P_META .
+scf:F22 scf:supports scf:variant .
+scf:F22 scf:supports scf:R07 .
+scf:F23 scf:sourcedFrom scf:P_META .
+scf:F23 scf:supports scf:G03 .
+scf:F23 scf:supports scf:R10 .
+scf:F24 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F24 scf:supports scf:publication .
+scf:F25 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F25 scf:supports scf:publication .
+scf:F26 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F26 scf:supports scf:G04 .
+scf:F26 scf:supports scf:publication .
+scf:F27 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F27 scf:supports scf:R01 .
+scf:F27 scf:supports scf:platform .
+scf:F28 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F28 scf:supports scf:G04 .
+scf:F28 scf:supports scf:R08 .
+scf:F29 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F29 scf:supports scf:D16 .
+scf:F29 scf:supports scf:R01 .
+scf:F30 scf:sourcedFrom scf:P_NAVER .
+scf:F30 scf:supports scf:D16 .
+scf:F31 scf:sourcedFrom scf:P_YOUTUBE .
+scf:F31 scf:supports scf:pmetric .
+scf:F32 scf:sourcedFrom scf:P_ANTHROPIC .
+scf:F32 scf:supports scf:D9 .
+scf:F32 scf:supports scf:cost .
+scf:F33 scf:sourcedFrom scf:P_OPENAI .
+scf:F33 scf:supports scf:D8 .
+scf:F34 scf:sourcedFrom scf:P_HIGGS .
+scf:F34 scf:supports scf:D7 .
+scf:G01 scf:sourcedFrom scf:P_FTC .
+scf:G01 scf:constrains scf:disclosure .
+scf:G01 scf:constrains scf:check .
+scf:G01 scf:constrains scf:CP14 .
+scf:G02 scf:sourcedFrom scf:P_COUPANG .
+scf:G02 scf:constrains scf:link .
+scf:G02 scf:constrains scf:disclosure .
+scf:G02 scf:constrains scf:image .
+scf:G03 scf:sourcedFrom scf:P_META .
+scf:G03 scf:constrains scf:publication .
+scf:G03 scf:constrains scf:platform .
+scf:G04 scf:sourcedFrom scf:P_YOUTUBE .
+scf:G04 scf:constrains scf:media .
+scf:G04 scf:constrains scf:publication .
+scf:G05 scf:sourcedFrom scf:P_MSIT .
+scf:G05 scf:constrains scf:media .
+scf:G06 scf:sourcedFrom scf:P_MSIT .
+scf:G06 scf:constrains scf:media .
+scf:G07 scf:sourcedFrom scf:P_LEGAL .
+scf:G07 scf:constrains scf:event .
+scf:G07 scf:constrains scf:landing .
+scf:G08 scf:sourcedFrom scf:P_FTC .
+scf:G08 scf:constrains scf:check .
+scf:G08 scf:constrains scf:price .
+scf:G09 scf:sourcedFrom scf:P_NAVER .
+scf:G09 scf:constrains scf:keyword .
+scf:G10 scf:sourcedFrom scf:P_TAX .
+scf:G10 scf:constrains scf:report .
+scf:G11 scf:sourcedFrom scf:P_EMPLOYER .
+scf:G11 scf:constrains scf:RM1 .
+scf:G12 scf:sourcedFrom scf:P_USER .
+scf:G12 scf:constrains scf:CP32 .
+scf:S01 scf:feeds scf:M08 .
+scf:S02 scf:feeds scf:M05 .
+scf:S03 scf:feeds scf:M05 .
+scf:S04 scf:feeds scf:M07 .
+scf:S05 scf:feeds scf:M07 .
+scf:S06 scf:feeds scf:M07 .
+scf:S06 scf:feeds scf:M09 .
+scf:S07 scf:feeds scf:M02 .
+scf:S07 scf:feeds scf:M03 .
+scf:S07 scf:feeds scf:M04 .
+scf:S08 scf:feeds scf:M08 .
+scf:S09 scf:feeds scf:M05 .
+scf:S10 scf:feeds scf:CP12 .
+scf:S11 scf:feeds scf:RM3 .
+scf:S12 scf:feeds scf:M10 .
+scf:S13 scf:feeds scf:M11 .
+scf:R01 scf:threatens scf:M02 .
+scf:R01 scf:mitigatedBy scf:D6 .
+scf:R01 scf:mitigatedBy scf:D16 .
+scf:R02 scf:threatens scf:M07 .
+scf:R02 scf:threatens scf:M09 .
+scf:R02 scf:mitigatedBy scf:D14 .
+scf:R02 scf:mitigatedBy scf:D11 .
+scf:R02 scf:mitigatedBy scf:D9 .
+scf:R03 scf:threatens scf:M05 .
+scf:R03 scf:mitigatedBy scf:D16 .
+scf:R04 scf:threatens scf:link .
+scf:R04 scf:threatens scf:platform .
+scf:R04 scf:mitigatedBy scf:CP14 .
+scf:R04 scf:mitigatedBy scf:D1 .
+scf:R05 scf:threatens scf:RM4 .
+scf:R05 scf:mitigatedBy scf:D11 .
+scf:R06 scf:threatens scf:image .
+scf:R06 scf:mitigatedBy scf:D7 .
+scf:R06 scf:mitigatedBy scf:CP15 .
+scf:R07 scf:threatens scf:media .
+scf:R07 scf:mitigatedBy scf:D7 .
+scf:R07 scf:mitigatedBy scf:CP16 .
+scf:R08 scf:threatens scf:media .
+scf:R08 scf:mitigatedBy scf:D7 .
+scf:R08 scf:mitigatedBy scf:D8 .
+scf:R09 scf:threatens scf:variant .
+scf:R09 scf:mitigatedBy scf:D12 .
+scf:R10 scf:threatens scf:disclosure .
+scf:R10 scf:mitigatedBy scf:CP14 .
+scf:R11 scf:threatens scf:selection .
+scf:R11 scf:threatens scf:RM2 .
+scf:R11 scf:mitigatedBy scf:D20 .
+scf:R11 scf:mitigatedBy scf:A25 .
+scf:R12 scf:threatens scf:M04 .
+scf:R12 scf:mitigatedBy scf:D3 .
+scf:R13 scf:threatens scf:M05 .
+scf:R13 scf:threatens scf:learning .
+scf:R13 scf:mitigatedBy scf:D16 .
+scf:R14 scf:threatens scf:RM1 .
+scf:R14 scf:mitigatedBy scf:D19 .
+scf:R15 scf:threatens scf:RM1 .
+scf:R15 scf:mitigatedBy scf:D1 .
+scf:R16 scf:threatens scf:approval .
+scf:R16 scf:mitigatedBy scf:D18 .
+scf:R17 scf:threatens scf:price .
+scf:R17 scf:mitigatedBy scf:D2 .
+scf:R18 scf:threatens scf:report .
+scf:R18 scf:threatens scf:RM3 .
+scf:R18 scf:mitigatedBy scf:D3 .
+scf:S06 scf:supports scf:R02 .
+scf:F28 scf:supports scf:R04 .
+scf:F17 scf:supports scf:R07 .
+scf:E05 scf:supports scf:R08 .
+scf:F15 scf:supports scf:R10 .
+scf:E05 scf:supports scf:R11 .
+scf:S12 scf:supports scf:R11 .
+scf:S07 scf:supports scf:R12 .
+scf:E07 scf:supports scf:R17 .
+scf:K01 scf:affects scf:job .
+scf:K01 scf:affects scf:CP20 .
+scf:K01 scf:foundBy scf:E06 .
+scf:K01 scf:resolvedBy scf:D2 .
+scf:K02 scf:affects scf:job .
+scf:K02 scf:affects scf:CP23 .
+scf:K02 scf:affects scf:CP24 .
+scf:K02 scf:foundBy scf:V17 .
+scf:K02 scf:resolvedBy scf:D2 .
+scf:K03 scf:affects scf:price .
+scf:K03 scf:affects scf:CP11 .
+scf:K03 scf:affects scf:CR04 .
+scf:K03 scf:foundBy scf:E07 .
+scf:K03 scf:resolvedBy scf:D2 .
+scf:K04 scf:affects scf:price .
+scf:K04 scf:affects scf:CP11 .
+scf:K04 scf:foundBy scf:E07 .
+scf:K04 scf:resolvedBy scf:D2 .
+scf:K05 scf:affects scf:check .
+scf:K05 scf:affects scf:CP14 .
+scf:K05 scf:affects scf:CR04 .
+scf:K05 scf:foundBy scf:E05 .
+scf:K05 scf:resolvedBy scf:D2 .
+scf:K06 scf:affects scf:product .
+scf:K06 scf:affects scf:CP05 .
+scf:K06 scf:foundBy scf:V17 .
+scf:K06 scf:resolvedBy scf:D11 .
+scf:K07 scf:affects scf:event .
+scf:K07 scf:affects scf:CP22 .
+scf:K07 scf:foundBy scf:V17 .
+scf:K07 scf:resolvedBy scf:D2 .
+scf:K08 scf:affects scf:CP23 .
+scf:K08 scf:affects scf:CP22 .
+scf:K08 scf:affects scf:CP01 .
+scf:K08 scf:foundBy scf:V17 .
+scf:K08 scf:resolvedBy scf:D2 .
+scf:K09 scf:affects scf:CP05 .
+scf:K09 scf:foundBy scf:V17 .
+scf:K09 scf:resolvedBy scf:D11 .
+scf:K10 scf:affects scf:job .
+scf:K10 scf:affects scf:CP20 .
+scf:K10 scf:foundBy scf:E05 .
+scf:K10 scf:resolvedBy scf:D18 .
+scf:K11 scf:affects scf:variant .
+scf:K11 scf:foundBy scf:V17 .
+scf:K11 scf:resolvedBy scf:D12 .
+scf:K12 scf:affects scf:media .
+scf:K12 scf:affects scf:CP15 .
+scf:K12 scf:foundBy scf:E05 .
+scf:K12 scf:resolvedBy scf:D7 .
+scf:K13 scf:affects scf:CP25 .
+scf:K13 scf:foundBy scf:V17 .
+scf:K13 scf:resolvedBy scf:D6 .
+scf:K14 scf:affects scf:job .
+scf:K14 scf:affects scf:CR13 .
+scf:K14 scf:foundBy scf:V17 .
+scf:K14 scf:resolvedBy scf:D17 .
+scf:K15 scf:affects scf:CP20 .
+scf:K15 scf:foundBy scf:E06 .
+scf:K15 scf:resolvedBy scf:DOC11 .
+scf:M01 scf:measures scf:pmetric .
+scf:M02 scf:measures scf:event .
+scf:M02 scf:measures scf:landing .
+scf:M03 scf:measures scf:event .
+scf:M04 scf:measures scf:report .
+scf:M05 scf:measures scf:report .
+scf:M05 scf:measures scf:funnel .
+scf:M06 scf:measures scf:funnel .
+scf:M07 scf:measures scf:funnel .
+scf:M08 scf:measures scf:funnel .
+scf:M09 scf:measures scf:approval .
+scf:M10 scf:measures scf:selection .
+scf:M11 scf:measures scf:cost .
+scf:P_NAVER scf:provides scf:keyword .
+scf:P_COUPANG scf:provides scf:product .
+scf:P_COUPANG scf:provides scf:link .
+scf:P_COUPANG scf:provides scf:report .
+scf:P_META scf:provides scf:platform .
+scf:P_META scf:provides scf:pmetric .
+scf:P_YOUTUBE scf:provides scf:platform .
+scf:P_YOUTUBE scf:provides scf:pmetric .
+scf:P_ANTHROPIC scf:provides scf:script .
+scf:P_CONSUMER scf:provides scf:event .
+scf:P_USER scf:provides scf:approval .
+scf:P_USER scf:provides scf:spec .
+scf:P_USER scf:provides scf:image .
+scf:P_USER scf:provides scf:usage .
+scf:DOC01 scf:describes scf:CR01 .
+scf:DOC01 scf:describes scf:CR02 .
+scf:DOC01 scf:describes scf:CR03 .
+scf:DOC01 scf:describes scf:CR04 .
+scf:DOC01 scf:describes scf:CR05 .
+scf:DOC01 scf:describes scf:CR06 .
+scf:DOC01 scf:describes scf:CR07 .
+scf:DOC01 scf:describes scf:CR08 .
+scf:DOC01 scf:describes scf:CR09 .
+scf:DOC01 scf:describes scf:CR10 .
+scf:DOC01 scf:describes scf:CR11 .
+scf:DOC01 scf:describes scf:CR12 .
+scf:DOC01 scf:describes scf:CR13 .
+scf:DOC01 scf:describes scf:CR14 .
+scf:DOC01 scf:describes scf:CR15 .
+scf:DOC01 scf:describes scf:DL01 .
+scf:DOC01 scf:describes scf:DL02 .
+scf:DOC01 scf:describes scf:DL03 .
+scf:DOC01 scf:describes scf:DL04 .
+scf:DOC01 scf:describes scf:DL05 .
+scf:DOC01 scf:describes scf:DL06 .
+scf:DOC01 scf:describes scf:DL07 .
+scf:DOC01 scf:describes scf:DL08 .
+scf:DOC01 scf:describes scf:DL09 .
+scf:DOC01 scf:describes scf:DL10 .
+scf:DOC01 scf:describes scf:DL11 .
+scf:DOC01 scf:describes scf:DL12 .
+scf:DOC01 scf:describes scf:DL13 .
+scf:DOC01 scf:describes scf:DL14 .
+scf:DOC01 scf:describes scf:DL15 .
+scf:DOC01 scf:describes scf:DL16 .
+scf:DOC01 scf:describes scf:DL17 .
+scf:DOC01 scf:describes scf:DL18 .
+scf:DOC01 scf:describes scf:DL19 .
+scf:DOC01 scf:describes scf:DL20 .
+scf:DOC03 scf:describes scf:R01 .
+scf:DOC03 scf:describes scf:R02 .
+scf:DOC03 scf:describes scf:R03 .
+scf:DOC03 scf:describes scf:R04 .
+scf:DOC03 scf:describes scf:R05 .
+scf:DOC03 scf:describes scf:R06 .
+scf:DOC03 scf:describes scf:R07 .
+scf:DOC03 scf:describes scf:R08 .
+scf:DOC03 scf:describes scf:R09 .
+scf:DOC03 scf:describes scf:R10 .
+scf:DOC03 scf:describes scf:R11 .
+scf:DOC03 scf:describes scf:R12 .
+scf:DOC03 scf:describes scf:R13 .
+scf:DOC03 scf:describes scf:R14 .
+scf:DOC03 scf:describes scf:R15 .
+scf:DOC03 scf:describes scf:R16 .
+scf:DOC03 scf:describes scf:R17 .
+scf:DOC03 scf:describes scf:R18 .
+scf:DOC03 scf:describes scf:K01 .
+scf:DOC03 scf:describes scf:K02 .
+scf:DOC03 scf:describes scf:K03 .
+scf:DOC03 scf:describes scf:K04 .
+scf:DOC03 scf:describes scf:K05 .
+scf:DOC03 scf:describes scf:K06 .
+scf:DOC03 scf:describes scf:K07 .
+scf:DOC03 scf:describes scf:K08 .
+scf:DOC03 scf:describes scf:K09 .
+scf:DOC03 scf:describes scf:K10 .
+scf:DOC03 scf:describes scf:K11 .
+scf:DOC03 scf:describes scf:K12 .
+scf:DOC03 scf:describes scf:K13 .
+scf:DOC03 scf:describes scf:K14 .
+scf:DOC03 scf:describes scf:K15 .
+scf:DOC04 scf:describes scf:PH1 .
+scf:DOC04 scf:describes scf:PH2 .
+scf:DOC04 scf:describes scf:PH3 .
+scf:DOC04 scf:describes scf:PH4 .
+scf:DOC04 scf:describes scf:PH5 .
+scf:DOC04 scf:describes scf:ST1 .
+scf:DOC04 scf:describes scf:ST2 .
+scf:DOC04 scf:describes scf:ST3 .
+scf:DOC05 scf:describes scf:F01 .
+scf:DOC05 scf:describes scf:F02 .
+scf:DOC05 scf:describes scf:F03 .
+scf:DOC05 scf:describes scf:F04 .
+scf:DOC05 scf:describes scf:F05 .
+scf:DOC05 scf:describes scf:F06 .
+scf:DOC05 scf:describes scf:F07 .
+scf:DOC05 scf:describes scf:F08 .
+scf:DOC05 scf:describes scf:F09 .
+scf:DOC05 scf:describes scf:F10 .
+scf:DOC05 scf:describes scf:F11 .
+scf:DOC05 scf:describes scf:F12 .
+scf:DOC05 scf:describes scf:F13 .
+scf:DOC05 scf:describes scf:F14 .
+scf:DOC05 scf:describes scf:F15 .
+scf:DOC05 scf:describes scf:F16 .
+scf:DOC05 scf:describes scf:F17 .
+scf:DOC05 scf:describes scf:F18 .
+scf:DOC05 scf:describes scf:F19 .
+scf:DOC05 scf:describes scf:F20 .
+scf:DOC05 scf:describes scf:F21 .
+scf:DOC05 scf:describes scf:F22 .
+scf:DOC05 scf:describes scf:F23 .
+scf:DOC05 scf:describes scf:F24 .
+scf:DOC05 scf:describes scf:F25 .
+scf:DOC05 scf:describes scf:F26 .
+scf:DOC05 scf:describes scf:F27 .
+scf:DOC05 scf:describes scf:F28 .
+scf:DOC05 scf:describes scf:F29 .
+scf:DOC05 scf:describes scf:F30 .
+scf:DOC05 scf:describes scf:F31 .
+scf:DOC05 scf:describes scf:F32 .
+scf:DOC05 scf:describes scf:F33 .
+scf:DOC05 scf:describes scf:F34 .
+scf:DOC06 scf:describes scf:G01 .
+scf:DOC06 scf:describes scf:G02 .
+scf:DOC06 scf:describes scf:G03 .
+scf:DOC06 scf:describes scf:G04 .
+scf:DOC06 scf:describes scf:G05 .
+scf:DOC06 scf:describes scf:G06 .
+scf:DOC06 scf:describes scf:G07 .
+scf:DOC06 scf:describes scf:G08 .
+scf:DOC06 scf:describes scf:G09 .
+scf:DOC06 scf:describes scf:G10 .
+scf:DOC06 scf:describes scf:G11 .
+scf:DOC06 scf:describes scf:G12 .
+scf:DOC07 scf:describes scf:M11 .
+scf:DOC07 scf:describes scf:S13 .
+scf:DOC07 scf:describes scf:D9 .
+scf:DOC08 scf:describes scf:S01 .
+scf:DOC08 scf:describes scf:S02 .
+scf:DOC08 scf:describes scf:S03 .
+scf:DOC08 scf:describes scf:S04 .
+scf:DOC08 scf:describes scf:S05 .
+scf:DOC08 scf:describes scf:S06 .
+scf:DOC08 scf:describes scf:S07 .
+scf:DOC08 scf:describes scf:S08 .
+scf:DOC08 scf:describes scf:S09 .
+scf:DOC08 scf:describes scf:M07 .
+scf:DOC08 scf:describes scf:M08 .
+scf:DOC09 scf:describes scf:CP25 .
+scf:DOC10 scf:describes scf:CP13 .
+scf:DOC10 scf:describes scf:lever .
+scf:DOC11 scf:describes scf:K01 .
+scf:DOC11 scf:describes scf:K03 .
+scf:DOC11 scf:describes scf:K04 .
+scf:DOC11 scf:describes scf:K15 .
+scf:DOC11 scf:describes scf:job .
+scf:DOC12 scf:describes scf:D1 .
+scf:DOC12 scf:describes scf:D2 .
+scf:DOC12 scf:describes scf:D3 .
+scf:DOC12 scf:describes scf:D4 .
+scf:DOC12 scf:describes scf:D6 .
+scf:DOC12 scf:describes scf:D18 .
+scf:DOC12 scf:describes scf:D19 .
+scf:DOC12 scf:describes scf:D20 .
+scf:DOC12 scf:describes scf:D5 .
+scf:DOC12 scf:describes scf:D7 .
+scf:DOC12 scf:describes scf:D8 .
+scf:DOC12 scf:describes scf:D9 .
+scf:DOC12 scf:describes scf:D10 .
+scf:DOC12 scf:describes scf:D11 .
+scf:DOC12 scf:describes scf:D12 .
+scf:DOC12 scf:describes scf:D17 .
+scf:DOC12 scf:describes scf:D13 .
+scf:DOC12 scf:describes scf:D14 .
+scf:DOC12 scf:describes scf:D15 .
+scf:DOC12 scf:describes scf:D16 .
+scf:DOC13 scf:describes scf:A01 .
+scf:DOC13 scf:describes scf:A02 .
+scf:DOC13 scf:describes scf:A03 .
+scf:DOC13 scf:describes scf:A04 .
+scf:DOC13 scf:describes scf:A05 .
+scf:DOC13 scf:describes scf:A06 .
+scf:DOC13 scf:describes scf:A07 .
+scf:DOC13 scf:describes scf:A08 .
+scf:DOC13 scf:describes scf:A09 .
+scf:DOC13 scf:describes scf:A10 .
+scf:DOC13 scf:describes scf:A11 .
+scf:DOC13 scf:describes scf:A12 .
+scf:DOC13 scf:describes scf:A13 .
+scf:DOC13 scf:describes scf:A14 .
+scf:DOC13 scf:describes scf:A15 .
+scf:DOC13 scf:describes scf:A16 .
+scf:DOC13 scf:describes scf:A17 .
+scf:DOC13 scf:describes scf:A18 .
+scf:DOC13 scf:describes scf:A19 .
+scf:DOC13 scf:describes scf:A20 .
+scf:DOC13 scf:describes scf:A21 .
+scf:DOC13 scf:describes scf:A22 .
+scf:DOC13 scf:describes scf:A23 .
+scf:DOC13 scf:describes scf:A25 .
+scf:DOC13 scf:describes scf:A26 .
+scf:DOC13 scf:describes scf:A24 .
+scf:DOC13 scf:describes scf:PC01 .
+scf:DOC13 scf:describes scf:PC02 .
+scf:DOC13 scf:describes scf:PC03 .
+scf:DOC13 scf:describes scf:PC04 .
+scf:DOC13 scf:describes scf:PC05 .
+scf:DOC13 scf:describes scf:PC06 .
+scf:DOC13 scf:describes scf:PC07 .
+scf:DOC13 scf:describes scf:PC08 .
+scf:DOC13 scf:describes scf:PC09 .
+scf:DOC14 scf:describes scf:keyword .
+scf:DOC14 scf:describes scf:persona .
+scf:DOC14 scf:describes scf:problem .
+scf:DOC14 scf:describes scf:barrier .
+scf:DOC14 scf:describes scf:lever .
+scf:DOC14 scf:describes scf:category .
+scf:DOC14 scf:describes scf:product .
+scf:DOC14 scf:describes scf:spec .
+scf:DOC14 scf:describes scf:caution .
+scf:DOC14 scf:describes scf:price .
+scf:DOC14 scf:describes scf:image .
+scf:DOC14 scf:describes scf:usage .
+scf:DOC14 scf:describes scf:score .
+scf:DOC14 scf:describes scf:filter .
+scf:DOC14 scf:describes scf:selection .
+scf:DOC14 scf:describes scf:content .
+scf:DOC14 scf:describes scf:script .
+scf:DOC14 scf:describes scf:variant .
+scf:DOC14 scf:describes scf:disclosure .
+scf:DOC14 scf:describes scf:media .
+scf:DOC14 scf:describes scf:check .
+scf:DOC14 scf:describes scf:approval .
+scf:DOC14 scf:describes scf:link .
+scf:DOC14 scf:describes scf:publication .
+scf:DOC14 scf:describes scf:platform .
+scf:DOC14 scf:describes scf:landing .
+scf:DOC14 scf:describes scf:pmetric .
+scf:DOC14 scf:describes scf:event .
+scf:DOC14 scf:describes scf:report .
+scf:DOC14 scf:describes scf:funnel .
+scf:DOC14 scf:describes scf:learning .
+scf:DOC14 scf:describes scf:source .
+scf:DOC14 scf:describes scf:policy .
+scf:DOC14 scf:describes scf:job .
+scf:DOC14 scf:describes scf:cost .
+scf:DOC14 scf:describes scf:audit .
+scf:DOC15 scf:describes scf:E05 .
+scf:DOC15 scf:describes scf:E07 .
+scf:DOC15 scf:describes scf:K03 .
+scf:DOC15 scf:describes scf:K04 .
+scf:DOC15 scf:describes scf:K05 .
+scf:DOC15 scf:describes scf:K12 .
+scf:DOC15 scf:describes scf:R11 .
+scf:DOC15 scf:describes scf:M10 .
+scf:DOC16 scf:describes scf:keyword .
+scf:DOC16 scf:describes scf:persona .
+scf:DOC16 scf:describes scf:problem .
+scf:DOC16 scf:describes scf:barrier .
+scf:DOC16 scf:describes scf:lever .
+scf:DOC16 scf:describes scf:category .
+scf:DOC16 scf:describes scf:product .
+scf:DOC16 scf:describes scf:spec .
+scf:DOC16 scf:describes scf:caution .
+scf:DOC16 scf:describes scf:price .
+scf:DOC16 scf:describes scf:image .
+scf:DOC16 scf:describes scf:usage .
+scf:DOC16 scf:describes scf:score .
+scf:DOC16 scf:describes scf:filter .
+scf:DOC16 scf:describes scf:selection .
+scf:DOC16 scf:describes scf:content .
+scf:DOC16 scf:describes scf:script .
+scf:DOC16 scf:describes scf:variant .
+scf:DOC16 scf:describes scf:disclosure .
+scf:DOC16 scf:describes scf:media .
+scf:DOC16 scf:describes scf:check .
+scf:DOC16 scf:describes scf:approval .
+scf:DOC16 scf:describes scf:link .
+scf:DOC16 scf:describes scf:publication .
+scf:DOC16 scf:describes scf:platform .
+scf:DOC16 scf:describes scf:landing .
+scf:DOC16 scf:describes scf:pmetric .
+scf:DOC16 scf:describes scf:event .
+scf:DOC16 scf:describes scf:report .
+scf:DOC16 scf:describes scf:funnel .
+scf:DOC16 scf:describes scf:learning .
+scf:DOC16 scf:describes scf:source .
+scf:DOC16 scf:describes scf:policy .
+scf:DOC16 scf:describes scf:job .
+scf:DOC16 scf:describes scf:cost .
+scf:DOC16 scf:describes scf:audit .
+scf:DOC18 scf:describes scf:PH1 .
+scf:DOC18 scf:describes scf:PH2 .
+scf:DOC18 scf:describes scf:PH3 .
+scf:DOC18 scf:describes scf:PH4 .
+scf:DOC18 scf:describes scf:PH5 .
+scf:DOC18 scf:describes scf:ST1 .
+scf:DOC18 scf:describes scf:ST2 .
+scf:DOC18 scf:describes scf:ST3 .
+scf:DOC18 scf:describes scf:ST4 .
+scf:DOC18 scf:describes scf:ST5 .
+scf:DOC18 scf:describes scf:ST6 .
+scf:DOC18 scf:describes scf:ST7 .
+scf:DOC18 scf:describes scf:ST8 .
+scf:DOC18 scf:describes scf:ST9 .
+scf:DOC18 scf:describes scf:ST10 .
+scf:DOC18 scf:describes scf:RM1 .
+scf:DOC18 scf:describes scf:RM2 .
+scf:DOC18 scf:describes scf:RM3 .
+scf:DOC18 scf:describes scf:RM4 .
+scf:DOC18 scf:describes scf:RM5 .
+scf:DOC18 scf:describes scf:DL01 .
+scf:DOC18 scf:describes scf:DL02 .
+scf:DOC18 scf:describes scf:DL03 .
+scf:DOC18 scf:describes scf:DL04 .
+scf:DOC18 scf:describes scf:DL05 .
+scf:DOC18 scf:describes scf:DL06 .
+scf:DOC18 scf:describes scf:DL07 .
+scf:DOC18 scf:describes scf:DL08 .
+scf:DOC18 scf:describes scf:DL09 .
+scf:DOC18 scf:describes scf:DL10 .
+scf:DOC18 scf:describes scf:DL11 .
+scf:DOC18 scf:describes scf:DL12 .
+scf:DOC18 scf:describes scf:DL13 .
+scf:DOC18 scf:describes scf:DL14 .
+scf:DOC18 scf:describes scf:DL15 .
+scf:DOC18 scf:describes scf:DL16 .
+scf:DOC18 scf:describes scf:DL17 .
+scf:DOC18 scf:describes scf:DL18 .
+scf:DOC18 scf:describes scf:DL19 .
+scf:DOC18 scf:describes scf:DL20 .
