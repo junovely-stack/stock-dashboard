@@ -101,7 +101,7 @@ shopping_content_factory/
 ├── assets/fonts/              Pretendard (OFL)
 ├── demo/                      데모 콘텐츠 1개 산출물·화면 캡처·보고서
 ├── docs/                      보고서·매트릭스·체크리스트·비용·스키마·프롬프트·장애 대응·ROI
-└── tests/                     pytest 74개
+└── tests/                     pytest 78개
 ```
 
 ## 6. 완료 판정 기준 (요구서 17장) ↔ 검증
